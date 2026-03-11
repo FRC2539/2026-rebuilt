@@ -23,6 +23,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.subsystems.drivetrain.TunerConstants.TunerSwerveDrivetrain;
+import frc.robot.subsystems.vision.LimelightHelpers.PoseEstimate;
 import java.util.Optional;
 import java.util.function.Supplier;
 import org.littletonrobotics.junction.AutoLogOutput;
@@ -276,6 +277,35 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     return getState().Pose;
   }
 
+  public void filterAndAddMeasurements(PoseEstimate estimate) {
+    // System.out.println(estimate);
+    if (estimate == null) {
+
+    } else {
+      boolean rejectPose = false;
+      if (estimate.tagCount < 1) {
+        rejectPose = true;
+      }
+
+      // if (estimate.avgTagDist
+      //     > 3.5) { // reject tags if estimate is the average tag distance is more than 2 meters awa
+      //   rejectPose = true;
+      // }
+
+      if (!rejectPose) {
+        // Logger.recordOutput("accepted limelight pose", estimate.pose);
+        addVisionMeasurement(
+            estimate.pose,
+            estimate.timestampSeconds,
+            // VecBuilder.fill(
+            //     0, 0, .99999)); // increase values to trust vision estimate less. (x, y, heading)
+            VecBuilder.fill(
+                0.5, 0.5,
+                .99999)); // increase values to trust vision estimate less. (x, y, heading)
+      }
+    }
+  }
+
   /**
    * Adds a vision measurement to the Kalman Filter. This will correct the odometry pose estimate
    * while still accounting for measurement noise.
@@ -301,7 +331,6 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
    * @param visionMeasurementStdDevs Standard deviations of the vision pose measurement in the form
    *     [x, y, theta]ᵀ, with units in meters and radians.
    */
-  
   @Override
   public void addVisionMeasurement(
       Pose2d visionRobotPoseMeters,
