@@ -2,7 +2,6 @@ package frc.robot.subsystems.vision;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.subsystems.vision.LimelightHelpers.PoseEstimate;
-
 import java.util.function.Consumer;
 import org.littletonrobotics.junction.Logger;
 
