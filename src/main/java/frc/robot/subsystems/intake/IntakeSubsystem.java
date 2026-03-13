@@ -10,13 +10,10 @@ public class IntakeSubsystem extends SubsystemBase {
     public IntakeSubsystem(IntakeIO io) {
         intakeIO = io;
     }
-
-
-
     
-  @Override
-  public void periodic() {
-    intakeIO.updateInputs(inputs);
-    Logger.processInputs("RealOutputs/Intake", inputs);
-  }
+    @Override
+    public void periodic() {
+        intakeIO.updateInputs(inputs);
+        Logger.processInputs("RealOutputs/Intake", inputs);
+    }
 }
