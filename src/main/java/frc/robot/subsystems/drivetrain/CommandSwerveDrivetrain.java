@@ -288,7 +288,8 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
       }
 
       // if (estimate.avgTagDist
-      //     > 3.5) { // reject tags if estimate is the average tag distance is more than 2 meters awa
+      //     > 3.5) { // reject tags if estimate is the average tag distance is more than 2 meters
+      // awa
       //   rejectPose = true;
       // }
 

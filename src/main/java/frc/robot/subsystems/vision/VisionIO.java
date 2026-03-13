@@ -3,7 +3,6 @@ package frc.robot.subsystems.vision;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import frc.robot.subsystems.vision.LimelightHelpers.PoseEstimate;
-
 import java.util.function.Supplier;
 import org.littletonrobotics.junction.AutoLog;
 
