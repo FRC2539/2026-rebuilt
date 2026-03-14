@@ -51,19 +51,15 @@ public class ShooterIOTalonFX implements ShooterIO {
   public void setControlVelocityRPS(double targetVelocityRPS) {
     this.targetRPS = targetVelocityRPS;
     leadMotor.setControl(controlRequest.withVelocity(targetVelocityRPS));
-    rightLowerMotor.getControlMode().refresh(); // I assume refresh works fine rather than complete contol reassignment?
-    leftLowerMotor.getControlMode().refresh();
-    leftUpperMotor.getControlMode().refresh();
+    rightLowerMotor.setControl(
+        new Follow(ShooterConstants.leadMotorID, MotorAlignmentValue.Aligned));
+    leftLowerMotor.setControl(opposedFollowRequest);
+    leftUpperMotor.setControl(opposedFollowRequest);
   }
 
   @Override
   public boolean isAtSetpoint() {
     return Math.abs(leadMotor.getVelocity().getValueAsDouble() - targetRPS)
         < ShooterConstants.goalDeadbandRPS;
-  }
-
-  @Override
-  public double getExpectedDelta() {
-    return targetRPS - leadMotor.getVelocity().getValueAsDouble();
   }
 }

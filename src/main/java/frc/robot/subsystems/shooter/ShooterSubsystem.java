@@ -3,11 +3,8 @@ package frc.robot.subsystems.shooter;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.subsystems.shooter.ShooterIO.ShooterIOInputs;
-
 import java.util.function.Supplier;
-
 import org.littletonrobotics.junction.Logger;
 
 public class ShooterSubsystem extends SubsystemBase {
@@ -27,7 +24,7 @@ public class ShooterSubsystem extends SubsystemBase {
     Logger.processInputs("RealOuputs/ShooterSubsystem", inputs);
   }
 
-  public void setTargetRPS(double targetRPS){
+  public void setTargetRPS(double targetRPS) {
     shooterIO.setControlVelocityRPS(targetRPS);
   }
 
@@ -42,12 +39,11 @@ public class ShooterSubsystem extends SubsystemBase {
         .andThen(Commands.run(() -> {}, this));
   }
 
-
-  public Command setVoltage(double voltage){
-    return Commands.run( () -> shooterIO.setVoltage(voltage));
+  public Command setVoltage(double voltage) {
+    return Commands.run(() -> shooterIO.setVoltage(voltage));
   }
 
-  public boolean isAtSetpoint(){
+  public boolean isAtSetpoint() {
     return shooterIO.isAtSetpoint();
   }
 }

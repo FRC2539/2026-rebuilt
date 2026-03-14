@@ -1,7 +1,5 @@
 package frc.robot.subsystems.shooter;
 
-import java.util.function.BooleanSupplier;
-
 import org.littletonrobotics.junction.AutoLog;
 import org.littletonrobotics.junction.AutoLogOutput;
 
@@ -22,6 +20,4 @@ public interface ShooterIO {
 
   @AutoLogOutput
   public void setControlVelocityRPS(double targetVelocity);
-
-  public double getExpectedDelta();
 }
