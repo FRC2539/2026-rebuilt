@@ -11,16 +11,16 @@ public class VisionIOLimelight implements VisionIO {
   Supplier<Rotation2d> currentHeading;
 
   public VisionIOLimelight(String cameraName, Supplier<Rotation2d> currentHeading) {
+
     this.cameraName = cameraName;
     this.currentHeading = currentHeading;
-    LimelightHelpers.Flush();
 
+    LimelightHelpers.Flush();
     LimelightHelpers.SetIMUMode(cameraName, 0);
   }
 
   @Override
   public void updateInputs(VisionIOInputs inputs) {
-    LimelightHelpers.Flush();
 
     inputs.targetX = LimelightHelpers.getTX(cameraName);
     inputs.targetY = LimelightHelpers.getTY(cameraName);
@@ -42,6 +42,7 @@ public class VisionIOLimelight implements VisionIO {
 
   @Override
   public void updateHeading(Supplier<Rotation2d> currentHeading) {
+
     LimelightHelpers.SetRobotOrientation(
         cameraName, currentHeading.get().getDegrees(), 0, 0, 0, 0, 0);
   }

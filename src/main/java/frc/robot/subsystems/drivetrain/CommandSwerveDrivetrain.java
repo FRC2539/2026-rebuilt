@@ -83,7 +83,6 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     boolean rejectPose = false;
 
     if (estimate.tagCount == 0) rejectPose = true;
-
     if (estimate.avgTagDist > 4.0) rejectPose = true;
 
     if (Math.abs(getRobotSpeeds().omegaRadiansPerSecond) > Math.toRadians(720)) rejectPose = true;

@@ -9,6 +9,7 @@ public class VisionSubsystem extends SubsystemBase {
 
   private final VisionIO[] io;
   private final VisionIOInputsAutoLogged[] inputs;
+
   private Consumer<PoseEstimate> consumer;
 
   public VisionSubsystem(Consumer<PoseEstimate> consumer, VisionIO... visionIO) {
@@ -26,9 +27,6 @@ public class VisionSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
 
-    double lowestAvgDistance = Double.POSITIVE_INFINITY;
-    PoseEstimate bestPoseEstimate = null;
-
     for (int i = 0; i < io.length; i++) {
 
       io[i].updateInputs(inputs[i]);
@@ -39,15 +37,8 @@ public class VisionSubsystem extends SubsystemBase {
 
       if (LimelightHelpers.validPoseEstimate(estimate)) {
 
-        if (estimate.avgTagDist < lowestAvgDistance) {
-          lowestAvgDistance = estimate.avgTagDist;
-          bestPoseEstimate = estimate;
-        }
+        consumer.accept(estimate);
       }
-    }
-
-    if (bestPoseEstimate != null) {
-      consumer.accept(bestPoseEstimate);
     }
 
     for (VisionIOInputsAutoLogged input : inputs) {
