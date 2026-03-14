@@ -4,7 +4,6 @@ import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.MotorAlignmentValue;
-import com.ctre.phoenix6.signals.NeutralModeValue;
 import frc.robot.constants.ShooterConstants;
 
 public class ShooterIOTalonFX implements ShooterIO {
@@ -21,13 +20,11 @@ public class ShooterIOTalonFX implements ShooterIO {
       new Follower(ShooterConstants.leadMotorID, MotorAlignmentValue.Opposed);
 
   public ShooterIOTalonFX() {
-    leadMotor.setNeutralMode(NeutralModeValue.Coast);
-    rightLowerMotor.setNeutralMode(NeutralModeValue.Coast);
-    leftLowerMotor.setNeutralMode(NeutralModeValue.Coast);
-    leftUpperMotor.setNeutralMode(NeutralModeValue.Coast);
-
     leadMotor.getConfigurator().apply(ShooterConstants.talonFXConfig);
-
+    rightLowerMotor.getConfigurator().apply(ShooterConstants.talonFXConfig);
+    leftUpperMotor.getConfigurator().apply(ShooterConstants.talonFXConfig);
+    leftLowerMotor.getConfigurator().apply(ShooterConstants.talonFXConfig);
+    
     rightLowerMotor.setControl(
         new Follower(ShooterConstants.leadMotorID, MotorAlignmentValue.Aligned));
     leftLowerMotor.setControl(opposedFollowRequest);
@@ -52,7 +49,7 @@ public class ShooterIOTalonFX implements ShooterIO {
     this.targetRPS = targetVelocityRPS;
     leadMotor.setControl(controlRequest.withVelocity(targetVelocityRPS));
     rightLowerMotor.setControl(
-        new Follow(ShooterConstants.leadMotorID, MotorAlignmentValue.Aligned));
+        new Follower(ShooterConstants.leadMotorID, MotorAlignmentValue.Aligned));
     leftLowerMotor.setControl(opposedFollowRequest);
     leftUpperMotor.setControl(opposedFollowRequest);
   }

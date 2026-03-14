@@ -1,8 +1,11 @@
 package frc.robot.constants;
 
+import com.ctre.phoenix6.configs.ClosedLoopGeneralConfigs;
 import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
+import com.ctre.phoenix6.configs.MotorOutputConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.signals.NeutralModeValue;
 
 public class ShooterConstants {
 
@@ -20,5 +23,5 @@ public class ShooterConstants {
       new CurrentLimitsConfigs().withSupplyCurrentLimitEnable(true).withSupplyCurrentLimit(45);
 
   public static TalonFXConfiguration talonFXConfig =
-      new TalonFXConfiguration().withSlot0(SlotConfigs).withCurrentLimits(currentLimits);
+      new TalonFXConfiguration().withSlot0(SlotConfigs).withCurrentLimits(currentLimits).withMotorOutput(new MotorOutputConfigs().withNeutralMode(NeutralModeValue.Coast));
 }
