@@ -24,8 +24,7 @@ public class ShooterIOTalonFX implements ShooterIO {
     rightLowerMotor.getConfigurator().apply(ShooterConstants.talonFXConfig);
     leftUpperMotor.getConfigurator().apply(ShooterConstants.talonFXConfig);
     leftLowerMotor.getConfigurator().apply(ShooterConstants.talonFXConfig);
-    
-    
+
     rightLowerMotor.setControl(
         new Follower(ShooterConstants.leadMotorID, MotorAlignmentValue.Aligned));
     leftLowerMotor.setControl(opposedFollowRequest);
@@ -48,7 +47,7 @@ public class ShooterIOTalonFX implements ShooterIO {
   @Override
   public void setControlVelocityRPS(double targetVelocityRPS) {
     this.targetRPS = targetVelocityRPS;
-    
+
     leadMotor.setControl(controlRequest.withVelocity(targetVelocityRPS));
 
     rightLowerMotor.setControl(

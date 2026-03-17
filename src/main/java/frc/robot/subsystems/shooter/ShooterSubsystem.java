@@ -3,13 +3,12 @@ package frc.robot.subsystems.shooter;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.subsystems.shooter.ShooterIO.ShooterIOInputs;
 import java.util.function.Supplier;
 import org.littletonrobotics.junction.Logger;
 
 public class ShooterSubsystem extends SubsystemBase {
 
-  ShooterIOInputs inputs = new ShooterIOInputs();
+  ShooterIOInputsAutoLogged inputs = new ShooterIOInputsAutoLogged();
   ShooterIO shooterIO;
 
   public ShooterSubsystem(ShooterIO shooterIO) {
