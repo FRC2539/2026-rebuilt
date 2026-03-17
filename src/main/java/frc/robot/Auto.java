@@ -9,7 +9,6 @@ import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.subsystems.drivetrain.CommandSwerveDrivetrain;
 import frc.robot.subsystems.drivetrain.DriveConstants;
 import java.util.Optional;
@@ -21,8 +20,7 @@ public class Auto {
   private final RobotContainer container;
 
   private final SwerveRequest.ApplyRobotSpeeds autoRequest =
-      new SwerveRequest.ApplyRobotSpeeds()
-          .withDriveRequestType(DriveRequestType.Velocity);
+      new SwerveRequest.ApplyRobotSpeeds().withDriveRequestType(DriveRequestType.Velocity);
 
   public Auto(RobotContainer container) {
     this.container = container;
@@ -30,8 +28,7 @@ public class Auto {
     configureAutoBuilder();
     registerNamedCommands();
 
-    autoChooser =
-        new LoggedDashboardChooser<>("Auto Routine", AutoBuilder.buildAutoChooser());
+    autoChooser = new LoggedDashboardChooser<>("Auto Routine", AutoBuilder.buildAutoChooser());
   }
 
   private void configureAutoBuilder() {
@@ -43,33 +40,27 @@ public class Auto {
     AutoBuilder.configure(
         drivetrain::getRobotPose,
         drivetrain::resetPose,
-
         drivetrain::getRobotSpeeds,
-
         (speeds, feedforwards) ->
             drivetrain.setControl(
                 autoRequest
                     .withSpeeds(speeds)
                     .withWheelForceFeedforwardsX(feedforwards.robotRelativeForcesXNewtons())
                     .withWheelForceFeedforwardsY(feedforwards.robotRelativeForcesYNewtons())),
-
         new PPHolonomicDriveController(
             new PIDConstants(8.0, 0.0, 0.0), // translation
-            new PIDConstants(4.0, 0.0, 0.0)  // rotation
-        ),
-
+            new PIDConstants(4.0, 0.0, 0.0) // rotation
+            ),
         config,
-
         () -> {
           Optional<DriverStation.Alliance> alliance = DriverStation.getAlliance();
           return alliance.isPresent() && alliance.get() == DriverStation.Alliance.Red;
         },
-
         drivetrain);
   }
 
   private void registerNamedCommands() {
-    NamedCommands.registerCommand(null,null);
+    NamedCommands.registerCommand(null, null);
   }
 
   public Command getAutoCommand() {
