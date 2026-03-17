@@ -13,6 +13,9 @@ import frc.robot.lib.controller.ThrustmasterJoystick;
 import frc.robot.subsystems.drivetrain.CommandSwerveDrivetrain;
 import frc.robot.subsystems.drivetrain.DriveConstants;
 import frc.robot.subsystems.drivetrain.TunerConstants;
+import frc.robot.subsystems.intake.IntakeSubsystem;
+import frc.robot.subsystems.intake.pivot.PivotIOTalonFX;
+import frc.robot.subsystems.intake.roller.RollerIOTalonFX;
 
 public class RobotContainer {
 
@@ -29,6 +32,9 @@ public class RobotContainer {
   private final ThrustmasterJoystick rightDriveController = new ThrustmasterJoystick(1);
 
   private final LogitechController operatorController = new LogitechController(2);
+
+  IntakeSubsystem intakeSubsystem =
+      new IntakeSubsystem(new PivotIOTalonFX(), new RollerIOTalonFX());
 
   private final SwerveRequest.FieldCentric driveRequest =
       new SwerveRequest.FieldCentric()
@@ -53,7 +59,9 @@ public class RobotContainer {
             }));
   }
 
-  private void configureBindings() {}
+  private void configureBindings() {
+
+  }
 
   private ChassisSpeeds getDriverChassisSpeeds() {
     return new ChassisSpeeds(getXVelocity(), getYVelocity(), getThetaVelocity());
