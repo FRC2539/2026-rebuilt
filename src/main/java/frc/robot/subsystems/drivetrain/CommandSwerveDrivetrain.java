@@ -40,9 +40,9 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
 
     super(
         drivetrainConstants,
-        250,
-        VecBuilder.fill(0.02, 0.02, 0.01),
-        VecBuilder.fill(0.5, 0.5, 1.0),
+        250, // odometry frequency
+        VecBuilder.fill(0.02, 0.02, 0.01), // odometry std devs
+        VecBuilder.fill(0.5, 0.5, 1.0), // vision std dev base
         modules);
 
     if (Utils.isSimulation()) {
@@ -52,7 +52,6 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
 
   @Override
   public void periodic() {
-
     if (!m_hasAppliedOperatorPerspective || DriverStation.isDisabled()) {
       DriverStation.getAlliance()
           .ifPresent(
@@ -76,29 +75,44 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     return getRobotPose().getRotation();
   }
 
-  public void filterAndAddMeasurements(PoseEstimate estimate) {
+  public ChassisSpeeds getRobotSpeeds() {
+    return getState().Speeds;
+  }
+
+  public SwerveModuleState[] getActualSpeeds() {
+    return getState().ModuleStates;
+  }
+
+  public SwerveModuleState[] getDesiredSpeeds() {
+    return getState().ModuleTargets;
+  }
+
+  public void addVisionMeasurementFromLimelight(PoseEstimate estimate) {
 
     if (estimate == null) return;
 
-    boolean rejectPose = false;
+    boolean reject = false;
 
-    if (estimate.tagCount == 0) rejectPose = true;
-    if (estimate.avgTagDist > 4.0) rejectPose = true;
+    if (estimate.tagCount == 0) reject = true;
+    if (estimate.avgTagDist > 4.5) reject = true;
 
-    if (Math.abs(getRobotSpeeds().omegaRadiansPerSecond) > Math.toRadians(720)) rejectPose = true;
+    if (Math.abs(getRobotSpeeds().omegaRadiansPerSecond) > Math.toRadians(720)) {
+      reject = true;
+    }
 
-    if (rejectPose) return;
+    if (reject) return;
 
     double xyStdDev;
+    if (estimate.avgTagDist < 1.5) xyStdDev = 0.07;
+    else if (estimate.avgTagDist < 3.0) xyStdDev = 0.15;
+    else xyStdDev = 0.35;
 
-    if (estimate.avgTagDist < 1.5) xyStdDev = 0.08;
-    else if (estimate.avgTagDist < 3) xyStdDev = 0.15;
-    else xyStdDev = 0.3;
+    double thetaStdDev = 0.4;
 
     double correctedTimestamp = estimate.timestampSeconds - (estimate.latency / 1000.0);
 
     addVisionMeasurement(
-        estimate.pose, correctedTimestamp, VecBuilder.fill(xyStdDev, xyStdDev, 0.3));
+        estimate.pose, correctedTimestamp, VecBuilder.fill(xyStdDev, xyStdDev, thetaStdDev));
   }
 
   @Override
@@ -117,20 +131,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     return super.samplePoseAt(Utils.fpgaToCurrentTime(timestamp));
   }
 
-  public ChassisSpeeds getRobotSpeeds() {
-    return getState().Speeds;
-  }
-
-  public SwerveModuleState[] getActualSpeeds() {
-    return getState().ModuleStates;
-  }
-
-  public SwerveModuleState[] getDesiredSpeeds() {
-    return getState().ModuleTargets;
-  }
-
   private void startSimThread() {
-
     m_lastSimTime = Utils.getCurrentTimeSeconds();
 
     m_simNotifier =
