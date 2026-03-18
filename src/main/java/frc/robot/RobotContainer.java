@@ -7,10 +7,12 @@ import static edu.wpi.first.units.Units.RotationsPerSecond;
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.lib.controller.LogitechController;
 import frc.robot.lib.controller.ThrustmasterJoystick;
 import frc.robot.subsystems.drivetrain.CommandSwerveDrivetrain;
+import frc.robot.subsystems.drivetrain.DriveConstants;
 import frc.robot.subsystems.drivetrain.TunerConstants;
 
 public class RobotContainer {
@@ -40,9 +42,40 @@ public class RobotContainer {
     configureBindings();
 
     auto = new Auto(this);
+
+    drivetrain.setDefaultCommand(
+        drivetrain.applyRequest(
+            () -> {
+              ChassisSpeeds speeds = getDriverChassisSpeeds();
+
+              return driveRequest
+                  .withVelocityX(speeds.vxMetersPerSecond)
+                  .withVelocityY(speeds.vyMetersPerSecond)
+                  .withRotationalRate(speeds.omegaRadiansPerSecond);
+            }));
+
   }
 
   private void configureBindings() {}
+
+  private ChassisSpeeds getDriverChassisSpeeds() {
+    return new ChassisSpeeds(getXVelocity(), getYVelocity(), getThetaVelocity());
+  }
+
+  private double getXVelocity() {
+    return DriveConstants.MAX_TRANSLATIONAL_SPEED.in(MetersPerSecond)
+        * -Math.pow(leftDriveController.getYAxis().get(), 3);
+  }
+
+  private double getYVelocity() {
+    return DriveConstants.MAX_TRANSLATIONAL_SPEED.in(MetersPerSecond)
+        * -Math.pow(leftDriveController.getXAxis().get(), 3);
+  }
+
+  private double getThetaVelocity() {
+    return DriveConstants.MAX_ROTATIONAL_SPEED.in(RadiansPerSecond)
+        * -Math.pow(rightDriveController.getXAxis().get(), 3);
+  }
 
   public Command getAutonomousCommand() {
     return auto.getAutoCommand();
