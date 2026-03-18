@@ -6,7 +6,6 @@ import static edu.wpi.first.units.Units.RotationsPerSecond;
 
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 import com.ctre.phoenix6.swerve.SwerveRequest;
-
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.lib.controller.LogitechController;
@@ -37,7 +36,6 @@ public class RobotContainer {
           .withRotationalDeadband(maxAngularRate * 0.025)
           .withDriveRequestType(DriveRequestType.Velocity);
 
-
   public RobotContainer() {
     configureBindings();
 
@@ -53,7 +51,6 @@ public class RobotContainer {
                   .withVelocityY(speeds.vyMetersPerSecond)
                   .withRotationalRate(speeds.omegaRadiansPerSecond);
             }));
-
   }
 
   private void configureBindings() {}
