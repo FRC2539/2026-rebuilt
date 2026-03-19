@@ -4,17 +4,15 @@
 
 package frc.robot.subsystems.magicFloor;
 
-import org.littletonrobotics.junction.Logger;
-
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.subsystems.magicFloor.MagicFloorIO.MagicFloorIOInputs;
+import org.littletonrobotics.junction.Logger;
 
 public class MagicFloorSubsystem extends SubsystemBase {
 
   MagicFloorIO magicFloorIO;
-  MagicFloorIOInputs inputs = new MagicFloorIOInputs();
+  MagicFloorIOInputsAutoLogged inputs = new MagicFloorIOInputsAutoLogged();
 
   public MagicFloorSubsystem(MagicFloorIO magicFloorIO) {
     this.magicFloorIO = magicFloorIO;
@@ -28,10 +26,7 @@ public class MagicFloorSubsystem extends SubsystemBase {
     Logger.processInputs("RealOutputs/MagicFloor", inputs);
   }
 
-  public Command setVoltage(double voltage){
-    return Commands.run(
-      () -> magicFloorIO.setVoltage(voltage)
-    );
+  public Command setVoltage(double voltage) {
+    return Commands.run(() -> magicFloorIO.setVoltage(voltage), this);
   }
-
 }

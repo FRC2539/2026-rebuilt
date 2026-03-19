@@ -4,13 +4,13 @@ import org.littletonrobotics.junction.AutoLog;
 
 public interface MagicFloorIO {
 
-    public void updateInputs(MagicFloorIOInputs inputs);
+  public void updateInputs(MagicFloorIOInputs inputs);
 
-    @AutoLog
-    public class MagicFloorIOInputs {
-        double voltage = 0;
-        double speed = 0;
-    }
+  @AutoLog
+  public class MagicFloorIOInputs {
+    public double voltage = 0;
+    public double speed = 0;
+  }
 
-    public void setVoltage(double voltage);
+  public void setVoltage(double voltage);
 }
