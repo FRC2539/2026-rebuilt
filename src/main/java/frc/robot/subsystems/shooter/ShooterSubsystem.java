@@ -9,7 +9,6 @@ import org.littletonrobotics.junction.Logger;
 public class ShooterSubsystem extends SubsystemBase {
 
   public ShooterIOInputsAutoLogged shooterInputs = new ShooterIOInputsAutoLogged();
-  ShooterIOInputsAutoLogged inputs = new ShooterIOInputsAutoLogged();
   ShooterIO shooterIO;
 
   public ShooterSubsystem(ShooterIO shooterIO) {
