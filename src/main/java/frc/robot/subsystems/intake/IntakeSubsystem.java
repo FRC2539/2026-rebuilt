@@ -23,22 +23,27 @@ public class IntakeSubsystem extends SubsystemBase {
   public void periodic() {}
 
   public Command IntakeUpStatic() { // Pull the intake up and stop the rollers
-    return Commands.parallel(pivotSubsystem.PullUp(), rollerSubsystem.Stop());
+    return Commands.parallel(pivotSubsystem.PullUp(), rollerSubsystem.Stop())
+        .andThen(Commands.idle(this));
   }
 
   public Command IntakeUpCrunch() { // Pull the intake up while agitating
-    return Commands.parallel(pivotSubsystem.PullUp(), rollerSubsystem.Crunch());
+    return Commands.parallel(pivotSubsystem.PullUp(), rollerSubsystem.Crunch())
+        .andThen(Commands.idle(this));
   }
 
   public Command IntakeDownStop() { // Push the intake down, while not intaking
-    return Commands.parallel(pivotSubsystem.PutDown(), rollerSubsystem.Stop());
+    return Commands.parallel(pivotSubsystem.PutDown(), rollerSubsystem.Stop())
+        .andThen(Commands.idle(this));
   }
 
   public Command IntakeDownRun() { // Push the intake down and intake
-    return Commands.parallel(pivotSubsystem.PutDown(), rollerSubsystem.RunForward());
+    return Commands.parallel(pivotSubsystem.PutDown(), rollerSubsystem.RunForward())
+        .andThen(Commands.idle(this));
   }
 
   public Command IntakeDownExtake() { // Push the intake down and extake
-    return Commands.parallel(pivotSubsystem.PutDown(), rollerSubsystem.RunBackward());
+    return Commands.parallel(pivotSubsystem.PutDown(), rollerSubsystem.RunBackward())
+        .andThen(Commands.idle(this));
   }
 }
