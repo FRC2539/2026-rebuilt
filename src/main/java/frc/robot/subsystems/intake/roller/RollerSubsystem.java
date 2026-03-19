@@ -21,22 +21,32 @@ public class RollerSubsystem extends SubsystemBase {
     rollerIO.updateInputs(inputs);
     Logger.processInputs("RealOutputs/Intake", inputs);
   }
-  
 
-    public Command Stop() {
-        return Commands.run(
-            () -> { rollerIO.setRollerVoltage(IntakeConstants.ROLLER_VOLTAGE_STOP); });
-    }
-    public Command RunForward() {
-        return Commands.run(
-            () -> { rollerIO.setRollerVoltage(IntakeConstants.ROLLER_VOLTAGE_FORWARD); });
-    }
-    public Command RunBackward() {
-        return Commands.run(
-            () -> { rollerIO.setRollerVoltage(IntakeConstants.ROLLER_VOLTAGE_BACKWARD); });
-    }
-    public Command Crunch() {
-        return Commands.run(
-            () -> { rollerIO.setRollerVoltage(IntakeConstants.ROLLER_VOLTAGE_FORWARD); });
-    }
+  public Command Stop() {
+    return Commands.run(
+        () -> {
+          rollerIO.setRollerVoltage(IntakeConstants.ROLLER_VOLTAGE_STOP);
+        });
+  }
+
+  public Command RunForward() {
+    return Commands.run(
+        () -> {
+          rollerIO.setRollerVoltage(IntakeConstants.ROLLER_VOLTAGE_FORWARD);
+        });
+  }
+
+  public Command RunBackward() {
+    return Commands.run(
+        () -> {
+          rollerIO.setRollerVoltage(IntakeConstants.ROLLER_VOLTAGE_BACKWARD);
+        });
+  }
+
+  public Command Crunch() {
+    return Commands.run(
+        () -> {
+          rollerIO.setRollerVoltage(IntakeConstants.ROLLER_VOLTAGE_FORWARD);
+        });
+  }
 }

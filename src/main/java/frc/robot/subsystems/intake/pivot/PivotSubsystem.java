@@ -21,14 +21,28 @@ public class PivotSubsystem extends SubsystemBase {
     Logger.processInputs("RealOutputs/Intake", inputs);
   }
 
-    public Command PullUp() {
-        return Commands.run(() -> { pivotIO.setPivotPosition(IntakeConstants.PIVOT_POSITION_UP); }, this);
-    }
-    public Command PutDown() {
-        return Commands.run(() -> { pivotIO.setPivotPosition(IntakeConstants.PIVOT_POSITION_UP); }, this);
-    }
-    public Command Crunch() {
-        // TODO: Crunch command for pivot
-        return Commands.run(() -> { pivotIO.setPivotPosition(IntakeConstants.PIVOT_POSITION_UP); }, this);
-    }
+  public Command PullUp() {
+    return Commands.run(
+        () -> {
+          pivotIO.setPivotPosition(IntakeConstants.PIVOT_POSITION_UP);
+        },
+        this);
+  }
+
+  public Command PutDown() {
+    return Commands.run(
+        () -> {
+          pivotIO.setPivotPosition(IntakeConstants.PIVOT_POSITION_UP);
+        },
+        this);
+  }
+
+  public Command Crunch() {
+    // TODO: Crunch command for pivot
+    return Commands.run(
+        () -> {
+          pivotIO.setPivotPosition(IntakeConstants.PIVOT_POSITION_UP);
+        },
+        this);
+  }
 }
