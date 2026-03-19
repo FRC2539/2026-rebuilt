@@ -59,9 +59,7 @@ public class RobotContainer {
             }));
   }
 
-  private void configureBindings() {
-
-  }
+  private void configureBindings() {}
 
   private ChassisSpeeds getDriverChassisSpeeds() {
     return new ChassisSpeeds(getXVelocity(), getYVelocity(), getThetaVelocity());
