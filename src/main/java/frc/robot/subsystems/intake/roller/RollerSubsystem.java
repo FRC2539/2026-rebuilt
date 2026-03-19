@@ -26,27 +26,32 @@ public class RollerSubsystem extends SubsystemBase {
     return Commands.run(
         () -> {
           rollerIO.setRollerVoltage(IntakeConstants.ROLLER_VOLTAGE_STOP);
-        });
+        },
+        this);
   }
 
   public Command RunForward() {
     return Commands.run(
         () -> {
           rollerIO.setRollerVoltage(IntakeConstants.ROLLER_VOLTAGE_FORWARD);
-        });
+        },
+        this);
   }
 
   public Command RunBackward() {
     return Commands.run(
         () -> {
           rollerIO.setRollerVoltage(IntakeConstants.ROLLER_VOLTAGE_BACKWARD);
-        });
+        },
+        this);
   }
 
   public Command Crunch() {
+    // TODO: Crunch command for roller
     return Commands.run(
         () -> {
           rollerIO.setRollerVoltage(IntakeConstants.ROLLER_VOLTAGE_FORWARD);
-        });
+        },
+        this);
   }
 }
