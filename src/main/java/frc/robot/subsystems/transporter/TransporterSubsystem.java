@@ -1,16 +1,14 @@
 package frc.robot.subsystems.transporter;
 
-import org.littletonrobotics.junction.Logger;
-
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.subsystems.transporter.TransporterIO.TransporterIOInputs;
+import org.littletonrobotics.junction.Logger;
 
 public class TransporterSubsystem extends SubsystemBase {
 
   TransporterIO transporterIO;
-  TransporterIOInputs inputs = new TransporterIOInputs();
+  TransporterIOInputsAutoLogged inputs = new TransporterIOInputsAutoLogged();
 
   public TransporterSubsystem(TransporterIO transporterIO) {
     this.transporterIO = transporterIO;
@@ -24,15 +22,11 @@ public class TransporterSubsystem extends SubsystemBase {
     Logger.processInputs("RealOutputs/TransporterSubsystem", inputs);
   }
 
-  public Command setVoltage(double voltage){
-    return Commands.run(
-      () -> transporterIO.setVoltage(voltage)
-    );
+  public Command setVoltage(double voltage) {
+    return Commands.run(() -> transporterIO.setVoltage(voltage));
   }
-  
-  public Command reverseVoltage(double voltage){
-    return Commands.run(
-      () -> transporterIO.setVoltage(-voltage)
-    );
+
+  public Command reverseVoltage(double voltage) {
+    return Commands.run(() -> transporterIO.setVoltage(-voltage));
   }
 }
