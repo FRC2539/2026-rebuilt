@@ -6,8 +6,10 @@ import static edu.wpi.first.units.Units.RotationsPerSecond;
 
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 import com.ctre.phoenix6.swerve.SwerveRequest;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.commands.FaceHubWhileDriving;
 import frc.robot.lib.controller.LogitechController;
 import frc.robot.lib.controller.ThrustmasterJoystick;
 import frc.robot.subsystems.drivetrain.CommandSwerveDrivetrain;
@@ -34,8 +36,12 @@ public class RobotContainer {
 
   private final LogitechController operatorController = new LogitechController(2);
 
-  PivotSubsystem pivotSubsystem = new PivotSubsystem(new PivotIOTalonFX());
-  RollerSubsystem rollerSubsystem = new RollerSubsystem(new RollerIOTalonFX());
+  public final PivotSubsystem pivotSubsystem = new PivotSubsystem(new PivotIOTalonFX());
+  public final RollerSubsystem rollerSubsystem = new RollerSubsystem(new RollerIOTalonFX());
+
+  private final FaceHubWhileDriving faceHubCommand =
+      new FaceHubWhileDriving(
+          drivetrain, leftDriveController.getYAxis(), leftDriveController.getXAxis());
 
   private final SwerveRequest.FieldCentric driveRequest =
       new SwerveRequest.FieldCentric()
@@ -60,14 +66,37 @@ public class RobotContainer {
             }));
   }
 
+  private Command face0 =
+      drivetrain.snapToAngle(
+          () -> Rotation2d.fromDegrees(0), () -> getXVelocity(), () -> getYVelocity());
+
+  private Command face90 =
+      drivetrain.snapToAngle(
+          () -> Rotation2d.fromDegrees(90), () -> getXVelocity(), () -> getYVelocity());
+
+  private Command face180 =
+      drivetrain.snapToAngle(
+          () -> Rotation2d.fromDegrees(180), () -> getXVelocity(), () -> getYVelocity());
+
+  private Command face270 =
+      drivetrain.snapToAngle(
+          () -> Rotation2d.fromDegrees(270), () -> getXVelocity(), () -> getYVelocity());
+
   private void configureBindings() {
     // driver bind
     rightDriveController.getLeftThumb().onTrue(pivotSubsystem.TogglePivot());
     rightDriveController.getTrigger().whileTrue(rollerSubsystem.RunForward());
 
+    rightDriveController.getBottomThumb().whileTrue(faceHubCommand);
+
+    // Cardinal directions
+    rightDriveController.getPOVUp().whileTrue(face0);
+    rightDriveController.getPOVLeft().whileTrue(face90);
+    rightDriveController.getPOVDown().whileTrue(face180);
+    rightDriveController.getPOVRight().whileTrue(face270);
+
     // op binds
     operatorController.getA().whileTrue(rollerSubsystem.RunBackward());
-
     operatorController.getY().whileTrue(pivotSubsystem.CrunchSlow());
   }
 

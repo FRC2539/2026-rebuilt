@@ -5,6 +5,7 @@ import static edu.wpi.first.units.Units.*;
 import com.ctre.phoenix6.SignalLogger;
 import com.ctre.phoenix6.Utils;
 import com.ctre.phoenix6.swerve.SwerveDrivetrainConstants;
+import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 import com.ctre.phoenix6.swerve.SwerveModuleConstants;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 import edu.wpi.first.math.Matrix;
@@ -103,6 +104,23 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
               },
               null,
               this));
+
+  public Command snapToAngle(
+      Supplier<Rotation2d> targetAngleSupplier, Supplier<Double> xVel, Supplier<Double> yVel) {
+
+    SwerveRequest.FieldCentricFacingAngle request =
+        new SwerveRequest.FieldCentricFacingAngle().withDriveRequestType(DriveRequestType.Velocity);
+
+    return run(
+        () -> {
+          request
+              .withVelocityX(xVel.get())
+              .withVelocityY(yVel.get())
+              .withTargetDirection(targetAngleSupplier.get());
+
+          setControl(request);
+        });
+  }
 
   /* The SysId routine to test */
   private SysIdRoutine m_sysIdRoutineToApply = m_sysIdRoutineTranslation;

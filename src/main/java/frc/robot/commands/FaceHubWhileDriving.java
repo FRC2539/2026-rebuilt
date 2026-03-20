@@ -29,9 +29,9 @@ public class FaceHubWhileDriving extends Command {
 
   private static final double TARGET_DEADBAND = 0.1;
 
-  private static final double kP = 0.0;
+  private static final double kP = 6.0;
   private static final double kI = 0.0;
-  private static final double kD = 0.0;
+  private static final double kD = 0.1;
 
   private final SwerveRequest.FieldCentricFacingAngle request =
       new SwerveRequest.FieldCentricFacingAngle();
@@ -43,6 +43,8 @@ public class FaceHubWhileDriving extends Command {
     this.yAxis = yAxis;
 
     request.HeadingController.setPID(kP, kI, kD);
+
+    request.HeadingController.enableContinuousInput(-Math.PI, Math.PI);
 
     addRequirements(drivetrain);
   }
