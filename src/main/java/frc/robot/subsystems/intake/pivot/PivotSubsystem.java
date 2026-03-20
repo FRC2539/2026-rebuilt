@@ -56,4 +56,17 @@ public class PivotSubsystem extends SubsystemBase {
         },
         this);
   }
+
+  public Command CrunchSlow() {
+    return Commands.startEnd(
+        () -> {
+          pivotIO.setPID(0.2, 0, 0);
+
+          pivotIO.setPivotPosition(IntakeConstants.PIVOT_POSITION_CRUNCH);
+        },
+        () -> {
+          pivotIO.setPID(0.6, 0, 0);
+        },
+        this);
+  }
 }

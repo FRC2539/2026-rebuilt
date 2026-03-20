@@ -67,6 +67,8 @@ public class RobotContainer {
 
     // op binds
     operatorController.getA().whileTrue(rollerSubsystem.RunBackward());
+
+    operatorController.getY().whileTrue(pivotSubsystem.CrunchSlow());
   }
 
   private ChassisSpeeds getDriverChassisSpeeds() {
