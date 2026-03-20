@@ -61,9 +61,11 @@ public class RobotContainer {
   }
 
   private void configureBindings() {
-    // #region Intake Bindings
-    rightDriveController.getLeftThumb().toggleOnTrue(pivotSubsystem.PutDown());
+    // driver bind
+    rightDriveController.getLeftThumb().onTrue(pivotSubsystem.TogglePivot());
     rightDriveController.getTrigger().whileTrue(rollerSubsystem.RunForward());
+
+    // op binds
     operatorController.getA().whileTrue(rollerSubsystem.RunBackward());
   }
 

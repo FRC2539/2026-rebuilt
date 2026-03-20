@@ -19,8 +19,6 @@ public final class IntakeConstants {
   // TODO: Intake: Define ROLLER_VELOCITY_TOLERANCE
   public static final double ROLLER_VELOCITY_TOLERANCE = 0;
 
-  
-  
   // TODO: Intake: Define PIVOT_POSITION_DOWN
   public static final double PIVOT_POSITION_DOWN = 0;
   // TODO: Intake: Define PIVOT_POSITION_UP

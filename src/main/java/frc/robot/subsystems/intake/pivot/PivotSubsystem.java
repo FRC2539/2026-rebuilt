@@ -32,25 +32,28 @@ public class PivotSubsystem extends SubsystemBase {
   public Command PutDown() {
     return Commands.run(
         () -> {
-          pivotIO.setPivotPosition(IntakeConstants.PIVOT_POSITION_UP);
+          pivotIO.setPivotPosition(IntakeConstants.PIVOT_POSITION_DOWN);
         },
         this);
   }
 
-  // In theory...
-  public Command Crunch() {
-    return Commands.repeatingSequence(
-        Commands.deadline(
-            Commands.waitSeconds(0.5),
-            Commands.run(
-                () -> {
-                  pivotIO.setPivotPosition(IntakeConstants.PIVOT_POSITION_CRUNCH);
-                })),
-        Commands.deadline(
-            Commands.waitSeconds(1.5),
-            Commands.run(
-                () -> {
-                  pivotIO.setPivotPosition(IntakeConstants.PIVOT_POSITION_UP);
-                })));
+  public boolean isUpOrCrunch() {
+    double pos = pivotIO.getPivotPosition();
+    return Math.abs(pos - IntakeConstants.PIVOT_POSITION_UP)
+            <= IntakeConstants.PIVOT_ROTATION_TOLERANCE
+        || Math.abs(pos - IntakeConstants.PIVOT_POSITION_CRUNCH)
+            <= IntakeConstants.PIVOT_ROTATION_TOLERANCE;
+  }
+
+  public Command TogglePivot() {
+    return Commands.runOnce(
+        () -> {
+          if (isUpOrCrunch()) {
+            pivotIO.setPivotPosition(IntakeConstants.PIVOT_POSITION_DOWN);
+          } else {
+            pivotIO.setPivotPosition(IntakeConstants.PIVOT_POSITION_UP);
+          }
+        },
+        this);
   }
 }

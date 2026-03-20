@@ -33,7 +33,7 @@ public class PivotIOTalonFX implements PivotIO {
   }
 
   public double getPivotPosition() { // Absolute position of the pivot
-    return pivotMotor.getMotorVoltage().refresh().getValueAsDouble();
+    return pivotMotor.getPosition().refresh().getValueAsDouble();
   }
 
   public double getPivotDelta() { // How much the pivot needs to turn to be at its absolute target
