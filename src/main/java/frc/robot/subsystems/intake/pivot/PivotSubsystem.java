@@ -37,12 +37,20 @@ public class PivotSubsystem extends SubsystemBase {
         this);
   }
 
+  // In theory...
   public Command Crunch() {
-    // TODO: Crunch command for pivot
-    return Commands.run(
-        () -> {
-          pivotIO.setPivotPosition(IntakeConstants.PIVOT_POSITION_UP);
-        },
-        this);
+    return Commands.repeatingSequence(
+        Commands.deadline(
+            Commands.waitSeconds(0.5),
+            Commands.run(
+                () -> {
+                  pivotIO.setPivotPosition(IntakeConstants.PIVOT_POSITION_CRUNCH);
+                })),
+        Commands.deadline(
+            Commands.waitSeconds(1.5),
+            Commands.run(
+                () -> {
+                  pivotIO.setPivotPosition(IntakeConstants.PIVOT_POSITION_UP);
+                })));
   }
 }

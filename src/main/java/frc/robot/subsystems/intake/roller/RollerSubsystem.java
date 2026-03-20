@@ -46,8 +46,8 @@ public class RollerSubsystem extends SubsystemBase {
         this);
   }
 
+  // In theory...
   public Command Crunch() {
-    // TODO: Crunch command for roller
     return Commands.run(
         () -> {
           rollerIO.setRollerVoltage(IntakeConstants.ROLLER_VOLTAGE_FORWARD);

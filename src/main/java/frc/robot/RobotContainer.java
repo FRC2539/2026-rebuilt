@@ -13,9 +13,10 @@ import frc.robot.lib.controller.ThrustmasterJoystick;
 import frc.robot.subsystems.drivetrain.CommandSwerveDrivetrain;
 import frc.robot.subsystems.drivetrain.DriveConstants;
 import frc.robot.subsystems.drivetrain.TunerConstants;
-import frc.robot.subsystems.intake.IntakeSubsystem;
 import frc.robot.subsystems.intake.pivot.PivotIOTalonFX;
+import frc.robot.subsystems.intake.pivot.PivotSubsystem;
 import frc.robot.subsystems.intake.roller.RollerIOTalonFX;
+import frc.robot.subsystems.intake.roller.RollerSubsystem;
 
 public class RobotContainer {
 
@@ -33,8 +34,8 @@ public class RobotContainer {
 
   private final LogitechController operatorController = new LogitechController(2);
 
-  IntakeSubsystem intakeSubsystem =
-      new IntakeSubsystem(new PivotIOTalonFX(), new RollerIOTalonFX());
+  PivotSubsystem pivotSubsystem = new PivotSubsystem(new PivotIOTalonFX());
+  RollerSubsystem rollerSubsystem = new RollerSubsystem(new RollerIOTalonFX());
 
   private final SwerveRequest.FieldCentric driveRequest =
       new SwerveRequest.FieldCentric()
@@ -59,7 +60,12 @@ public class RobotContainer {
             }));
   }
 
-  private void configureBindings() {}
+  private void configureBindings() {
+    // #region Intake Bindings
+    rightDriveController.getLeftThumb().toggleOnTrue(pivotSubsystem.PutDown());
+    rightDriveController.getTrigger().whileTrue(rollerSubsystem.RunForward());
+    operatorController.getA().whileTrue(rollerSubsystem.RunBackward());
+  }
 
   private ChassisSpeeds getDriverChassisSpeeds() {
     return new ChassisSpeeds(getXVelocity(), getYVelocity(), getThetaVelocity());
