@@ -28,6 +28,14 @@ public enum LEDSegment {
   CenterTop(7, false, 20),
 
   BatteryIndicator(0, true, 0, 1),
+  ConnectedIndicator(0, true, 1, 2),
+  PivotIndicator(0, true, 2, 3),
+  HoodIndicator(0, true, 3, 4),
+  // connected to computer/fms
+  // hood encoder
+  // intake agle encoder
+  // all cameras online
+  // field color ???
 
   // All
   All(0, false, ShooterTop.startIndex, CenterTop.endIndex),

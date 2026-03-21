@@ -22,6 +22,7 @@ public class PivotIOTalonFX implements PivotIO {
   public void updateInputs(PivotIOInputs inputs) {
     inputs.pivotPosition = getPivotPosition();
     inputs.pivotVoltage = getPivotVoltage();
+    // inputs.throughboreConnected = piv.isConnected();
   }
 
   public void setPivotPosition(double position) {

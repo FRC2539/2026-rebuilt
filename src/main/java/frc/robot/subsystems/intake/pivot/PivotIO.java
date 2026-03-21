@@ -9,6 +9,7 @@ public interface PivotIO {
   public class PivotIOInputs {
     double pivotVoltage = 0;
     double pivotPosition = 0;
+    public boolean throughboreConnected = false;
   }
 
   public void setPivotPosition(double position);

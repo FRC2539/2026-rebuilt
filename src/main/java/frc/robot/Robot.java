@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -59,16 +60,15 @@ public class Robot extends LoggedRobot {
       LEDSegment.BatteryIndicator.setSolidColor(ColorPalette.Green);
     else LEDSegment.BatteryIndicator.setFadeAnimation(ColorPalette.Red, 1);
 
+    // Indicate once the driver station is connected
+    if (DriverStation.isDSAttached())
+      LEDSegment.ConnectedIndicator.setSolidColor(ColorPalette.Orange);
+    else LEDSegment.ConnectedIndicator.setSolidColor(ColorPalette.Black);
+
     // // Verify that all absolute encoders are connected
-    // if (m_robotContainer.armSubsystem.isEncoderConnected())
-    //     LEDSegment.PivotEncoderIndicator.setColor(LightsSubsystem.white.dim(1));
-    // else LEDSegment.PivotEncoderIndicator.fullClear();
-
-    // // Indicate once the driver station is connected
-    // if (DriverStation.isDSAttached())
-    //     LEDSegment.DriverstationIndicator.setColor(LightsSubsystem.orange.dim(1));
-    // else LEDSegment.DriverstationIndicator.fullClear();
-
+    if (m_robotContainer.pivotSubsystem.isEncoderConnected())
+      LEDSegment.PivotIndicator.setSolidColor(ColorPalette.Orange);
+    else LEDSegment.PivotIndicator.setSolidColor(ColorPalette.Black);
   }
 
   @Override

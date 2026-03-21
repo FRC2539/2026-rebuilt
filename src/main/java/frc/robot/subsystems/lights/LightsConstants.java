@@ -60,6 +60,7 @@ public class LightsConstants {
     public static RGBWColor Blue = new RGBWColor(8, 32, 255);
     public static RGBWColor White = new RGBWColor(255, 255, 255);
     public static RGBWColor Purple = new RGBWColor(200, 0, 200);
+    public static RGBWColor Black = new RGBWColor(0, 0, 0);
 
     static RGBWColor Crossfade(RGBWColor a, RGBWColor b, double ratio) {
       return new RGBWColor(

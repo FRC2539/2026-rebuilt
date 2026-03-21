@@ -61,4 +61,8 @@ public class HoodSubsystem extends SubsystemBase {
   public Command aimHoodFromDistanceForever(Supplier<Double> distanceMeters) {
     return setHoodAngleForever(() -> getHoodAngleForDistance(distanceMeters.get()));
   }
+
+  public boolean isEncoderConnected() {
+    return inputs.throughboreConnected;
+  }
 }

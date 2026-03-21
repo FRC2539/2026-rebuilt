@@ -69,4 +69,8 @@ public class PivotSubsystem extends SubsystemBase {
         },
         this);
   }
+
+  public boolean isEncoderConnected() {
+    return inputs.throughboreConnected;
+  }
 }
