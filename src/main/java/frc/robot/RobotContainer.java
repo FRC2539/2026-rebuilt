@@ -11,6 +11,7 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.commands.AutoShootWhileBracing;
 import frc.robot.commands.FaceHubWhileDriving;
+import frc.robot.commands.ShootWhileDriving;
 import frc.robot.lib.controller.LogitechController;
 import frc.robot.lib.controller.ThrustmasterJoystick;
 import frc.robot.subsystems.drivetrain.CommandSwerveDrivetrain;
@@ -120,6 +121,19 @@ public class RobotContainer {
         .whileTrue(
             new AutoShootWhileBracing(
                 drivetrain, targeting, shooter, hood, transporter, magicFloor));
+
+    operatorController
+        .getRightTrigger()
+        .whileTrue(
+            new ShootWhileDriving(
+                drivetrain,
+                targeting,
+                shooter,
+                hood,
+                transporter,
+                magicFloor,
+                leftDriveController.getYAxis(),
+                leftDriveController.getXAxis()));
   }
 
   private ChassisSpeeds getDriverChassisSpeeds() {
