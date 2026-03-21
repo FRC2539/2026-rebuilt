@@ -19,6 +19,7 @@ import frc.robot.subsystems.intake.pivot.PivotIOTalonFX;
 import frc.robot.subsystems.intake.pivot.PivotSubsystem;
 import frc.robot.subsystems.intake.roller.RollerIOTalonFX;
 import frc.robot.subsystems.intake.roller.RollerSubsystem;
+import frc.robot.subsystems.lights.LightsSubsystem;
 
 public class RobotContainer {
 
@@ -38,6 +39,8 @@ public class RobotContainer {
 
   public final PivotSubsystem pivotSubsystem = new PivotSubsystem(new PivotIOTalonFX());
   public final RollerSubsystem rollerSubsystem = new RollerSubsystem(new RollerIOTalonFX());
+
+  public final LightsSubsystem lights = new LightsSubsystem();
 
   private final FaceHubWhileDriving faceHubCommand =
       new FaceHubWhileDriving(
