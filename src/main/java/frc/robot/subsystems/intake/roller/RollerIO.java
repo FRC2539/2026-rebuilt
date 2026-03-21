@@ -11,5 +11,4 @@ public interface RollerIO {
   }
 
   public void setVoltage(double voltage);
-
 }

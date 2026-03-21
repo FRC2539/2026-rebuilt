@@ -21,11 +21,11 @@ public class PivotSubsystem extends SubsystemBase {
   }
 
   public Command PullUp() {
-    setPosition(PivotConstants.intakeUpPosition);
+    return setPosition(PivotConstants.intakeUpPosition);
   }
 
   public Command PutDown() {
-    setPosition(PivotConstants.intakeDownPosition);
+    return setPosition(PivotConstants.intakeDownPosition);
   }
 
   public Command setVoltage(double voltage) {
