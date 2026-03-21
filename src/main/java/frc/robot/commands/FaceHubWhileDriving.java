@@ -55,6 +55,7 @@ public class FaceHubWhileDriving extends Command {
     double xSpeed = xAxis.get() * DriveConstants.MAX_TRANSLATIONAL_SPEED.in(MetersPerSecond);
 
     double ySpeed = yAxis.get() * DriveConstants.MAX_TRANSLATIONAL_SPEED.in(MetersPerSecond);
+    
 
     Pose2d hubPosition = blueHubPosition;
 
