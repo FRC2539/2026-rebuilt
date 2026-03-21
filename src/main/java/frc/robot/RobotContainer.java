@@ -11,6 +11,8 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.commands.AutoShootWhileBracing;
 import frc.robot.commands.FaceHubWhileDriving;
+import frc.robot.commands.LongDistanceFeed;
+import frc.robot.commands.MediumDistanceFeed;
 import frc.robot.commands.ShootWhileDriving;
 import frc.robot.lib.controller.LogitechController;
 import frc.robot.lib.controller.ThrustmasterJoystick;
@@ -134,6 +136,16 @@ public class RobotContainer {
                 magicFloor,
                 leftDriveController.getYAxis(),
                 leftDriveController.getXAxis()));
+
+    operatorController
+        .getRightBumper()
+        .whileTrue(
+            new MediumDistanceFeed(drivetrain, targeting, shooter, hood, transporter, magicFloor));
+
+    operatorController
+        .getLeftBumper()
+        .whileTrue(
+            new LongDistanceFeed(drivetrain, targeting, shooter, hood, transporter, magicFloor));
   }
 
   private ChassisSpeeds getDriverChassisSpeeds() {
