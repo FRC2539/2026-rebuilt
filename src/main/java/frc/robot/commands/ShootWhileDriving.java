@@ -14,12 +14,16 @@ import frc.robot.subsystems.shooter.ShooterSubsystem;
 import frc.robot.subsystems.targeting.TargetingConstants;
 import frc.robot.subsystems.targeting.TargetingSubsystem;
 import frc.robot.subsystems.transporter.TransporterSubsystem;
+import java.util.function.Supplier;
 
 public class ShootWhileDriving extends Command {
 
   private final Command command;
 
   private boolean hasSpunUp = false;
+
+  private final Supplier<Double> shooterOffset;
+  private final Supplier<Double> hoodOffset;
 
   public ShootWhileDriving(
       CommandSwerveDrivetrain drivetrain,
@@ -29,7 +33,12 @@ public class ShootWhileDriving extends Command {
       TransporterSubsystem transporter,
       MagicFloorSubsystem magicFloor,
       Axis xAxis,
-      Axis yAxis) {
+      Axis yAxis,
+      Supplier<Double> shooterOffset,
+      Supplier<Double> hoodOffset) {
+
+    this.shooterOffset = shooterOffset;
+    this.hoodOffset = hoodOffset;
 
     SwerveRequest.FieldCentricFacingAngle request = new SwerveRequest.FieldCentricFacingAngle();
 
@@ -81,8 +90,14 @@ public class ShootWhileDriving extends Command {
     Command spinUp =
         Commands.run(
             () -> {
-              shooter.setTargetRPS(targeting.getIdealFlywheelRPS().get());
-              hood.setTargetAngle(targeting.getIdealHoodAngle());
+              shooter.setTargetRPS(targeting.getIdealFlywheelRPS().get() + shooterOffset.get());
+
+              hood.setTargetAngle(
+                  () ->
+                      targeting
+                          .getIdealHoodAngle()
+                          .get()
+                          .plus(Rotation2d.fromRotations(hoodOffset.get())));
 
               if (shooter.isAtSetpoint()) {
                 hasSpunUp = true;

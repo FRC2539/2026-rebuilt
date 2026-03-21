@@ -12,6 +12,7 @@ import frc.robot.subsystems.magicFloor.MagicFloorSubsystem;
 import frc.robot.subsystems.shooter.ShooterSubsystem;
 import frc.robot.subsystems.targeting.TargetingSubsystem;
 import frc.robot.subsystems.transporter.TransporterSubsystem;
+import java.util.function.Supplier;
 
 public class MediumDistanceFeed extends Command {
 
@@ -20,13 +21,21 @@ public class MediumDistanceFeed extends Command {
   private static final Rotation2d RED_WALL = Rotation2d.fromDegrees(0);
   private static final Rotation2d BLUE_WALL = Rotation2d.fromDegrees(180);
 
+  private final Supplier<Double> shooterOffset;
+  private final Supplier<Double> hoodOffset;
+
   public MediumDistanceFeed(
       CommandSwerveDrivetrain drivetrain,
       TargetingSubsystem targeting,
       ShooterSubsystem shooter,
       HoodSubsystem hood,
       TransporterSubsystem transporter,
-      MagicFloorSubsystem magicFloor) {
+      MagicFloorSubsystem magicFloor,
+      Supplier<Double> shooterOffset,
+      Supplier<Double> hoodOffset) {
+
+    this.shooterOffset = shooterOffset;
+    this.hoodOffset = hoodOffset;
 
     SwerveRequest.FieldCentricFacingAngle request = new SwerveRequest.FieldCentricFacingAngle();
 
@@ -53,9 +62,15 @@ public class MediumDistanceFeed extends Command {
               double rps = targeting.getIdealFlywheelRPS().get();
               Rotation2d hoodAngle = targeting.getIdealHoodAngle().get();
 
-              shooter.setTargetRPS(rps * 0.85);
+              shooter.setTargetRPS(
+                  targeting.getIdealFlywheelRPS().get() * 0.85 + shooterOffset.get());
 
-              hood.setTargetAngle(() -> hoodAngle.times(0.9));
+              hood.setTargetAngle(
+                  () ->
+                      targeting
+                          .getIdealHoodAngle()
+                          .get()
+                          .plus(Rotation2d.fromRotations(hoodOffset.get())));
             },
             shooter,
             hood);

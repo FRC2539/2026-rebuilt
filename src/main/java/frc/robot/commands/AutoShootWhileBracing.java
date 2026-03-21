@@ -2,19 +2,19 @@ package frc.robot.commands;
 
 import com.ctre.phoenix6.swerve.SwerveRequest;
 import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj2.command.*;
 import frc.robot.subsystems.drivetrain.CommandSwerveDrivetrain;
 import frc.robot.subsystems.hood.HoodSubsystem;
 import frc.robot.subsystems.magicFloor.MagicFloorSubsystem;
 import frc.robot.subsystems.shooter.ShooterSubsystem;
 import frc.robot.subsystems.targeting.TargetingSubsystem;
 import frc.robot.subsystems.transporter.TransporterSubsystem;
+import java.util.function.Supplier;
 
 public class AutoShootWhileBracing extends Command {
 
   private final Command command;
-
   private static final double ANGLE_TOLERANCE_RAD = 0.05;
 
   public AutoShootWhileBracing(
@@ -23,14 +23,14 @@ public class AutoShootWhileBracing extends Command {
       ShooterSubsystem shooter,
       HoodSubsystem hood,
       TransporterSubsystem transporter,
-      MagicFloorSubsystem magicFloor) {
+      MagicFloorSubsystem magicFloor,
+      Supplier<Double> shooterOffset,
+      Supplier<Double> hoodOffset) {
 
     SwerveRequest.FieldCentricFacingAngle aimRequest = new SwerveRequest.FieldCentricFacingAngle();
 
     aimRequest.HeadingController.setPID(6.0, 0.0, 0.1);
     aimRequest.HeadingController.enableContinuousInput(-Math.PI, Math.PI);
-
-    SwerveRequest.SwerveDriveBrake brakeRequest = new SwerveRequest.SwerveDriveBrake();
 
     Command rotateToAngle =
         Commands.run(
@@ -43,34 +43,44 @@ public class AutoShootWhileBracing extends Command {
                 drivetrain)
             .until(
                 () -> {
-                  double current = drivetrain.getHeading().getRadians();
-                  double target = targeting.getIdealRobotHeading().get().getRadians();
-
-                  double error = MathUtil.angleModulus(target - current);
+                  double error =
+                      MathUtil.angleModulus(
+                          targeting.getIdealRobotHeading().get().getRadians()
+                              - drivetrain.getHeading().getRadians());
 
                   return Math.abs(error) < ANGLE_TOLERANCE_RAD;
                 });
 
-    Command lockWheels = Commands.run(() -> drivetrain.setControl(brakeRequest), drivetrain);
-
     Command spinUp =
-        Commands.parallel(
-            Commands.run(
-                () -> shooter.setTargetRPS(targeting.getIdealFlywheelRPS().get()), shooter),
-            Commands.run(() -> hood.setTargetAngle(targeting.getIdealHoodAngle()), hood));
+        Commands.run(
+            () -> {
+              shooter.setTargetRPS(targeting.getIdealFlywheelRPS().get() + shooterOffset.get());
 
-    Command waitUntilReady =
-        Commands.waitUntil(() -> shooter.isAtSetpoint() && hood.isAtSetpoint());
+              hood.setTargetAngle(
+                  () ->
+                      targeting
+                          .getIdealHoodAngle()
+                          .get()
+                          .plus(Rotation2d.fromRotations(hoodOffset.get())));
+            },
+            shooter,
+            hood);
 
-    Command shoot = Commands.parallel(transporter.setVoltage(10), magicFloor.setVoltage(10));
+    Command shoot =
+        Commands.run(
+            () -> {
+              transporter.setVoltage(10);
+              magicFloor.setVoltage(10);
+            },
+            transporter,
+            magicFloor);
 
     command =
         Commands.sequence(
             rotateToAngle,
-            Commands.parallel(lockWheels),
             spinUp,
-            waitUntilReady,
-            Commands.parallel(lockWheels, spinUp, shoot));
+            Commands.waitUntil(() -> shooter.isAtSetpoint() && hood.isAtSetpoint()),
+            shoot);
   }
 
   @Override
