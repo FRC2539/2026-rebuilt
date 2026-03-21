@@ -8,7 +8,7 @@ import org.littletonrobotics.junction.Logger;
 
 public class ShooterSubsystem extends SubsystemBase {
 
-  ShooterIOInputsAutoLogged inputs = new ShooterIOInputsAutoLogged();
+  public ShooterIOInputsAutoLogged shooterInputs = new ShooterIOInputsAutoLogged();
   ShooterIO shooterIO;
 
   public ShooterSubsystem(ShooterIO shooterIO) {
@@ -19,8 +19,8 @@ public class ShooterSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
-    shooterIO.updateInputs(inputs);
-    Logger.processInputs("RealOuputs/ShooterSubsystem", inputs);
+    shooterIO.updateInputs(shooterInputs);
+    Logger.processInputs("RealOutputs/FlywheelSubsystem", shooterInputs);
   }
 
   public void setTargetRPS(double targetRPS) {

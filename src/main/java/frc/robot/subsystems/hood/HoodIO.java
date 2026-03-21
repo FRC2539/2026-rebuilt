@@ -1,0 +1,23 @@
+package frc.robot.subsystems.hood;
+
+import edu.wpi.first.math.geometry.Rotation2d;
+import org.littletonrobotics.junction.AutoLog;
+
+public interface HoodIO {
+
+  @AutoLog
+  class HoodIOInputs {
+    public Rotation2d position = Rotation2d.fromRadians(0.0);
+    public double voltage = 0.0;
+  }
+
+  public void updateInputs(HoodIOInputs inputs);
+
+  public void setTargetAngle(Rotation2d targetAngle);
+
+  public void setHoodVoltage(double voltage);
+
+  public boolean isAtSetpoint();
+
+  public double getExpectedDelta();
+}
