@@ -41,6 +41,9 @@ public class PivotSubsystem extends SubsystemBase {
         .until(() -> pivotIO.isAtSetpoint());
   }
 
+  public boolean isEncoderConnected() {
+    return inputs.throughboreConnected;
+  }
   // public Command Feather() {
   //   // TODO: Crunch command for pivot
   //   return Commands.sequence(

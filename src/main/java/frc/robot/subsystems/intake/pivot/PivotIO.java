@@ -10,6 +10,7 @@ public interface PivotIO {
   @AutoLog
   public class PivotIOInputs {
     double pivotPosition = 0;
+    public boolean throughboreConnected = false;
   }
 
   public void setPosition(Rotation2d position);

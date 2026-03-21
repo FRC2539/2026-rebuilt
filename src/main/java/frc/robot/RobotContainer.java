@@ -55,6 +55,8 @@ public class RobotContainer {
   public final MagicFloorSubsystem magicFloor = new MagicFloorSubsystem(new MagicFloorIOTalonFX());
   public final TargetingSubsystem targeting = new TargetingSubsystem(drivetrain);
 
+  public final LightsSubsystem lights = new LightsSubsystem();
+
   private final FaceHubWhileDriving faceHubCommand =
       new FaceHubWhileDriving(
           drivetrain, leftDriveController.getYAxis(), leftDriveController.getXAxis());

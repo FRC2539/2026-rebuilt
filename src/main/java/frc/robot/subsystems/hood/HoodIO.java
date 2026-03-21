@@ -9,6 +9,7 @@ public interface HoodIO {
   class HoodIOInputs {
     public Rotation2d position = Rotation2d.fromRadians(0.0);
     public double voltage = 0.0;
+    public boolean throughboreConnected = false;
   }
 
   public void updateInputs(HoodIOInputs inputs);
