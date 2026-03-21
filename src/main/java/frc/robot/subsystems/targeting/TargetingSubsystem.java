@@ -11,8 +11,6 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.subsystems.drivetrain.CommandSwerveDrivetrain;
 import frc.robot.subsystems.targeting.TargetingConstants.ShootingParameters;
 import frc.robot.subsystems.targeting.TargetingConstants.ShotSettings;
-
-import java.util.List;
 import java.util.function.Supplier;
 import org.littletonrobotics.junction.AutoLogOutput;
 
@@ -63,12 +61,12 @@ public class TargetingSubsystem extends SubsystemBase {
     }
     Pose2d robotPose = drivetrain.getRobotPose();
 
-
-    calculatedParams = calculateShot(robotPose, drivetrain.getFieldSpeeds(), hubPosition.getTranslation());
+    calculatedParams =
+        calculateShot(robotPose, drivetrain.getFieldSpeeds(), hubPosition.getTranslation());
   }
 
   public ShootingParameters calculateShot(
-    Pose2d robotPose, ChassisSpeeds fieldSpeeds, Translation2d targetPose) {
+      Pose2d robotPose, ChassisSpeeds fieldSpeeds, Translation2d targetPose) {
 
     Translation2d realDisplacementToHub = targetPose.minus(robotPose.getTranslation());
 
@@ -100,6 +98,4 @@ public class TargetingSubsystem extends SubsystemBase {
   public Supplier<Double> getIdealFlywheelRPS() {
     return () -> calculatedParams.flywheelRPS();
   }
-
-
 }
