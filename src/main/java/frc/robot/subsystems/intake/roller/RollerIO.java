@@ -10,15 +10,6 @@ public interface RollerIO {
     double wheelsVoltage = 0;
   }
 
-  public void setRollerVoltage(double voltage);
+  public void setVoltage(double voltage);
 
-  public double getRollerVelocity(); // How fast the rollers are currently moving
-
-  public boolean isRollerStationary(); // Simple detection of the roller moving within tolerance
-
-  public boolean isRollerMovingForward(); // Simple detection of the roller moving within tolerance
-
-  public boolean isRollerMovingBackward(); // Simple detection of the roller moving within tolerance
-
-  public double getRollerVoltage();
 }

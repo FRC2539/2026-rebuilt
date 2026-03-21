@@ -10,48 +10,29 @@ public class RollerSubsystem extends SubsystemBase {
   private final RollerIO rollerIO;
   private final RollerIOInputsAutoLogged inputs = new RollerIOInputsAutoLogged();
 
-  public RollerSubsystem(RollerIO io) {
-    System.out.println("Initializing");
-    rollerIO = io;
-    setDefaultCommand(Stop());
+  public RollerSubsystem(RollerIO rollerIO) {
+    this.rollerIO = rollerIO;
+
+    setDefaultCommand(setVoltage(0));
   }
 
   @Override
   public void periodic() {
     rollerIO.updateInputs(inputs);
-    Logger.processInputs("RealOutputs/Intake", inputs);
+    Logger.processInputs("RealOutputs/IntakeSubsystemRoller", inputs);
   }
 
-  public Command Stop() {
+  public Command setVoltage(double voltage) {
     return Commands.run(
         () -> {
-          rollerIO.setRollerVoltage(IntakeConstants.ROLLER_VOLTAGE_STOP);
-        },
-        this);
+          rollerIO.setVoltage(voltage);
+        });
   }
 
-  public Command RunForward() {
+  public Command reverseVoltage(double voltage) {
     return Commands.run(
         () -> {
-          rollerIO.setRollerVoltage(IntakeConstants.ROLLER_VOLTAGE_FORWARD);
-        },
-        this);
-  }
-
-  public Command RunBackward() {
-    return Commands.run(
-        () -> {
-          rollerIO.setRollerVoltage(IntakeConstants.ROLLER_VOLTAGE_BACKWARD);
-        },
-        this);
-  }
-
-  public Command Crunch() {
-    // TODO: Crunch command for roller
-    return Commands.run(
-        () -> {
-          rollerIO.setRollerVoltage(IntakeConstants.ROLLER_VOLTAGE_FORWARD);
-        },
-        this);
+          rollerIO.setVoltage(-voltage);
+        });
   }
 }
