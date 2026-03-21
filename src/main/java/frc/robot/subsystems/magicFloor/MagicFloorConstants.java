@@ -5,9 +5,9 @@ import com.ctre.phoenix6.configs.TalonFXConfiguration;
 
 public class MagicFloorConstants {
 
-  public static int magicMotorID = 1;
+  public static int magicMotorID = 17;
 
-  public static final String magicCanBus = "";
+  public static final String magicCanBus = "rio";
 
   public static final CurrentLimitsConfigs currentLimits =
       new CurrentLimitsConfigs().withSupplyCurrentLimitEnable(true).withSupplyCurrentLimit(40);
