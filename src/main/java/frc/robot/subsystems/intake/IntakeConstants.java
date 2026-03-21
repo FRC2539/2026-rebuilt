@@ -30,10 +30,5 @@ public final class IntakeConstants {
 
 
     public static final int PivotEncoderID = 1;
-    public static final ExternalFeedbackConfigs feedbackConfig =
-      new ExternalFeedbackConfigs()
-          .withExternalFeedbackSensorSource(ExternalFeedbackSensorSourceValue.RemoteCANcoder)
-          .withFeedbackRemoteSensorID(PivotEncoderID);
-          //.withSensorToMechanismRatio();
 
 }
