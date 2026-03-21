@@ -1,56 +1,42 @@
 package frc.robot.subsystems.intake.pivot;
 
-import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.configs.CANcoderConfiguration;
+import com.ctre.phoenix6.controls.PositionVoltage;
+import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
-import com.ctre.phoenix6.signals.NeutralModeValue;
-import edu.wpi.first.math.controller.PIDController;
-import frc.robot.subsystems.intake.IntakeConstants;
+import edu.wpi.first.math.geometry.Rotation2d;
 
 public class PivotIOTalonFX implements PivotIO {
-  private final TalonFX pivotMotor =
-      new TalonFX(IntakeConstants.PIVOT_MOTOR_ID, IntakeConstants.PIVOT_MOTOR_CANBUS);
 
-  private PIDController pivotController = new PIDController(0.6, 0, 0);
+  private final CANcoder pivotEncoder = new CANcoder(PivotConstants.pivotEncoderID);
+  private final TalonFX pivotMotor =
+      new TalonFX(PivotConstants.pivotMotorID, PivotConstants.pivotMotorCanBus);
+
+  double positionSetpoint = 0;
+  PositionVoltage magicVoltage = new PositionVoltage(positionSetpoint);
 
   public PivotIOTalonFX() {
-    TalonFXConfiguration pivotConfig =
-        new TalonFXConfiguration().withCurrentLimits(IntakeConstants.PIVOT_CURRENT_LIMIT);
-    pivotMotor.getConfigurator().apply(pivotConfig);
-    pivotMotor.setNeutralMode(NeutralModeValue.Brake);
+    CANcoderConfiguration encoderConfig = new CANcoderConfiguration();
+    pivotEncoder.getConfigurator().apply(encoderConfig);
+
+    pivotMotor.getConfigurator().apply(PivotConstants.motorConfig);
   }
 
   public void updateInputs(PivotIOInputs inputs) {
-    inputs.pivotPosition = getPivotPosition();
-    inputs.pivotVoltage = getPivotVoltage();
-    // inputs.throughboreConnected = piv.isConnected();
+    inputs.pivotPosition = pivotMotor.getPosition().getValueAsDouble();
   }
 
-  public void setPivotPosition(double position) {
-    pivotController.setSetpoint(position);
+  public void setPosition(Rotation2d position) {
+    positionSetpoint = position.getRotations();
+    pivotMotor.setControl(magicVoltage.withPosition(positionSetpoint));
   }
 
-  public void setPID(double kp, double ki, double kd) {
-    pivotController.setPID(kp, ki, kd);
+  public boolean isAtSetpoint() {
+    return Math.abs(pivotMotor.getPosition().getValueAsDouble() - positionSetpoint)
+        < PivotConstants.pivotDeadband.getRotations();
   }
 
-  public double getPivotPosition() { // Absolute position of the pivot
-    return pivotMotor.getPosition().refresh().getValueAsDouble();
-  }
-
-  public double getPivotDelta() { // How much the pivot needs to turn to be at its absolute target
-    return pivotController.getSetpoint() - getPivotPosition();
-  }
-
-  public boolean
-      isAtSetpoint() { // Simple detection of the pivot being within range within tolerance
-    return Math.abs(getPivotDelta()) <= IntakeConstants.PIVOT_ROTATION_TOLERANCE;
-  }
-
-  public double getPivotVelocity() { // How fast the pivot is currently moving
-    return pivotMotor.getVelocity().refresh().getValueAsDouble();
-  }
-
-  public double getPivotVoltage() { // Simple voltage reader
-    return pivotMotor.getMotorVoltage().refresh().getValueAsDouble();
+  public void setVoltage(double voltage) {
+    pivotMotor.setVoltage(voltage);
   }
 }

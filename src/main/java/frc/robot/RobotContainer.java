@@ -9,17 +9,26 @@ import com.ctre.phoenix6.swerve.SwerveRequest;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.commands.AutoShootWhileBracing;
 import frc.robot.commands.FaceHubWhileDriving;
 import frc.robot.lib.controller.LogitechController;
 import frc.robot.lib.controller.ThrustmasterJoystick;
 import frc.robot.subsystems.drivetrain.CommandSwerveDrivetrain;
 import frc.robot.subsystems.drivetrain.DriveConstants;
 import frc.robot.subsystems.drivetrain.TunerConstants;
+import frc.robot.subsystems.hood.HoodIOTalonFXS;
+import frc.robot.subsystems.hood.HoodSubsystem;
 import frc.robot.subsystems.intake.pivot.PivotIOTalonFX;
 import frc.robot.subsystems.intake.pivot.PivotSubsystem;
 import frc.robot.subsystems.intake.roller.RollerIOTalonFX;
 import frc.robot.subsystems.intake.roller.RollerSubsystem;
-import frc.robot.subsystems.lights.LightsSubsystem;
+import frc.robot.subsystems.magicFloor.MagicFloorIOTalonFX;
+import frc.robot.subsystems.magicFloor.MagicFloorSubsystem;
+import frc.robot.subsystems.shooter.ShooterIOTalonFX;
+import frc.robot.subsystems.shooter.ShooterSubsystem;
+import frc.robot.subsystems.targeting.TargetingSubsystem;
+import frc.robot.subsystems.transporter.TransporterIOTalonFX;
+import frc.robot.subsystems.transporter.TransporterSubsystem;
 
 public class RobotContainer {
 
@@ -39,6 +48,12 @@ public class RobotContainer {
 
   public final PivotSubsystem pivotSubsystem = new PivotSubsystem(new PivotIOTalonFX());
   public final RollerSubsystem rollerSubsystem = new RollerSubsystem(new RollerIOTalonFX());
+  public final ShooterSubsystem shooter = new ShooterSubsystem(new ShooterIOTalonFX());
+  public final HoodSubsystem hood = new HoodSubsystem(new HoodIOTalonFXS());
+  public final TransporterSubsystem transporter =
+      new TransporterSubsystem(new TransporterIOTalonFX());
+  public final MagicFloorSubsystem magicFloor = new MagicFloorSubsystem(new MagicFloorIOTalonFX());
+  public final TargetingSubsystem targeting = new TargetingSubsystem(drivetrain);
 
   public final LightsSubsystem lights = new LightsSubsystem();
 
@@ -86,9 +101,6 @@ public class RobotContainer {
           () -> Rotation2d.fromDegrees(270), () -> getXVelocity(), () -> getYVelocity());
 
   private void configureBindings() {
-    // driver bind
-    rightDriveController.getLeftThumb().onTrue(pivotSubsystem.TogglePivot());
-    rightDriveController.getTrigger().whileTrue(rollerSubsystem.RunForward());
 
     rightDriveController.getBottomThumb().whileTrue(faceHubCommand);
 
@@ -98,9 +110,11 @@ public class RobotContainer {
     rightDriveController.getPOVDown().whileTrue(face180);
     rightDriveController.getPOVRight().whileTrue(face270);
 
-    // op binds
-    operatorController.getA().whileTrue(rollerSubsystem.RunBackward());
-    operatorController.getY().whileTrue(pivotSubsystem.CrunchSlow());
+    operatorController
+        .getLeftTrigger()
+        .whileTrue(
+            new AutoShootWhileBracing(
+                drivetrain, targeting, shooter, hood, transporter, magicFloor));
   }
 
   private ChassisSpeeds getDriverChassisSpeeds() {
