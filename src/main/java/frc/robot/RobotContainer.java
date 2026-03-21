@@ -22,6 +22,7 @@ import frc.robot.subsystems.intake.pivot.PivotIOTalonFX;
 import frc.robot.subsystems.intake.pivot.PivotSubsystem;
 import frc.robot.subsystems.intake.roller.RollerIOTalonFX;
 import frc.robot.subsystems.intake.roller.RollerSubsystem;
+import frc.robot.subsystems.lights.LightsSubsystem;
 import frc.robot.subsystems.magicFloor.MagicFloorIOTalonFX;
 import frc.robot.subsystems.magicFloor.MagicFloorSubsystem;
 import frc.robot.subsystems.shooter.ShooterIOTalonFX;
