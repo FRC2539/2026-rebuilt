@@ -1,72 +1,56 @@
 package frc.robot.subsystems.intake.pivot;
 
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.subsystems.intake.IntakeConstants;
 import org.littletonrobotics.junction.Logger;
 
 public class PivotSubsystem extends SubsystemBase {
   private final PivotIO pivotIO;
   private final PivotIOInputsAutoLogged inputs = new PivotIOInputsAutoLogged();
 
-  public PivotSubsystem(PivotIO io) {
-    pivotIO = io;
-    setDefaultCommand(PullUp());
+  public PivotSubsystem(PivotIO pivotIO) {
+    this.pivotIO = pivotIO;
   }
 
   @Override
   public void periodic() {
     pivotIO.updateInputs(inputs);
-    Logger.processInputs("RealOutputs/Intake", inputs);
+    Logger.processInputs("RealOutputs/IntakeSubsystemPivot", inputs);
   }
 
   public Command PullUp() {
-    return Commands.run(
-        () -> {
-          pivotIO.setPivotPosition(IntakeConstants.PIVOT_POSITION_UP);
-        },
-        this);
+    return setPosition(PivotConstants.intakeUpPosition);
   }
 
   public Command PutDown() {
+    return setPosition(PivotConstants.intakeDownPosition);
+  }
+
+  public Command setVoltage(double voltage) {
     return Commands.run(
         () -> {
-          pivotIO.setPivotPosition(IntakeConstants.PIVOT_POSITION_DOWN);
-        },
-        this);
+          pivotIO.setVoltage(voltage);
+        });
   }
 
-  public boolean isUpOrCrunch() {
-    double pos = pivotIO.getPivotPosition();
-    return Math.abs(pos - IntakeConstants.PIVOT_POSITION_UP)
-            <= IntakeConstants.PIVOT_ROTATION_TOLERANCE
-        || Math.abs(pos - IntakeConstants.PIVOT_POSITION_CRUNCH)
-            <= IntakeConstants.PIVOT_ROTATION_TOLERANCE;
+  public Command setPosition(Rotation2d targetPosition) {
+    return runOnce(() -> pivotIO.setPosition(targetPosition))
+        .andThen(Commands.run(() -> {}))
+        .until(() -> pivotIO.isAtSetpoint());
   }
 
-  public Command TogglePivot() {
-    return Commands.runOnce(
-        () -> {
-          if (isUpOrCrunch()) {
-            pivotIO.setPivotPosition(IntakeConstants.PIVOT_POSITION_DOWN);
-          } else {
-            pivotIO.setPivotPosition(IntakeConstants.PIVOT_POSITION_UP);
-          }
-        },
-        this);
+  public boolean isEncoderConnected() {
+    return inputs.throughboreConnected;
   }
-
-  public Command CrunchSlow() {
-    return Commands.startEnd(
-        () -> {
-          pivotIO.setPID(0.2, 0, 0);
-
-          pivotIO.setPivotPosition(IntakeConstants.PIVOT_POSITION_CRUNCH);
-        },
-        () -> {
-          pivotIO.setPID(0.6, 0, 0);
-        },
-        this);
-  }
+  // public Command Feather() {
+  //   // TODO: Crunch command for pivot
+  //   return Commands.sequence(
+  //     PullUp(),
+  //     Commands.waitSeconds(0.5),
+  //     PutDown(),
+  //     Commands.waitSeconds(0.5)
+  //   );
+  // }
 }

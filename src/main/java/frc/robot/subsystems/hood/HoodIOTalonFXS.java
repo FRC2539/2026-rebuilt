@@ -32,6 +32,7 @@ public class HoodIOTalonFXS implements HoodIO {
   public void updateInputs(HoodIOInputs inputs) {
     inputs.position = Rotation2d.fromRotations(motor.getPosition().getValueAsDouble());
     inputs.voltage = motor.getMotorVoltage().getValueAsDouble();
+    inputs.throughboreConnected = hoodEncoder.isConnected();
   }
 
   @Override
