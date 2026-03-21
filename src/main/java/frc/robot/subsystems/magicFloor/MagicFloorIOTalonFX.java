@@ -1,6 +1,5 @@
 package frc.robot.subsystems.magicFloor;
 
-import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
@@ -11,12 +10,8 @@ public class MagicFloorIOTalonFX implements MagicFloorIO {
   public MagicFloorIOTalonFX() {
     magicMotor.setVoltage(0);
 
-    TalonFXConfiguration config = new TalonFXConfiguration();
-
-    magicMotor.getConfigurator().apply(config);
+    magicMotor.getConfigurator().apply(MagicFloorConstants.motorConfig);
     magicMotor.setNeutralMode(NeutralModeValue.Coast);
-    config.CurrentLimits.SupplyCurrentLimit = 80;
-    config.CurrentLimits.SupplyCurrentLimitEnable = true;
   }
 
   @Override
