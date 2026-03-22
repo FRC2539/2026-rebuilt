@@ -13,8 +13,8 @@ import edu.wpi.first.math.geometry.Rotation2d;
 
 public final class HoodConstants {
 
-  public static final int kMotorId = 1;
-  public static final int hoodEncoderID = 1;
+  public static final int kMotorId = 10;
+  public static final int hoodEncoderID = 41;
   public static final String kCanBus = "rio";
 
   public static final Rotation2d maxHoodAngle = Rotation2d.fromRotations(0.1);

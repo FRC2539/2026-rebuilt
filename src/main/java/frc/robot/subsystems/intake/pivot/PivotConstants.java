@@ -7,9 +7,10 @@ import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
 import edu.wpi.first.math.geometry.Rotation2d;
 
 public class PivotConstants {
-  public static final int pivotMotorID = 0;
-  public static final int pivotEncoderID = 0;
+  public static final int pivotMotorID = 18;
+  public static final int pivotEncoderID = 40;
   public static final String pivotMotorCanBus = "rio";
+  public static final String pivotEncoderCanBus = "CANivore";
 
   public static final Rotation2d pivotDeadband = Rotation2d.fromDegrees(2);
 
