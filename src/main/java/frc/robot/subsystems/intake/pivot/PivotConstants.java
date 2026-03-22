@@ -14,8 +14,8 @@ public class PivotConstants {
 
   public static final Rotation2d pivotDeadband = Rotation2d.fromDegrees(2);
 
-  public static final Rotation2d intakeUpPosition = new Rotation2d();
-  public static final Rotation2d intakeDownPosition = new Rotation2d();
+  public static final Rotation2d intakeUpPosition = new Rotation2d(0.649414);
+  public static final Rotation2d intakeDownPosition = new Rotation2d(-0.064209);
   public static final Rotation2d intakeFeatherPosition = new Rotation2d();
 
   public static final CurrentLimitsConfigs currentLimits =
@@ -28,4 +28,6 @@ public class PivotConstants {
 
   public static final TalonFXConfiguration motorConfig =
       new TalonFXConfiguration().withCurrentLimits(currentLimits).withFeedback(feedbackConfig);
+
+
 }

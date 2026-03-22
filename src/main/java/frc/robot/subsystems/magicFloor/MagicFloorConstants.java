@@ -6,6 +6,7 @@ import com.ctre.phoenix6.configs.TalonFXConfiguration;
 public class MagicFloorConstants {
 
   public static int magicMotorID = 17;
+  //VOLTAGE IS POSTIVE LIKE 6
 
   public static final String magicCanBus = "rio";
 

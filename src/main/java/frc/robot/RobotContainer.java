@@ -6,9 +6,12 @@ import static edu.wpi.first.units.Units.RotationsPerSecond;
 
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 import com.ctre.phoenix6.swerve.SwerveRequest;
+
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.commands.FaceHubWhileDriving;
 import frc.robot.lib.controller.LogitechController;
 import frc.robot.lib.controller.ThrustmasterJoystick;
@@ -19,6 +22,7 @@ import frc.robot.subsystems.hood.HoodIOTalonFXS;
 import frc.robot.subsystems.hood.HoodSubsystem;
 import frc.robot.subsystems.intake.pivot.PivotIOTalonFX;
 import frc.robot.subsystems.intake.pivot.PivotSubsystem;
+import frc.robot.subsystems.intake.roller.RollerConstants;
 import frc.robot.subsystems.intake.roller.RollerIOTalonFX;
 import frc.robot.subsystems.intake.roller.RollerSubsystem;
 import frc.robot.subsystems.lights.LightsSubsystem;
@@ -34,7 +38,7 @@ public class RobotContainer {
 
   public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
 
-  public final Auto auto;
+  // public final Auto auto;
 
   private final double maxSpeed = TunerConstants.kSpeedAt12Volts.in(MetersPerSecond);
 
@@ -46,20 +50,20 @@ public class RobotContainer {
 
   private final LogitechController operatorController = new LogitechController(2);
 
-  public final PivotSubsystem pivotSubsystem = new PivotSubsystem(new PivotIOTalonFX());
+  // public final PivotSubsystem pivotSubsystem = new PivotSubsystem(new PivotIOTalonFX());
   public final RollerSubsystem rollerSubsystem = new RollerSubsystem(new RollerIOTalonFX());
   public final ShooterSubsystem shooter = new ShooterSubsystem(new ShooterIOTalonFX());
-  public final HoodSubsystem hood = new HoodSubsystem(new HoodIOTalonFXS());
+  // public final HoodSubsystem hood = new HoodSubsystem(new HoodIOTalonFXS());
   public final TransporterSubsystem transporter =
       new TransporterSubsystem(new TransporterIOTalonFX());
   public final MagicFloorSubsystem magicFloor = new MagicFloorSubsystem(new MagicFloorIOTalonFX());
   public final TargetingSubsystem targeting = new TargetingSubsystem(drivetrain);
 
-  public final LightsSubsystem lights = new LightsSubsystem();
+  // public final LightsSubsystem lights = new LightsSubsystem();
 
-  private final FaceHubWhileDriving faceHubCommand =
-      new FaceHubWhileDriving(
-          drivetrain, leftDriveController.getYAxis(), leftDriveController.getXAxis());
+  // private final FaceHubWhileDriving faceHubCommand =
+  //     new FaceHubWhileDriving(
+  //         drivetrain, leftDriveController.getYAxis(), leftDriveController.getXAxis());
 
   private final SwerveRequest.FieldCentric driveRequest =
       new SwerveRequest.FieldCentric()
@@ -70,7 +74,7 @@ public class RobotContainer {
   public RobotContainer() {
     configureBindings();
 
-    auto = new Auto(this);
+  //   auto = new Auto(this);
 
     drivetrain.setDefaultCommand(
         drivetrain.applyRequest(
@@ -81,37 +85,50 @@ public class RobotContainer {
                   .withVelocityX(speeds.vxMetersPerSecond)
                   .withVelocityY(speeds.vyMetersPerSecond)
                   .withRotationalRate(speeds.omegaRadiansPerSecond);
-            }));
+            }));}
 
     // rollerSubsystem.setDefaultCommand(
-    //     rollerSubsystem.run(
+    //     Commands.run(
     //         () -> {
     //           double xSpeed = drivetrain.getRobotSpeeds().vxMetersPerSecond;
-    //           if (xSpeed > 0.2 && pivotSubsystem.isDown()) {
+    //           if (xSpeed > 0.2) { //&& pivotSubsystem.isDown()
     //             rollerSubsystem.runRoller(RollerConstants.intakeVoltage);
     //           } else {
     //             rollerSubsystem.runRoller(0.0);
     //           }
-    //         }));
-  }
+    //         }, drivetrain, rollerSubsystem));
+    //       }
 
-  private Command face0 =
-      drivetrain.snapToAngle(
-          () -> Rotation2d.fromDegrees(0), () -> getXVelocity(), () -> getYVelocity());
+  // private Command face0 =
+  //     drivetrain.snapToAngle(
+  //         () -> Rotation2d.fromDegrees(0), () -> getXVelocity(), () -> getYVelocity());
 
-  private Command face90 =
-      drivetrain.snapToAngle(
-          () -> Rotation2d.fromDegrees(90), () -> getXVelocity(), () -> getYVelocity());
+  // private Command face90 =
+  //     drivetrain.snapToAngle(
+  //         () -> Rotation2d.fromDegrees(90), () -> getXVelocity(), () -> getYVelocity());
 
-  private Command face180 =
-      drivetrain.snapToAngle(
-          () -> Rotation2d.fromDegrees(180), () -> getXVelocity(), () -> getYVelocity());
+  // private Command face180 =
+  //     drivetrain.snapToAngle(
+  //         () -> Rotation2d.fromDegrees(180), () -> getXVelocity(), () -> getYVelocity());
 
-  private Command face270 =
-      drivetrain.snapToAngle(
-          () -> Rotation2d.fromDegrees(270), () -> getXVelocity(), () -> getYVelocity());
+  // private Command face270 =
+  //     drivetrain.snapToAngle(
+  //         () -> Rotation2d.fromDegrees(270), () -> getXVelocity(), () -> getYVelocity());
 
   private void configureBindings() {
+
+    rightDriveController
+        .getLeftTopLeft()
+        .onTrue(
+            Commands.runOnce(
+                () ->
+                    drivetrain.resetPose(
+                        new Pose2d(
+                            drivetrain.getRobotPose().getX(),
+                            drivetrain.getRobotPose().getY(),
+                            drivetrain.getOperatorForwardDirection())),
+                drivetrain));
+
 
     // rightDriveController.getBottomThumb().whileTrue(faceHubCommand);
 
@@ -126,6 +143,13 @@ public class RobotContainer {
     //     .whileTrue(
     //         new AutoShootWhileBracing(
     //             drivetrain, targeting, shooter, hood, transporter, magicFloor));
+
+    operatorController.getLeftTrigger().whileTrue(rollerSubsystem.setVoltage(12));
+    operatorController.getRightTrigger().whileTrue(magicFloor.setVoltage(4));
+
+    operatorController.getLeftBumper().whileTrue(transporter.setVoltage(-4));
+    operatorController.getRightBumper().whileTrue(shooter.setShooterRPSForever( 40.0));
+    operatorController.getY().whileTrue(shooter.setVoltage(6));
   }
 
   private ChassisSpeeds getDriverChassisSpeeds() {
@@ -148,6 +172,6 @@ public class RobotContainer {
   }
 
   public Command getAutonomousCommand() {
-    return auto.getAutoCommand();
+    return Commands.none();
   }
 }
