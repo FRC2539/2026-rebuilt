@@ -20,6 +20,7 @@ import frc.robot.subsystems.hood.HoodIOTalonFXS;
 import frc.robot.subsystems.hood.HoodSubsystem;
 import frc.robot.subsystems.intake.pivot.PivotIOTalonFX;
 import frc.robot.subsystems.intake.pivot.PivotSubsystem;
+import frc.robot.subsystems.intake.roller.RollerConstants;
 import frc.robot.subsystems.intake.roller.RollerIOTalonFX;
 import frc.robot.subsystems.intake.roller.RollerSubsystem;
 import frc.robot.subsystems.lights.LightsSubsystem;
@@ -87,9 +88,9 @@ public class RobotContainer {
     rollerSubsystem.setDefaultCommand(
         rollerSubsystem.run(
             () -> {
-              double xSpeed = getXVelocity();
+              double xSpeed = drivetrain.getRobotSpeeds().vxMetersPerSecond;
               if (xSpeed > 0.2 && pivotSubsystem.isDown()) {
-                rollerSubsystem.runRoller(10.0);
+                rollerSubsystem.runRoller(RollerConstants.intakeVoltage);
               } else {
                 rollerSubsystem.runRoller(0.0);
               }
