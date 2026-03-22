@@ -4,7 +4,7 @@ import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 
 public class RollerConstants {
-    public static final double intakeVoltage = 10;
+  public static final double intakeVoltage = 10;
   public static final int rollerMotorID = 9;
 
   public static final String rollerMotorCanBus = "rio";
