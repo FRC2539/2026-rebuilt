@@ -9,7 +9,6 @@ import com.ctre.phoenix6.swerve.SwerveRequest;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.commands.AutoShootWhileBracing;
 import frc.robot.commands.FaceHubWhileDriving;
 import frc.robot.lib.controller.LogitechController;
 import frc.robot.lib.controller.ThrustmasterJoystick;
@@ -20,7 +19,6 @@ import frc.robot.subsystems.hood.HoodIOTalonFXS;
 import frc.robot.subsystems.hood.HoodSubsystem;
 import frc.robot.subsystems.intake.pivot.PivotIOTalonFX;
 import frc.robot.subsystems.intake.pivot.PivotSubsystem;
-import frc.robot.subsystems.intake.roller.RollerConstants;
 import frc.robot.subsystems.intake.roller.RollerIOTalonFX;
 import frc.robot.subsystems.intake.roller.RollerSubsystem;
 import frc.robot.subsystems.lights.LightsSubsystem;
@@ -85,16 +83,16 @@ public class RobotContainer {
                   .withRotationalRate(speeds.omegaRadiansPerSecond);
             }));
 
-    rollerSubsystem.setDefaultCommand(
-        rollerSubsystem.run(
-            () -> {
-              double xSpeed = drivetrain.getRobotSpeeds().vxMetersPerSecond;
-              if (xSpeed > 0.2 && pivotSubsystem.isDown()) {
-                rollerSubsystem.runRoller(RollerConstants.intakeVoltage);
-              } else {
-                rollerSubsystem.runRoller(0.0);
-              }
-            }));
+    // rollerSubsystem.setDefaultCommand(
+    //     rollerSubsystem.run(
+    //         () -> {
+    //           double xSpeed = drivetrain.getRobotSpeeds().vxMetersPerSecond;
+    //           if (xSpeed > 0.2 && pivotSubsystem.isDown()) {
+    //             rollerSubsystem.runRoller(RollerConstants.intakeVoltage);
+    //           } else {
+    //             rollerSubsystem.runRoller(0.0);
+    //           }
+    //         }));
   }
 
   private Command face0 =
@@ -115,19 +113,19 @@ public class RobotContainer {
 
   private void configureBindings() {
 
-    rightDriveController.getBottomThumb().whileTrue(faceHubCommand);
+    // rightDriveController.getBottomThumb().whileTrue(faceHubCommand);
 
     // Cardinal directions
-    rightDriveController.getPOVUp().whileTrue(face0);
-    rightDriveController.getPOVLeft().whileTrue(face90);
-    rightDriveController.getPOVDown().whileTrue(face180);
-    rightDriveController.getPOVRight().whileTrue(face270);
+    // rightDriveController.getPOVUp().whileTrue(face0);
+    // rightDriveController.getPOVLeft().whileTrue(face90);
+    // rightDriveController.getPOVDown().whileTrue(face180);
+    // rightDriveController.getPOVRight().whileTrue(face270);
 
-    operatorController
-        .getLeftTrigger()
-        .whileTrue(
-            new AutoShootWhileBracing(
-                drivetrain, targeting, shooter, hood, transporter, magicFloor));
+    // operatorController
+    //     .getLeftTrigger()
+    //     .whileTrue(
+    //         new AutoShootWhileBracing(
+    //             drivetrain, targeting, shooter, hood, transporter, magicFloor));
   }
 
   private ChassisSpeeds getDriverChassisSpeeds() {
