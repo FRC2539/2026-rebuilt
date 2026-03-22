@@ -83,6 +83,17 @@ public class RobotContainer {
                   .withVelocityY(speeds.vyMetersPerSecond)
                   .withRotationalRate(speeds.omegaRadiansPerSecond);
             }));
+
+    rollerSubsystem.setDefaultCommand(
+        rollerSubsystem.run(
+            () -> {
+              double xSpeed = getXVelocity();
+              if (xSpeed > 0.2 && pivotSubsystem.isDown()) {
+                rollerSubsystem.runRoller(10.0);
+              } else {
+                rollerSubsystem.runRoller(0.0);
+              }
+            }));
   }
 
   private Command face0 =
