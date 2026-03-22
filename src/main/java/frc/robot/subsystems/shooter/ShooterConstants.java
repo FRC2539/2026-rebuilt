@@ -8,10 +8,10 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 
 public class ShooterConstants {
 
-  public static int leadMotorID = 1;
-  public static int rightLowerMotorID = 1;
-  public static int leftUpperMotorID = 1;
-  public static int leftLowerMotorID = 1;
+  public static int leadMotorID = 15;
+  public static int rightLowerMotorID = 14;
+  public static int leftUpperMotorID = 13;
+  public static int leftLowerMotorID = 12;
 
   public static final double goalDeadbandRPS = 2;
 
