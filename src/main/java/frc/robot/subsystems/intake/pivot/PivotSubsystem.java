@@ -44,6 +44,14 @@ public class PivotSubsystem extends SubsystemBase {
   public boolean isEncoderConnected() {
     return inputs.throughboreConnected;
   }
+
+  public boolean isDown() {
+    if (!isEncoderConnected()) return false;
+    double current = inputs.pivotPosition;
+    double target = PivotConstants.intakeDownPosition.getRotations();
+    return Math.abs(current - target) < PivotConstants.pivotDeadband.getRotations();
+  }
+
   // public Command Feather() {
   //   // TODO: Crunch command for pivot
   //   return Commands.sequence(
