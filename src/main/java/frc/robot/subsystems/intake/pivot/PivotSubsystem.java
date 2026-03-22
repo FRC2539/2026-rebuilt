@@ -48,8 +48,8 @@ public class PivotSubsystem extends SubsystemBase {
   public boolean isDown() {
     if (!isEncoderConnected()) return false;
     double current = inputs.pivotPosition;
-    double target = PivotConstants.intakeDownPosition.getDegrees();
-    return Math.abs(current - target) < 5.0;
+    double target = PivotConstants.intakeDownPosition.getRotations();
+    return Math.abs(current - target) < PivotConstants.pivotDeadband.getRotations();
   }
 
   // public Command Feather() {
