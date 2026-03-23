@@ -6,7 +6,6 @@ import static edu.wpi.first.units.Units.RotationsPerSecond;
 
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 import com.ctre.phoenix6.swerve.SwerveRequest;
-
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
@@ -24,12 +23,8 @@ import frc.robot.subsystems.drivetrain.DriveConstants;
 import frc.robot.subsystems.drivetrain.TunerConstants;
 import frc.robot.subsystems.hood.HoodIOTalonFXS;
 import frc.robot.subsystems.hood.HoodSubsystem;
-import frc.robot.subsystems.intake.pivot.PivotIOTalonFX;
-import frc.robot.subsystems.intake.pivot.PivotSubsystem;
-import frc.robot.subsystems.intake.roller.RollerConstants;
 import frc.robot.subsystems.intake.roller.RollerIOTalonFX;
 import frc.robot.subsystems.intake.roller.RollerSubsystem;
-import frc.robot.subsystems.lights.LightsSubsystem;
 import frc.robot.subsystems.magicFloor.MagicFloorIOTalonFX;
 import frc.robot.subsystems.magicFloor.MagicFloorSubsystem;
 import frc.robot.subsystems.shooter.ShooterIOTalonFX;
@@ -37,6 +32,8 @@ import frc.robot.subsystems.shooter.ShooterSubsystem;
 import frc.robot.subsystems.targeting.TargetingSubsystem;
 import frc.robot.subsystems.transporter.TransporterIOTalonFX;
 import frc.robot.subsystems.transporter.TransporterSubsystem;
+import frc.robot.subsystems.vision.VisionIOLimelight;
+import frc.robot.subsystems.vision.VisionSubsystem;
 
 public class RobotContainer {
 
@@ -63,11 +60,20 @@ public class RobotContainer {
   public final PivotSubsystem pivot = new PivotSubsystem(new PivotIOTalonFX());
   public final RollerSubsystem roller = new RollerSubsystem(new RollerIOTalonFX());
   public final ShooterSubsystem shooter = new ShooterSubsystem(new ShooterIOTalonFX());
-  // public final HoodSubsystem hood = new HoodSubsystem(new HoodIOTalonFXS());
+  public final HoodSubsystem hood = new HoodSubsystem(new HoodIOTalonFXS());
   public final TransporterSubsystem transporter =
       new TransporterSubsystem(new TransporterIOTalonFX());
   public final MagicFloorSubsystem magicFloor = new MagicFloorSubsystem(new MagicFloorIOTalonFX());
   public final TargetingSubsystem targeting = new TargetingSubsystem(drivetrain);
+
+  public final VisionSubsystem vision =
+      new VisionSubsystem(
+          drivetrain::filterAndAddMeasurements,
+          new VisionIOLimelight("limelight-left", drivetrain::getHeading),
+          new VisionIOLimelight("limelight-backl", drivetrain::getHeading),
+          new VisionIOLimelight("limelight-backr", drivetrain::getHeading),
+          new VisionIOLimelight("limelight-right", drivetrain::getHeading));
+
 
   // public final LightsSubsystem lights = new LightsSubsystem();
 
@@ -84,7 +90,7 @@ public class RobotContainer {
   public RobotContainer() {
     configureBindings();
 
-  //   auto = new Auto(this);
+    //   auto = new Auto(this);
 
     drivetrain.setDefaultCommand(
         drivetrain.applyRequest(
@@ -95,19 +101,20 @@ public class RobotContainer {
                   .withVelocityX(speeds.vxMetersPerSecond)
                   .withVelocityY(speeds.vyMetersPerSecond)
                   .withRotationalRate(speeds.omegaRadiansPerSecond);
-            }));}
+            }));
+  }
 
-    // rollerSubsystem.setDefaultCommand(
-    //     Commands.run(
-    //         () -> {
-    //           double xSpeed = drivetrain.getRobotSpeeds().vxMetersPerSecond;
-    //           if (xSpeed > 0.2) { //&& pivotSubsystem.isDown()
-    //             rollerSubsystem.runRoller(RollerConstants.intakeVoltage);
-    //           } else {
-    //             rollerSubsystem.runRoller(0.0);
-    //           }
-    //         }, drivetrain, rollerSubsystem));
-    //       }
+  // rollerSubsystem.setDefaultCommand(
+  //     Commands.run(
+  //         () -> {
+  //           double xSpeed = drivetrain.getRobotSpeeds().vxMetersPerSecond;
+  //           if (xSpeed > 0.2) { //&& pivotSubsystem.isDown()
+  //             rollerSubsystem.runRoller(RollerConstants.intakeVoltage);
+  //           } else {
+  //             rollerSubsystem.runRoller(0.0);
+  //           }
+  //         }, drivetrain, rollerSubsystem));
+  //       }
 
   // private Command face0 =
   //     drivetrain.snapToAngle(
@@ -238,8 +245,15 @@ public class RobotContainer {
     operatorController.getRightTrigger().whileTrue(magicFloor.setVoltage(2));
 
     operatorController.getLeftBumper().whileTrue(transporter.setVoltage(-2));
-    operatorController.getRightBumper().whileTrue(shooter.setShooterRPSForever( 20.0));
-    operatorController.getY().whileTrue(shooter.setVoltage(6));
+    operatorController.getRightBumper().whileTrue(shooter.setShooterRPSForever(35.0));
+
+    operatorController
+        .getB()
+        .whileTrue(hood.setHoodAngleForever(() -> Rotation2d.fromRotations(-0.1)));
+
+    operatorController
+        .getX()
+        .whileTrue(hood.setHoodAngleForever(() -> Rotation2d.fromRotations(0.05)));
   }
 
   private ChassisSpeeds getDriverChassisSpeeds() {

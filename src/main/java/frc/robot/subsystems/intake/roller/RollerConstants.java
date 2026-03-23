@@ -10,7 +10,7 @@ public class RollerConstants {
   public static final String rollerMotorCanBus = "rio";
 
   public static final CurrentLimitsConfigs currentLimits =
-      new CurrentLimitsConfigs().withSupplyCurrentLimitEnable(true).withSupplyCurrentLimit(40);
+      new CurrentLimitsConfigs().withSupplyCurrentLimitEnable(true).withSupplyCurrentLimit(60);
 
   public static final TalonFXConfiguration motorConfig =
       new TalonFXConfiguration().withCurrentLimits(currentLimits);
