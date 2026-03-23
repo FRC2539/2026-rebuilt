@@ -19,7 +19,8 @@ public class PivotConstants {
   public static final Rotation2d intakeDownPosition = new Rotation2d(0.0);
   public static final Rotation2d intakeFeatherPosition = new Rotation2d(0.247);
 
-  public static final Slot0Configs slot0configs = new Slot0Configs().withKP(26).withKD(0.1).withKS(5);
+  public static final Slot0Configs slot0configs =
+      new Slot0Configs().withKP(26).withKD(0.1).withKS(5);
 
   public static final CurrentLimitsConfigs currentLimits =
       new CurrentLimitsConfigs().withSupplyCurrentLimit(40).withSupplyCurrentLimitEnable(true);
@@ -30,7 +31,8 @@ public class PivotConstants {
           .withFeedbackSensorSource(FeedbackSensorSourceValue.RemoteCANcoder);
 
   public static final TalonFXConfiguration motorConfig =
-      new TalonFXConfiguration().withCurrentLimits(currentLimits).withFeedback(feedbackConfig).withSlot0(slot0configs);
-
-
+      new TalonFXConfiguration()
+          .withCurrentLimits(currentLimits)
+          .withFeedback(feedbackConfig)
+          .withSlot0(slot0configs);
 }
