@@ -11,6 +11,11 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import frc.robot.commands.AutoShootWhileBracing;
+import frc.robot.commands.FaceHubWhileDriving;
+import frc.robot.commands.LongDistanceFeed;
+import frc.robot.commands.MediumDistanceFeed;
+import frc.robot.commands.ShootWhileDriving;
 import frc.robot.lib.controller.LogitechController;
 import frc.robot.lib.controller.ThrustmasterJoystick;
 import frc.robot.subsystems.drivetrain.CommandSwerveDrivetrain;
@@ -46,8 +51,14 @@ public class RobotContainer {
 
   private final LogitechController operatorController = new LogitechController(2);
 
-  // public final PivotSubsystem pivotSubsystem = new PivotSubsystem(new PivotIOTalonFX());
-  public final RollerSubsystem rollerSubsystem = new RollerSubsystem(new RollerIOTalonFX());
+  public double shooterRPSOffset = 0.0;
+  public double hoodAngleOffsetRotations = 0.0;
+
+  private static final double RPS_STEP = 1.5;
+  private static final double HOOD_STEP = 0.005;
+
+  public final PivotSubsystem pivot = new PivotSubsystem(new PivotIOTalonFX());
+  public final RollerSubsystem roller = new RollerSubsystem(new RollerIOTalonFX());
   public final ShooterSubsystem shooter = new ShooterSubsystem(new ShooterIOTalonFX());
   public final HoodSubsystem hood = new HoodSubsystem(new HoodIOTalonFXS());
   public final TransporterSubsystem transporter =
@@ -135,9 +146,90 @@ public class RobotContainer {
                             drivetrain.getOperatorForwardDirection())),
                 drivetrain));
 
+  private void configureBindings() {
+    // driver bind
+    rightDriveController.getLeftThumb().onTrue(pivot.TogglePivot());
+    rightDriveController.getTrigger().whileTrue(roller.RunForward());
+
     // rightDriveController.getBottomThumb().whileTrue(faceHubCommand);
 
     // Cardinal directions
+    rightDriveController.getPOVUp().whileTrue(face0);
+    rightDriveController.getPOVLeft().whileTrue(face90);
+    rightDriveController.getPOVDown().whileTrue(face180);
+    rightDriveController.getPOVRight().whileTrue(face270);
+
+    // op binds
+    operatorController.getA().whileTrue(roller.RunBackward());
+    operatorController.getY().whileTrue(pivot.CrunchSlow());
+
+    operatorController
+        .getLeftTrigger()
+        .whileTrue(
+            new AutoShootWhileBracing(
+                drivetrain,
+                targeting,
+                shooter,
+                hood,
+                transporter,
+                magicFloor,
+                () -> shooterRPSOffset,
+                () -> hoodAngleOffsetRotations));
+
+    operatorController
+        .getRightTrigger()
+        .whileTrue(
+            new ShootWhileDriving(
+                drivetrain,
+                targeting,
+                shooter,
+                hood,
+                transporter,
+                magicFloor,
+                leftDriveController.getYAxis(),
+                leftDriveController.getXAxis(),
+                () -> shooterRPSOffset,
+                () -> hoodAngleOffsetRotations));
+
+    operatorController
+        .getRightBumper()
+        .whileTrue(
+            new MediumDistanceFeed(
+                drivetrain,
+                targeting,
+                shooter,
+                hood,
+                transporter,
+                magicFloor,
+                () -> shooterRPSOffset,
+                () -> hoodAngleOffsetRotations));
+
+    operatorController
+        .getLeftBumper()
+        .whileTrue(
+            new LongDistanceFeed(
+                drivetrain,
+                targeting,
+                shooter,
+                hood,
+                transporter,
+                magicFloor,
+                () -> shooterRPSOffset,
+                () -> hoodAngleOffsetRotations));
+
+    // Shooter tuning
+    operatorController.getDPadUp().onTrue(Commands.runOnce(() -> shooterRPSOffset += RPS_STEP));
+
+    operatorController.getDPadDown().onTrue(Commands.runOnce(() -> shooterRPSOffset -= RPS_STEP));
+
+    // Hood tuning
+    operatorController
+        .getDPadLeft()
+        .onTrue(Commands.runOnce(() -> hoodAngleOffsetRotations += HOOD_STEP));
+
+    operatorController
+        .getDPadRight()
+        .onTrue(Commands.runOnce(() -> hoodAngleOffsetRotations -= HOOD_STEP));
     // rightDriveController.getPOVUp().whileTrue(face0);
     // rightDriveController.getPOVLeft().whileTrue(face90);
     // rightDriveController.getPOVDown().whileTrue(face180);
