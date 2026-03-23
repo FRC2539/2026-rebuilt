@@ -12,7 +12,7 @@ public class RollerSubsystem extends SubsystemBase {
   public RollerSubsystem(RollerIO rollerIO) {
     this.rollerIO = rollerIO;
 
-    // setDefaultCommand(setVoltage(0));
+    setDefaultCommand(setVoltage(0));
   }
 
   @Override
@@ -22,7 +22,7 @@ public class RollerSubsystem extends SubsystemBase {
   }
 
   public Command setVoltage(double voltage) {
-    return Commands.run(
+    return run(
         () -> {
           rollerIO.setVoltage(voltage);
         });

@@ -39,7 +39,7 @@ public class ShooterSubsystem extends SubsystemBase {
   }
 
   public Command setVoltage(double voltage) {
-    return Commands.run(() -> shooterIO.setVoltage(voltage));
+    return run(() -> shooterIO.setVoltage(voltage));
   }
 
   public boolean isAtSetpoint() {
