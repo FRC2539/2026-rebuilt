@@ -32,7 +32,8 @@ public class HoodSubsystem extends SubsystemBase {
   }
 
   public Command setHoodAngleForever(Supplier<Rotation2d> desiredAngle) {
-    return runOnce(() -> io.setTargetAngle(desiredAngle.get()));
+    return runOnce(() -> io.setTargetAngle(desiredAngle.get()))
+        .andThen(Commands.run(() -> {}, this));
   }
 
   @AutoLogOutput
