@@ -53,7 +53,7 @@ public class RobotContainer {
   // public final PivotSubsystem pivotSubsystem = new PivotSubsystem(new PivotIOTalonFX());
   public final RollerSubsystem rollerSubsystem = new RollerSubsystem(new RollerIOTalonFX());
   public final ShooterSubsystem shooter = new ShooterSubsystem(new ShooterIOTalonFX());
-  // public final HoodSubsystem hood = new HoodSubsystem(new HoodIOTalonFXS());
+  public final HoodSubsystem hood = new HoodSubsystem(new HoodIOTalonFXS());
   public final TransporterSubsystem transporter =
       new TransporterSubsystem(new TransporterIOTalonFX());
   public final MagicFloorSubsystem magicFloor = new MagicFloorSubsystem(new MagicFloorIOTalonFX());
@@ -148,8 +148,11 @@ public class RobotContainer {
     operatorController.getRightTrigger().whileTrue(magicFloor.setVoltage(2));
 
     operatorController.getLeftBumper().whileTrue(transporter.setVoltage(-2));
-    operatorController.getRightBumper().whileTrue(shooter.setShooterRPSForever( 20.0));
-    operatorController.getY().whileTrue(shooter.setVoltage(6));
+    operatorController.getRightBumper().whileTrue(shooter.setShooterRPSForever( 35.0));
+
+    operatorController.getB().whileTrue(hood.setHoodAngleForever(() -> Rotation2d.fromRotations(-0.1)));
+
+    operatorController.getX().whileTrue(hood.setHoodAngleForever(() -> Rotation2d.fromRotations(0.05)));
   }
 
   private ChassisSpeeds getDriverChassisSpeeds() {
