@@ -17,7 +17,7 @@ public class MagicFloorSubsystem extends SubsystemBase {
   public MagicFloorSubsystem(MagicFloorIO magicFloorIO) {
     this.magicFloorIO = magicFloorIO;
 
-    setDefaultCommand(null);
+    setDefaultCommand(setVoltage(0));
   }
 
   @Override

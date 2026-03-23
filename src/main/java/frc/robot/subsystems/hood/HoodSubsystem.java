@@ -48,20 +48,6 @@ public class HoodSubsystem extends SubsystemBase {
     return Commands.run(() -> io.setHoodVoltage(volts), this);
   }
 
-  private Rotation2d getHoodAngleForDistance(double distanceMeters) {
-    double angleDeg = 20 + (distanceMeters * 5);
-
-    return Rotation2d.fromDegrees(angleDeg);
-  }
-
-  public Command aimHoodFromDistance(Supplier<Double> distanceMeters) {
-    return setHoodAngle(() -> getHoodAngleForDistance(distanceMeters.get()));
-  }
-
-  public Command aimHoodFromDistanceForever(Supplier<Double> distanceMeters) {
-    return setHoodAngleForever(() -> getHoodAngleForDistance(distanceMeters.get()));
-  }
-
   public boolean isEncoderConnected() {
     return inputs.throughboreConnected;
   }

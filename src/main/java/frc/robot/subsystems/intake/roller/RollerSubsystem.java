@@ -22,9 +22,13 @@ public class RollerSubsystem extends SubsystemBase {
   }
 
   public Command setVoltage(double voltage) {
-    return Commands.run(
+    return run(
         () -> {
           rollerIO.setVoltage(voltage);
         });
+  }
+
+  public void runRoller(double voltage) {
+    rollerIO.setVoltage(voltage);
   }
 }
