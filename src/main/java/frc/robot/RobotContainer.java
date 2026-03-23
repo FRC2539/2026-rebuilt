@@ -23,6 +23,8 @@ import frc.robot.subsystems.drivetrain.DriveConstants;
 import frc.robot.subsystems.drivetrain.TunerConstants;
 import frc.robot.subsystems.hood.HoodIOTalonFXS;
 import frc.robot.subsystems.hood.HoodSubsystem;
+import frc.robot.subsystems.intake.pivot.PivotIOTalonFX;
+import frc.robot.subsystems.intake.pivot.PivotSubsystem;
 import frc.robot.subsystems.intake.roller.RollerIOTalonFX;
 import frc.robot.subsystems.intake.roller.RollerSubsystem;
 import frc.robot.subsystems.magicFloor.MagicFloorIOTalonFX;
@@ -146,12 +148,12 @@ public class RobotContainer {
                             drivetrain.getOperatorForwardDirection())),
                 drivetrain));
 
-  private void configureBindings() {
+
     // driver bind
     rightDriveController.getLeftThumb().onTrue(pivot.TogglePivot());
     rightDriveController.getTrigger().whileTrue(roller.RunForward());
 
-    // rightDriveController.getBottomThumb().whileTrue(faceHubCommand);
+    rightDriveController.getBottomThumb().whileTrue(faceHubCommand);
 
     // Cardinal directions
     rightDriveController.getPOVUp().whileTrue(face0);
@@ -241,19 +243,19 @@ public class RobotContainer {
     //         new AutoShootWhileBracing(
     //             drivetrain, targeting, shooter, hood, transporter, magicFloor));
 
-    operatorController.getLeftTrigger().whileTrue(rollerSubsystem.setVoltage(12));
-    operatorController.getRightTrigger().whileTrue(magicFloor.setVoltage(2));
+    // operatorController.getLeftTrigger().whileTrue(rollerSubsystem.setVoltage(12));
+    // operatorController.getRightTrigger().whileTrue(magicFloor.setVoltage(2));
 
-    operatorController.getLeftBumper().whileTrue(transporter.setVoltage(-2));
-    operatorController.getRightBumper().whileTrue(shooter.setShooterRPSForever(35.0));
+    // operatorController.getLeftBumper().whileTrue(transporter.setVoltage(-2));
+    // operatorController.getRightBumper().whileTrue(shooter.setShooterRPSForever(35.0));
 
-    operatorController
-        .getB()
-        .whileTrue(hood.setHoodAngleForever(() -> Rotation2d.fromRotations(-0.1)));
+    // operatorController
+    //     .getB()
+    //     .whileTrue(hood.setHoodAngleForever(() -> Rotation2d.fromRotations(-0.1)));
 
-    operatorController
-        .getX()
-        .whileTrue(hood.setHoodAngleForever(() -> Rotation2d.fromRotations(0.05)));
+    // operatorController
+    //     .getX()
+    //     .whileTrue(hood.setHoodAngleForever(() -> Rotation2d.fromRotations(0.05)));
   }
 
   private ChassisSpeeds getDriverChassisSpeeds() {
