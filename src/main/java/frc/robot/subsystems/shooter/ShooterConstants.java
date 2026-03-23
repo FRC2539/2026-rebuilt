@@ -16,7 +16,7 @@ public class ShooterConstants {
   public static final double goalDeadbandRPS = 2;
 
   public static final Slot0Configs SlotConfigs =
-      new Slot0Configs().withKP(0.45).withKI(0).withKD(0).withKS(1.8).withKA(0).withKV(0);
+      new Slot0Configs().withKP(0.3).withKI(0).withKD(0).withKS(.25).withKA(0).withKV(.115);
 
   public static final CurrentLimitsConfigs currentLimits =
       new CurrentLimitsConfigs().withSupplyCurrentLimitEnable(true).withSupplyCurrentLimit(45);

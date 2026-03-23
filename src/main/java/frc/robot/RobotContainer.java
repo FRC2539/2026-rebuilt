@@ -145,10 +145,10 @@ public class RobotContainer {
     //             drivetrain, targeting, shooter, hood, transporter, magicFloor));
 
     operatorController.getLeftTrigger().whileTrue(rollerSubsystem.setVoltage(12));
-    operatorController.getRightTrigger().whileTrue(magicFloor.setVoltage(4));
+    operatorController.getRightTrigger().whileTrue(magicFloor.setVoltage(2));
 
-    operatorController.getLeftBumper().whileTrue(transporter.setVoltage(-4));
-    operatorController.getRightBumper().whileTrue(shooter.setShooterRPSForever( 40.0));
+    operatorController.getLeftBumper().whileTrue(transporter.setVoltage(-2));
+    operatorController.getRightBumper().whileTrue(shooter.setShooterRPSForever( 20.0));
     operatorController.getY().whileTrue(shooter.setVoltage(6));
   }
 

@@ -29,7 +29,7 @@ public final class HoodConstants {
           .withFeedbackRemoteSensorID(hoodEncoderID)
           .withSensorToMechanismRatio(1);
 
-  public static final Slot0Configs slot0configs = new Slot0Configs().withKP(1).withKS(0);
+  public static final Slot0Configs slot0configs = new Slot0Configs().withKP(25).withKS(020).withKV(.1);
 
   public static final MotorOutputConfigs outputConfigs =
       new MotorOutputConfigs().withInverted(InvertedValue.CounterClockwise_Positive);
