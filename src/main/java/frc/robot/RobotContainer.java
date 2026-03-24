@@ -79,9 +79,9 @@ public class RobotContainer {
 
   // public final LightsSubsystem lights = new LightsSubsystem();
 
-  // private final FaceHubWhileDriving faceHubCommand =
-  //     new FaceHubWhileDriving(
-  //         drivetrain, leftDriveController.getYAxis(), leftDriveController.getXAxis());
+  private final FaceHubWhileDriving faceHubCommand =
+      new FaceHubWhileDriving(
+          drivetrain, leftDriveController.getYAxis(), leftDriveController.getXAxis());
 
   private final SwerveRequest.FieldCentric driveRequest =
       new SwerveRequest.FieldCentric()
@@ -118,21 +118,21 @@ public class RobotContainer {
   //         }, drivetrain, rollerSubsystem));
   //       }
 
-  // private Command face0 =
-  //     drivetrain.snapToAngle(
-  //         () -> Rotation2d.fromDegrees(0), () -> getXVelocity(), () -> getYVelocity());
+  private Command face0 =
+      drivetrain.snapToAngle(
+          () -> Rotation2d.fromDegrees(0), () -> getXVelocity(), () -> getYVelocity());
 
-  // private Command face90 =
-  //     drivetrain.snapToAngle(
-  //         () -> Rotation2d.fromDegrees(90), () -> getXVelocity(), () -> getYVelocity());
+  private Command face90 =
+      drivetrain.snapToAngle(
+          () -> Rotation2d.fromDegrees(90), () -> getXVelocity(), () -> getYVelocity());
 
-  // private Command face180 =
-  //     drivetrain.snapToAngle(
-  //         () -> Rotation2d.fromDegrees(180), () -> getXVelocity(), () -> getYVelocity());
+  private Command face180 =
+      drivetrain.snapToAngle(
+          () -> Rotation2d.fromDegrees(180), () -> getXVelocity(), () -> getYVelocity());
 
-  // private Command face270 =
-  //     drivetrain.snapToAngle(
-  //         () -> Rotation2d.fromDegrees(270), () -> getXVelocity(), () -> getYVelocity());
+  private Command face270 =
+      drivetrain.snapToAngle(
+          () -> Rotation2d.fromDegrees(270), () -> getXVelocity(), () -> getYVelocity());
 
   private void configureBindings() {
 
@@ -150,8 +150,8 @@ public class RobotContainer {
 
 
     // driver bind
-    rightDriveController.getLeftThumb().onTrue(pivot.TogglePivot());
-    rightDriveController.getTrigger().whileTrue(roller.RunForward());
+    rightDriveController.getLeftThumb().onTrue(pivot.Toggle());
+    rightDriveController.getTrigger().whileTrue(roller.setVoltage(12));
 
     rightDriveController.getBottomThumb().whileTrue(faceHubCommand);
 
@@ -162,8 +162,8 @@ public class RobotContainer {
     rightDriveController.getPOVRight().whileTrue(face270);
 
     // op binds
-    operatorController.getA().whileTrue(roller.RunBackward());
-    operatorController.getY().whileTrue(pivot.CrunchSlow());
+    operatorController.getA().whileTrue(roller.setVoltage(-12));
+    operatorController.getY().whileTrue(pivot.Crunch());
 
     operatorController
         .getLeftTrigger()
@@ -232,10 +232,6 @@ public class RobotContainer {
     operatorController
         .getDPadRight()
         .onTrue(Commands.runOnce(() -> hoodAngleOffsetRotations -= HOOD_STEP));
-    // rightDriveController.getPOVUp().whileTrue(face0);
-    // rightDriveController.getPOVLeft().whileTrue(face90);
-    // rightDriveController.getPOVDown().whileTrue(face180);
-    // rightDriveController.getPOVRight().whileTrue(face270);
 
     // operatorController
     //     .getLeftTrigger()

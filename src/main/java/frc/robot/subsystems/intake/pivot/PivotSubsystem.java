@@ -61,4 +61,21 @@ public class PivotSubsystem extends SubsystemBase {
   //     Commands.waitSeconds(0.5)
   //   );
   // }
+
+  public Command Crunch() {
+  return Commands.either(
+      Commands.sequence(
+          setPosition(PivotConstants.intakeFeatherPosition),
+          Commands.waitSeconds(0.5),
+          PutDown()),
+      Commands.none(),
+      this::isDown);
+}
+
+public Command Toggle() {
+  return Commands.either(
+      PullUp(),
+      PutDown(),
+      this::isDown);
+}
 }
