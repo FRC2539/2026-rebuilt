@@ -25,6 +25,9 @@ public class LongDistanceFeed extends Command {
   private static final Rotation2d RED_WALL = Rotation2d.fromDegrees(0);
   private static final Rotation2d BLUE_WALL = Rotation2d.fromDegrees(180);
 
+  private static final double BASE_RPS = 45.0;
+  private static final Rotation2d BASE_HOOD = Rotation2d.fromRotations(0.08);
+
   public LongDistanceFeed(
       CommandSwerveDrivetrain drivetrain,
       TargetingSubsystem targeting,
@@ -73,13 +76,9 @@ public class LongDistanceFeed extends Command {
     Command spinUp =
         Commands.run(
             () -> {
-              double rps = targeting.getIdealFlywheelRPS().get() + shooterOffset.get();
+              double rps = BASE_RPS + shooterOffset.get();
 
-              Rotation2d hoodAngle =
-                  targeting
-                      .getIdealHoodAngle()
-                      .get()
-                      .plus(Rotation2d.fromRotations(hoodOffset.get()));
+              Rotation2d hoodAngle = BASE_HOOD.plus(Rotation2d.fromRotations(hoodOffset.get()));
 
               shooter.setTargetRPS(rps);
               hood.setTargetAngle(() -> hoodAngle);
@@ -104,25 +103,5 @@ public class LongDistanceFeed extends Command {
     command = Commands.parallel(driveAndFace, spinUp, shoot);
 
     addRequirements(drivetrain, shooter, hood, transporter, magicFloor);
-  }
-
-  @Override
-  public void initialize() {
-    command.initialize();
-  }
-
-  @Override
-  public void execute() {
-    command.execute();
-  }
-
-  @Override
-  public void end(boolean interrupted) {
-    command.end(interrupted);
-  }
-
-  @Override
-  public boolean isFinished() {
-    return false;
   }
 }
