@@ -71,13 +71,17 @@ public class TargetingSubsystem extends SubsystemBase {
 
     realDistance = realDisplacementToHub.getNorm();
 
-    Rotation2d neededHeading = realDisplacementToHub.getAngle();
+    Rotation2d neededHeading =
+        realDisplacementToHub
+            .getAngle()
+            .plus(Rotation2d.k180deg); // shooter is facing backwards, need to offset by 180 degrees
 
     ShotSettings mapValues = TargetingConstants.hubShotMap.get(realDistance);
 
     if (mapValues == null) {
       return calculatedParams; // Return last known good params
     }
+
     targetHoodAngle = mapValues.hoodAngle();
     targetFlywheelRPS = mapValues.wheelRPS();
     return new ShootingParameters(
