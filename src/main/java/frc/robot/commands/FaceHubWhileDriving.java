@@ -48,27 +48,21 @@ public class FaceHubWhileDriving extends Command {
   @Override
   public void execute() {
 
-    double xInput = xAxis.get();
-    double yInput = yAxis.get();
+    double xInput = -Math.pow(xAxis.get(), 3);
+    double yInput = -Math.pow(yAxis.get(), 3);
 
     double maxSpeed = DriveConstants.MAX_TRANSLATIONAL_SPEED.in(MetersPerSecond);
 
     Rotation2d robotHeading = drivetrain.getHeading();
 
-    double xSpeed =
-        (xInput * robotHeading.getCos() - yInput * robotHeading.getSin()) * maxSpeed;
+    double xSpeed = (xInput * robotHeading.getCos() - yInput * robotHeading.getSin()) * maxSpeed;
 
-    double ySpeed =
-        (xInput * robotHeading.getSin() + yInput * robotHeading.getCos()) * maxSpeed;
-
+    double ySpeed = (xInput * robotHeading.getSin() + yInput * robotHeading.getCos()) * maxSpeed;
 
     Rotation2d targetAngle = targetingSubsystem.getIdealRobotHeading().get();
 
     drivetrain.setControl(
-        request
-            .withVelocityX(xSpeed)
-            .withVelocityY(ySpeed)
-            .withTargetDirection(targetAngle));
+        request.withVelocityX(xSpeed).withVelocityY(ySpeed).withTargetDirection(targetAngle));
   }
 
   @Override
@@ -77,8 +71,7 @@ public class FaceHubWhileDriving extends Command {
     Rotation2d current = drivetrain.getHeading();
     Rotation2d target = targetingSubsystem.getIdealRobotHeading().get();
 
-    double error =
-        MathUtil.angleModulus(target.minus(current).getRadians());
+    double error = MathUtil.angleModulus(target.minus(current).getRadians());
 
     return Math.abs(error) < ANGLE_TOLERANCE;
   }

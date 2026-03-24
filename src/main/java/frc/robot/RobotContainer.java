@@ -74,7 +74,7 @@ public class RobotContainer {
 
   private final FaceHubWhileDriving faceHubCommand =
       new FaceHubWhileDriving(
-          drivetrain, leftDriveController.getYAxis(), leftDriveController.getXAxis());
+          drivetrain, targeting, leftDriveController.getYAxis(), leftDriveController.getXAxis());
 
   private final SwerveRequest.FieldCentric driveRequest =
       new SwerveRequest.FieldCentric()
