@@ -27,11 +27,11 @@ public class FaceHubWhileDriving extends Command {
       new Pose2d(
           fieldLengthMeters - blueHubPosition.getX(), blueHubPosition.getY(), Rotation2d.kZero);
 
-  private static final double TARGET_DEADBAND = 0.1;
+  private static final double TARGET_DEADBAND = 0.015;
 
   private static final double kP = 6.0;
   private static final double kI = 0.0;
-  private static final double kD = 0.1;
+  private static final double kD = 0.5;
 
   private final SwerveRequest.FieldCentricFacingAngle request =
       new SwerveRequest.FieldCentricFacingAngle();

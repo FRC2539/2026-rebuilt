@@ -11,11 +11,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
-import frc.robot.commands.AutoShootWhileBracing;
 import frc.robot.commands.FaceHubWhileDriving;
-import frc.robot.commands.LongDistanceFeed;
-import frc.robot.commands.MediumDistanceFeed;
-import frc.robot.commands.ShootWhileDriving;
 import frc.robot.lib.controller.LogitechController;
 import frc.robot.lib.controller.ThrustmasterJoystick;
 import frc.robot.subsystems.drivetrain.CommandSwerveDrivetrain;
@@ -23,8 +19,6 @@ import frc.robot.subsystems.drivetrain.DriveConstants;
 import frc.robot.subsystems.drivetrain.TunerConstants;
 import frc.robot.subsystems.hood.HoodIOTalonFXS;
 import frc.robot.subsystems.hood.HoodSubsystem;
-import frc.robot.subsystems.intake.pivot.PivotIOTalonFX;
-import frc.robot.subsystems.intake.pivot.PivotSubsystem;
 import frc.robot.subsystems.intake.roller.RollerIOTalonFX;
 import frc.robot.subsystems.intake.roller.RollerSubsystem;
 import frc.robot.subsystems.magicFloor.MagicFloorIOTalonFX;
@@ -59,7 +53,7 @@ public class RobotContainer {
   private static final double RPS_STEP = 1.5;
   private static final double HOOD_STEP = 0.005;
 
-  public final PivotSubsystem pivot = new PivotSubsystem(new PivotIOTalonFX());
+  // public final PivotSubsystem pivot = new PivotSubsystem(new PivotIOTalonFX());
   public final RollerSubsystem roller = new RollerSubsystem(new RollerIOTalonFX());
   public final ShooterSubsystem shooter = new ShooterSubsystem(new ShooterIOTalonFX());
   public final HoodSubsystem hood = new HoodSubsystem(new HoodIOTalonFXS());
@@ -71,11 +65,10 @@ public class RobotContainer {
   public final VisionSubsystem vision =
       new VisionSubsystem(
           drivetrain::filterAndAddMeasurements,
-          new VisionIOLimelight("limelight-left", drivetrain::getHeading),
+          // new VisionIOLimelight("limelight-left", drivetrain::getHeading),
           new VisionIOLimelight("limelight-backl", drivetrain::getHeading),
           new VisionIOLimelight("limelight-backr", drivetrain::getHeading),
           new VisionIOLimelight("limelight-right", drivetrain::getHeading));
-
 
   // public final LightsSubsystem lights = new LightsSubsystem();
 
@@ -148,9 +141,8 @@ public class RobotContainer {
                             drivetrain.getOperatorForwardDirection())),
                 drivetrain));
 
-
     // driver bind
-    rightDriveController.getLeftThumb().onTrue(pivot.Toggle());
+    // rightDriveController.getLeftThumb().onTrue(pivot.Toggle());
     rightDriveController.getTrigger().whileTrue(roller.setVoltage(12));
 
     rightDriveController.getBottomThumb().whileTrue(faceHubCommand);
@@ -163,61 +155,61 @@ public class RobotContainer {
 
     // op binds
     operatorController.getA().whileTrue(roller.setVoltage(-12));
-    operatorController.getY().whileTrue(pivot.Crunch());
+    // operatorController.getY().whileTrue(pivot.Crunch());
 
-    operatorController
-        .getLeftTrigger()
-        .whileTrue(
-            new AutoShootWhileBracing(
-                drivetrain,
-                targeting,
-                shooter,
-                hood,
-                transporter,
-                magicFloor,
-                () -> shooterRPSOffset,
-                () -> hoodAngleOffsetRotations));
+    // operatorController
+    //     .getLeftTrigger()
+    //     .whileTrue(
+    //         new AutoShootWhileBracing(
+    //             drivetrain,
+    //             targeting,
+    //             shooter,
+    //             hood,
+    //             transporter,
+    //             magicFloor,
+    //             () -> shooterRPSOffset,
+    //             () -> hoodAngleOffsetRotations));
 
-    operatorController
-        .getRightTrigger()
-        .whileTrue(
-            new ShootWhileDriving(
-                drivetrain,
-                targeting,
-                shooter,
-                hood,
-                transporter,
-                magicFloor,
-                leftDriveController.getYAxis(),
-                leftDriveController.getXAxis(),
-                () -> shooterRPSOffset,
-                () -> hoodAngleOffsetRotations));
+    // operatorController
+    //     .getRightTrigger()
+    //     .whileTrue(
+    //         new ShootWhileDriving(
+    //             drivetrain,
+    //             targeting,
+    //             shooter,
+    //             hood,
+    //             transporter,
+    //             magicFloor,
+    //             leftDriveController.getYAxis(),
+    //             leftDriveController.getXAxis(),
+    //             () -> shooterRPSOffset,
+    //             () -> hoodAngleOffsetRotations));
 
-    operatorController
-        .getRightBumper()
-        .whileTrue(
-            new MediumDistanceFeed(
-                drivetrain,
-                targeting,
-                shooter,
-                hood,
-                transporter,
-                magicFloor,
-                () -> shooterRPSOffset,
-                () -> hoodAngleOffsetRotations));
+    // operatorController
+    //     .getRightBumper()
+    //     .whileTrue(
+    //         new MediumDistanceFeed(
+    //             drivetrain,
+    //             targeting,
+    //             shooter,
+    //             hood,
+    //             transporter,
+    //             magicFloor,
+    //             () -> shooterRPSOffset,
+    //             () -> hoodAngleOffsetRotations));
 
-    operatorController
-        .getLeftBumper()
-        .whileTrue(
-            new LongDistanceFeed(
-                drivetrain,
-                targeting,
-                shooter,
-                hood,
-                transporter,
-                magicFloor,
-                () -> shooterRPSOffset,
-                () -> hoodAngleOffsetRotations));
+    // operatorController
+    //     .getLeftBumper()
+    //     .whileTrue(
+    //         new LongDistanceFeed(
+    //             drivetrain,
+    //             targeting,
+    //             shooter,
+    //             hood,
+    //             transporter,
+    //             magicFloor,
+    //             () -> shooterRPSOffset,
+    //             () -> hoodAngleOffsetRotations));
 
     // Shooter tuning
     operatorController.getDPadUp().onTrue(Commands.runOnce(() -> shooterRPSOffset += RPS_STEP));
@@ -233,16 +225,9 @@ public class RobotContainer {
         .getDPadRight()
         .onTrue(Commands.runOnce(() -> hoodAngleOffsetRotations -= HOOD_STEP));
 
-    // operatorController
-    //     .getLeftTrigger()
-    //     .whileTrue(
-    //         new AutoShootWhileBracing(
-    //             drivetrain, targeting, shooter, hood, transporter, magicFloor));
+    // operatorController.getRightTrigger().whileTrue(magicFloor.setVoltage(8));
 
-    // operatorController.getLeftTrigger().whileTrue(rollerSubsystem.setVoltage(12));
-    // operatorController.getRightTrigger().whileTrue(magicFloor.setVoltage(2));
-
-    // operatorController.getLeftBumper().whileTrue(transporter.setVoltage(-2));
+    // operatorController.getLeftBumper().whileTrue(transporter.setVoltage(-8));
     // operatorController.getRightBumper().whileTrue(shooter.setShooterRPSForever(35.0));
 
     // operatorController
@@ -252,6 +237,16 @@ public class RobotContainer {
     // operatorController
     //     .getX()
     //     .whileTrue(hood.setHoodAngleForever(() -> Rotation2d.fromRotations(0.05)));
+
+    operatorController
+        .getLeftTrigger()
+        .whileTrue(
+            Commands.sequence(
+                Commands.parallel(
+                    shooter.setShooterRPSCommand(() -> 35.0),
+                    hood.setHoodAngle(() -> Rotation2d.fromRotations(0.05))),
+                Commands.waitSeconds(0.4),
+                Commands.parallel(magicFloor.setVoltage(8), transporter.setVoltage(-8))));
   }
 
   private ChassisSpeeds getDriverChassisSpeeds() {

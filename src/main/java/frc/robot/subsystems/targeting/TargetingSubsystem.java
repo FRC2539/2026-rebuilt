@@ -1,6 +1,5 @@
 package frc.robot.subsystems.targeting;
 
-import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -71,8 +70,6 @@ public class TargetingSubsystem extends SubsystemBase {
     Translation2d realDisplacementToHub = targetPose.minus(robotPose.getTranslation());
 
     realDistance = realDisplacementToHub.getNorm();
-
-    realDistance = MathUtil.clamp(realDistance, 2.1, 5.122);
 
     Rotation2d neededHeading = realDisplacementToHub.getAngle();
 
