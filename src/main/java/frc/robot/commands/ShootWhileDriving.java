@@ -58,26 +58,29 @@ public class ShootWhileDriving extends Command {
                       * DriveConstants.MAX_TRANSLATIONAL_SPEED.in(
                           edu.wpi.first.units.Units.MetersPerSecond);
 
-              ChassisSpeeds speeds = drivetrain.getFieldSpeeds();
+              ChassisSpeeds fieldSpeeds = drivetrain.getFieldSpeeds();
 
               double distance = targeting.realDistance;
 
-              double lookaheadTime = 0.25; // fallback
+              double lookaheadTime = 0.25;
 
               var shot = TargetingConstants.hubShotMap.get(distance);
               if (shot != null) {
                 lookaheadTime = shot.timeOfFlight();
               }
 
-              double dx = speeds.vxMetersPerSecond * lookaheadTime;
-              double dy = speeds.vyMetersPerSecond * lookaheadTime;
+              double dx = fieldSpeeds.vxMetersPerSecond * lookaheadTime;
+              double dy = fieldSpeeds.vyMetersPerSecond * lookaheadTime;
 
               Rotation2d baseAngle = targeting.getIdealRobotHeading().get();
 
-              double compensatedX = Math.cos(baseAngle.getRadians()) + dx;
-              double compensatedY = Math.sin(baseAngle.getRadians()) + dy;
+              double targetX = Math.cos(baseAngle.getRadians());
+              double targetY = Math.sin(baseAngle.getRadians());
 
-              Rotation2d compensatedAngle = new Rotation2d(Math.atan2(compensatedY, compensatedX));
+              double finalX = targetX + dx;
+              double finalY = targetY + dy;
+
+              Rotation2d compensatedAngle = new Rotation2d(Math.atan2(finalY, finalX));
 
               drivetrain.setControl(
                   request
@@ -112,8 +115,8 @@ public class ShootWhileDriving extends Command {
               boolean ready = hood.isAtSetpoint() && (shooter.isAtSetpoint() || hasSpunUp);
 
               if (ready) {
-                transporter.setVoltage(10);
-                magicFloor.setVoltage(10);
+                transporter.setVoltage(-8);
+                magicFloor.setVoltage(8);
               } else {
                 transporter.setVoltage(0);
                 magicFloor.setVoltage(0);

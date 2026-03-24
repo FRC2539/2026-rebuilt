@@ -12,6 +12,8 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.commands.FaceHubWhileDriving;
+import frc.robot.commands.LongDistanceFeed;
+import frc.robot.commands.MediumDistanceFeed;
 import frc.robot.lib.controller.LogitechController;
 import frc.robot.lib.controller.ThrustmasterJoystick;
 import frc.robot.subsystems.drivetrain.CommandSwerveDrivetrain;
@@ -185,31 +187,35 @@ public class RobotContainer {
     //             () -> shooterRPSOffset,
     //             () -> hoodAngleOffsetRotations));
 
-    // operatorController
-    //     .getRightBumper()
-    //     .whileTrue(
-    //         new MediumDistanceFeed(
-    //             drivetrain,
-    //             targeting,
-    //             shooter,
-    //             hood,
-    //             transporter,
-    //             magicFloor,
-    //             () -> shooterRPSOffset,
-    //             () -> hoodAngleOffsetRotations));
+    operatorController
+        .getRightBumper()
+        .whileTrue(
+            new MediumDistanceFeed(
+                drivetrain,
+                targeting,
+                shooter,
+                hood,
+                transporter,
+                magicFloor,
+                leftDriveController.getYAxis(),
+                leftDriveController.getXAxis(),
+                () -> shooterRPSOffset,
+                () -> hoodAngleOffsetRotations));
 
-    // operatorController
-    //     .getLeftBumper()
-    //     .whileTrue(
-    //         new LongDistanceFeed(
-    //             drivetrain,
-    //             targeting,
-    //             shooter,
-    //             hood,
-    //             transporter,
-    //             magicFloor,
-    //             () -> shooterRPSOffset,
-    //             () -> hoodAngleOffsetRotations));
+    operatorController
+        .getLeftBumper()
+        .whileTrue(
+            new LongDistanceFeed(
+                drivetrain,
+                targeting,
+                shooter,
+                hood,
+                transporter,
+                magicFloor,
+                leftDriveController.getYAxis(),
+                leftDriveController.getXAxis(),
+                () -> shooterRPSOffset,
+                () -> hoodAngleOffsetRotations));
 
     // Shooter tuning
     operatorController.getDPadUp().onTrue(Commands.runOnce(() -> shooterRPSOffset += RPS_STEP));
