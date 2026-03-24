@@ -4,6 +4,8 @@ import static edu.wpi.first.units.Units.MetersPerSecond;
 import static edu.wpi.first.units.Units.RadiansPerSecond;
 import static edu.wpi.first.units.Units.RotationsPerSecond;
 
+import java.util.Set;
+
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -73,8 +75,8 @@ public class RobotContainer {
           drivetrain::filterAndAddMeasurements,
           // new VisionIOLimelight("limelight-left", drivetrain::getHeading),
           new VisionIOLimelight("limelight-backl", drivetrain::getHeading),
-          new VisionIOLimelight("limelight-backr", drivetrain::getHeading),
-          new VisionIOLimelight("limelight-right", drivetrain::getHeading));
+          new VisionIOLimelight("limelight-backr", drivetrain::getHeading));
+          //new VisionIOLimelight("limelight-right", drivetrain::getHeading));
 
   // public final LightsSubsystem lights = new LightsSubsystem();
 
@@ -89,6 +91,8 @@ public class RobotContainer {
           .withDriveRequestType(DriveRequestType.Velocity);
 
   public RobotContainer() {
+    tunablerps.initDefault(0);
+    tunableHoodAngle.initDefault(0);
     configureBindings();
 
     //   auto = new Auto(this);
@@ -206,7 +210,7 @@ public class RobotContainer {
     //             () -> shooterRPSOffset,
     //             () -> hoodAngleOffsetRotations));
 
-    operatorController.getRightBumper().whileTrue(new SimpleAlignAndShoot(hood, targeting, shooter, magicFloor, transporter, drivetrain, Rotation2d.fromRotations(tunableHoodAngle.get()), tunablerps.get()));
+    operatorController.getRightBumper().whileTrue(Commands.defer(() -> {return new SimpleAlignAndShoot(hood, targeting, shooter, magicFloor, transporter, drivetrain, Rotation2d.fromRotations(tunableHoodAngle.get()), tunablerps.get());}, Set.of(hood, targeting, shooter, magicFloor, transporter, drivetrain)));
 
     operatorController
         .getLeftBumper()

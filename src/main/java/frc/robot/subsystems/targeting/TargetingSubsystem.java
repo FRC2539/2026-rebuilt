@@ -18,6 +18,7 @@ public class TargetingSubsystem extends SubsystemBase {
       new ShootingParameters(new Rotation2d(), new Rotation2d(), 0.0);
 
   @AutoLogOutput public Pose2d hubPosition;
+  @AutoLogOutput public Pose2d desiredRobotPosition;
   @AutoLogOutput public double realDistance = 0;
 
   @AutoLogOutput public Rotation2d targetRobotAngle;
@@ -73,11 +74,13 @@ public class TargetingSubsystem extends SubsystemBase {
 
     Rotation2d neededHeading =
         realDisplacementToHub
-            .getAngle()
-            .plus(Rotation2d.k180deg); // shooter is facing backwards, need to offset by 180 degrees
+            .getAngle().plus(Rotation2d.k180deg); // shooter is facing backwards, need to offset by 180 degrees
 
-    ShotSettings mapValues = TargetingConstants.hubShotMap.get(realDistance);
+    // ShotSettings mapValues = TargetingConstants.hubShotMap.get(realDistance);
 
+    ShotSettings mapValues = new ShotSettings(0.0, Rotation2d.kZero, 0.0);
+
+    desiredRobotPosition = new Pose2d(robotPose.getX(), robotPose.getY(), neededHeading);
     if (mapValues == null) {
       return calculatedParams; // Return last known good params
     }
