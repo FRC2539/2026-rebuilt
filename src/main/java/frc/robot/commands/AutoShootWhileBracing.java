@@ -34,19 +34,22 @@ public class AutoShootWhileBracing extends Command {
 
     Command rotateToAngle =
         Commands.run(
-                () ->
-                    drivetrain.setControl(
-                        aimRequest
-                            .withVelocityX(0)
-                            .withVelocityY(0)
-                            .withTargetDirection(targeting.getIdealRobotHeading().get())),
+                () -> {
+                  Rotation2d targetAngle = targeting.getIdealRobotHeading().get();
+
+                  drivetrain.setControl(
+                      aimRequest
+                          .withVelocityX(0)
+                          .withVelocityY(0)
+                          .withTargetDirection(targetAngle));
+                },
                 drivetrain)
             .until(
                 () -> {
-                  double error =
-                      MathUtil.angleModulus(
-                          targeting.getIdealRobotHeading().get().getRadians()
-                              - drivetrain.getHeading().getRadians());
+                  Rotation2d current = drivetrain.getHeading();
+                  Rotation2d target = targeting.getIdealRobotHeading().get();
+
+                  double error = MathUtil.angleModulus(target.minus(current).getRadians());
 
                   return Math.abs(error) < ANGLE_TOLERANCE_RAD;
                 });
@@ -54,14 +57,16 @@ public class AutoShootWhileBracing extends Command {
     Command spinUp =
         Commands.run(
             () -> {
-              shooter.setTargetRPS(targeting.getIdealFlywheelRPS().get() + shooterOffset.get());
+              double targetRPS = targeting.getIdealFlywheelRPS().get() + shooterOffset.get();
 
-              hood.setTargetAngle(
-                  () ->
-                      targeting
-                          .getIdealHoodAngle()
-                          .get()
-                          .plus(Rotation2d.fromRotations(hoodOffset.get())));
+              Rotation2d targetHood =
+                  targeting
+                      .getIdealHoodAngle()
+                      .get()
+                      .plus(Rotation2d.fromRotations(hoodOffset.get()));
+
+              shooter.setTargetRPS(targetRPS);
+              hood.setTargetAngle(() -> targetHood);
             },
             shooter,
             hood);
@@ -69,16 +74,15 @@ public class AutoShootWhileBracing extends Command {
     Command shoot =
         Commands.run(
             () -> {
-              transporter.setVoltage(10);
-              magicFloor.setVoltage(10);
+              transporter.setVoltage(-8);
+              magicFloor.setVoltage(8);
             },
             transporter,
             magicFloor);
 
     command =
         Commands.sequence(
-            rotateToAngle,
-            spinUp,
+            Commands.parallel(rotateToAngle, spinUp),
             Commands.waitUntil(() -> shooter.isAtSetpoint() && hood.isAtSetpoint()),
             shoot);
   }

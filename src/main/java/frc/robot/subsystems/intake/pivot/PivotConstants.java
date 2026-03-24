@@ -17,7 +17,7 @@ public class PivotConstants {
 
   public static final Rotation2d intakeUpPosition = new Rotation2d(0.634);
   public static final Rotation2d intakeDownPosition = new Rotation2d(0.0);
-  public static final Rotation2d intakeFeatherPosition = new Rotation2d(0.247);
+  public static final Rotation2d intakeFeatherPosition = new Rotation2d(0.4);
 
   public static final Slot0Configs slot0configs =
       new Slot0Configs().withKP(26).withKD(0.1).withKS(5);

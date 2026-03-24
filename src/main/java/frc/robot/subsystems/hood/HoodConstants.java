@@ -17,8 +17,8 @@ public final class HoodConstants {
   public static final int hoodEncoderID = 41;
   public static final String kCanBus = "rio";
 
-  public static final Rotation2d maxHoodAngle = Rotation2d.fromRotations(0.129639);
-  public static final Rotation2d minHoodAngle = Rotation2d.fromRotations(-0.1);
+  public static final Rotation2d maxHoodAngle = Rotation2d.fromRotations(0.122803);
+  public static final Rotation2d minHoodAngle = Rotation2d.fromRotations(-0.134521);
 
   public static final Rotation2d angleDeadband = Rotation2d.fromRotations(0.05);
   public static final TalonFXConfiguration motorConfig = new TalonFXConfiguration();

@@ -3,47 +3,43 @@ package frc.robot.commands;
 import static edu.wpi.first.units.Units.*;
 
 import com.ctre.phoenix6.swerve.SwerveRequest;
-import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.lib.controller.Axis;
 import frc.robot.subsystems.drivetrain.CommandSwerveDrivetrain;
 import frc.robot.subsystems.drivetrain.DriveConstants;
+import frc.robot.subsystems.targeting.TargetingSubsystem;
 
 public class FaceHubWhileDriving extends Command {
 
   private final CommandSwerveDrivetrain drivetrain;
+  private final TargetingSubsystem targetingSubsystem;
 
   private final Axis xAxis;
   private final Axis yAxis;
 
-  public static double fieldLengthMeters = 16.54098798984;
-
-  public static Pose2d blueHubPosition = new Pose2d(4.6255, 4.0345, Rotation2d.kZero);
-
-  public static Pose2d redHubPosition =
-      new Pose2d(
-          fieldLengthMeters - blueHubPosition.getX(), blueHubPosition.getY(), Rotation2d.kZero);
-
-  private static final double TARGET_DEADBAND = 0.1;
-
   private static final double kP = 6.0;
   private static final double kI = 0.0;
-  private static final double kD = 0.1;
+  private static final double kD = 0.5;
+
+  private static final double ANGLE_TOLERANCE = Math.toRadians(2.5);
 
   private final SwerveRequest.FieldCentricFacingAngle request =
       new SwerveRequest.FieldCentricFacingAngle();
 
-  public FaceHubWhileDriving(CommandSwerveDrivetrain drivetrain, Axis xAxis, Axis yAxis) {
+  public FaceHubWhileDriving(
+      CommandSwerveDrivetrain drivetrain,
+      TargetingSubsystem targetingSubsystem,
+      Axis xAxis,
+      Axis yAxis) {
 
     this.drivetrain = drivetrain;
+    this.targetingSubsystem = targetingSubsystem;
     this.xAxis = xAxis;
     this.yAxis = yAxis;
 
     request.HeadingController.setPID(kP, kI, kD);
-
     request.HeadingController.enableContinuousInput(-Math.PI, Math.PI);
 
     addRequirements(drivetrain);
@@ -52,32 +48,18 @@ public class FaceHubWhileDriving extends Command {
   @Override
   public void execute() {
 
-    double xSpeed = xAxis.get() * DriveConstants.MAX_TRANSLATIONAL_SPEED.in(MetersPerSecond);
+    double xInput = -Math.pow(xAxis.get(), 3);
+    double yInput = -Math.pow(yAxis.get(), 3);
 
-    double ySpeed = yAxis.get() * DriveConstants.MAX_TRANSLATIONAL_SPEED.in(MetersPerSecond);
+    double maxSpeed = DriveConstants.MAX_TRANSLATIONAL_SPEED.in(MetersPerSecond);
 
-    Pose2d hubPosition = blueHubPosition;
+    Rotation2d robotHeading = drivetrain.getHeading();
 
-    if (DriverStation.getAlliance().isPresent()
-        && DriverStation.getAlliance().get() == Alliance.Red) {
-      hubPosition = redHubPosition;
-    }
+    double xSpeed = (xInput * robotHeading.getCos() - yInput * robotHeading.getSin()) * maxSpeed;
 
-    var pose = drivetrain.getRobotPose();
+    double ySpeed = (xInput * robotHeading.getSin() + yInput * robotHeading.getCos()) * maxSpeed;
 
-    double dx = hubPosition.getX() - pose.getX();
-    double dy = hubPosition.getY() - pose.getY();
-
-    if (Math.hypot(dx, dy) < TARGET_DEADBAND) {
-      drivetrain.setControl(
-          request
-              .withVelocityX(xSpeed)
-              .withVelocityY(ySpeed)
-              .withTargetDirection(drivetrain.getHeading()));
-      return;
-    }
-
-    Rotation2d targetAngle = new Rotation2d(Math.atan2(dy, dx));
+    Rotation2d targetAngle = targetingSubsystem.getIdealRobotHeading().get();
 
     drivetrain.setControl(
         request.withVelocityX(xSpeed).withVelocityY(ySpeed).withTargetDirection(targetAngle));
@@ -85,6 +67,12 @@ public class FaceHubWhileDriving extends Command {
 
   @Override
   public boolean isFinished() {
-    return false;
+
+    Rotation2d current = drivetrain.getHeading();
+    Rotation2d target = targetingSubsystem.getIdealRobotHeading().get();
+
+    double error = MathUtil.angleModulus(target.minus(current).getRadians());
+
+    return Math.abs(error) < ANGLE_TOLERANCE;
   }
 }
