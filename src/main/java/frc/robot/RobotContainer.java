@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.commands.FaceHubWhileDriving;
 import frc.robot.commands.LongDistanceFeed;
 import frc.robot.commands.MediumDistanceFeed;
+import frc.robot.commands.SimpleAlignAndShoot;
 import frc.robot.lib.controller.LogitechController;
 import frc.robot.lib.controller.ThrustmasterJoystick;
 import frc.robot.subsystems.drivetrain.CommandSwerveDrivetrain;
@@ -32,6 +33,7 @@ import frc.robot.subsystems.transporter.TransporterIOTalonFX;
 import frc.robot.subsystems.transporter.TransporterSubsystem;
 import frc.robot.subsystems.vision.VisionIOLimelight;
 import frc.robot.subsystems.vision.VisionSubsystem;
+import frc.robot.util.LoggedTunableNumber;
 
 public class RobotContainer {
 
@@ -39,6 +41,8 @@ public class RobotContainer {
 
   // public final Auto auto;
 
+  public LoggedTunableNumber tunablerps = new LoggedTunableNumber("rps");
+  public LoggedTunableNumber tunableHoodAngle = new LoggedTunableNumber("hood-angle");
   private final double maxSpeed = TunerConstants.kSpeedAt12Volts.in(MetersPerSecond);
 
   private final double maxAngularRate = RotationsPerSecond.of(1.5).in(RadiansPerSecond);
@@ -187,20 +191,22 @@ public class RobotContainer {
     //             () -> shooterRPSOffset,
     //             () -> hoodAngleOffsetRotations));
 
-    operatorController
-        .getRightBumper()
-        .whileTrue(
-            new MediumDistanceFeed(
-                drivetrain,
-                targeting,
-                shooter,
-                hood,
-                transporter,
-                magicFloor,
-                leftDriveController.getYAxis(),
-                leftDriveController.getXAxis(),
-                () -> shooterRPSOffset,
-                () -> hoodAngleOffsetRotations));
+    // operatorController
+    //     .getRightBumper()
+    //     .whileTrue(
+    //         new MediumDistanceFeed(
+    //             drivetrain,
+    //             targeting,
+    //             shooter,
+    //             hood,
+    //             transporter,
+    //             magicFloor,
+    //             leftDriveController.getYAxis(),
+    //             leftDriveController.getXAxis(),
+    //             () -> shooterRPSOffset,
+    //             () -> hoodAngleOffsetRotations));
+
+    operatorController.getRightBumper().whileTrue(new SimpleAlignAndShoot(hood, targeting, shooter, magicFloor, transporter, drivetrain, Rotation2d.fromRotations(tunableHoodAngle.get()), tunablerps.get()));
 
     operatorController
         .getLeftBumper()

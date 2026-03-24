@@ -3,7 +3,6 @@ package frc.robot.commands;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.subsystems.drivetrain.CommandSwerveDrivetrain;
 import frc.robot.subsystems.hood.HoodSubsystem;
 import frc.robot.subsystems.magicFloor.MagicFloorSubsystem;
@@ -19,6 +18,8 @@ public class SimpleAlignAndShoot extends Command {
   MagicFloorSubsystem floor;
   TransporterSubsystem transporter;
   CommandSwerveDrivetrain drivetrain;
+  Rotation2d tunableHoodAngle = new Rotation2d();
+  double tunablerps = 0;
 
   private final SwerveRequest.FieldCentricFacingAngle driveRequest =
       new SwerveRequest.FieldCentricFacingAngle();
@@ -31,13 +32,18 @@ public class SimpleAlignAndShoot extends Command {
       ShooterSubsystem shooterSubsystem,
       MagicFloorSubsystem magicFloorSubsystem,
       TransporterSubsystem transporterSubsystem,
-      CommandSwerveDrivetrain drivetrainSubsystem) {
+      CommandSwerveDrivetrain drivetrainSubsystem,
+      Rotation2d hoodAngle,
+      double rps) {
     hood = hoodSubsystem;
     targeting = targetingSubsystem;
     shooter = shooterSubsystem;
     floor = magicFloorSubsystem;
     transporter = transporterSubsystem;
     drivetrain = drivetrainSubsystem;
+
+    hoodAngle = tunableHoodAngle;
+    tunablerps = rps;
 
     addRequirements(hood, targeting, shooter, floor, transporter, drivetrain);
   }
@@ -54,14 +60,18 @@ public class SimpleAlignAndShoot extends Command {
     Rotation2d desiredDrivetrainHeading = targeting.getIdealRobotHeading().get();
 
     if (isFacingHub()) {
-      shooter.setTargetRPS(targeting.targetFlywheelRPS);
-      hood.setTargetAngle(targeting.getIdealHoodAngle());
+      //   shooter.setTargetRPS(targeting.getTargetFlywheelRPS);
+      //   hood.setTargetAngle(targeting.getIdealHoodAngle());
+      shooter.setTargetRPS(tunablerps);
+      hood.setTargetAngle(() -> tunableHoodAngle);
 
       if ((shooter.isAtSetpoint() || hasSpunUp) && hood.isAtSetpoint()) {
         hasSpunUp = true;
-        CommandScheduler.getInstance().schedule(floor.setVoltage(8), transporter.setVoltage(-8));
+        floor.setVoltageFunction(8);
+        transporter.setVoltageFunction(-8);
+        // CommandScheduler.getInstance().schedule(floor.setVoltage(8), transporter.setVoltage(-8));
       }
-      
+
     } else {
       drivetrain.setControl(driveRequest.withTargetDirection(desiredDrivetrainHeading));
     }

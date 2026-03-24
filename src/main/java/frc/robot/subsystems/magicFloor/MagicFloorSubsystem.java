@@ -29,4 +29,8 @@ public class MagicFloorSubsystem extends SubsystemBase {
   public Command setVoltage(double voltage) {
     return Commands.run(() -> magicFloorIO.setVoltage(voltage), this);
   }
+
+  public void setVoltageFunction(double voltage) {
+    magicFloorIO.setVoltage(voltage);
+  }
 }
