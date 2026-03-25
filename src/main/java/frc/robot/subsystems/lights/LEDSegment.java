@@ -27,10 +27,10 @@ public enum LEDSegment {
   LeftTop(6, false, 35),
   CenterTop(7, false, 20),
 
-  BatteryIndicator(0, true, 0, 1),
-  ConnectedIndicator(0, true, 1, 2),
-  PivotIndicator(0, true, 2, 3),
-  HoodIndicator(0, true, 3, 4),
+  BatteryIndicator(0, true, 0, 0),
+  ConnectedIndicator(0, true, 1, 1),
+  PivotIndicator(0, true, 2, 2),
+  HoodIndicator(0, true, 3, 3),
   // connected to computer/fms
   // hood encoder
   // intake agle encoder
