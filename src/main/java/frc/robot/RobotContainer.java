@@ -173,7 +173,9 @@ public class RobotContainer {
                 shooter.setVoltage(-4),
                 transporter.setVoltage(4),
                 magicFloor.setVoltage(-4),
-                roller.setVoltage(-4)));
+                roller.setVoltage(-4)
+            )
+        );
 
     // operatorController
     //     .getLeftTrigger()
