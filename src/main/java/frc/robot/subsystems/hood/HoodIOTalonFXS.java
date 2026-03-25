@@ -39,12 +39,12 @@ public class HoodIOTalonFXS implements HoodIO {
   public void setTargetAngle(Rotation2d desiredTargetAngle) {
     targetAngle = desiredTargetAngle;
 
-    targetAngle =
-        Rotation2d.fromDegrees(
-            MathUtil.clamp(
-                targetAngle.getDegrees(),
-                HoodConstants.minHoodAngle.getDegrees(),
-                HoodConstants.maxHoodAngle.getDegrees()));
+    // targetAngle =
+    //     Rotation2d.fromDegrees(
+    //         MathUtil.clamp(
+    //             targetAngle.getDegrees(),
+    //             HoodConstants.minHoodAngle.getDegrees(),
+    //             HoodConstants.maxHoodAngle.getDegrees()));
     motor.setControl(motorRequest.withPosition(targetAngle.getRotations()));
   }
 

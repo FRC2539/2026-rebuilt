@@ -72,7 +72,7 @@ public class SimpleAlignAndShoot extends Command {
 
   @Override
   public void execute() {
-   // rotationController.setSetpoint(targeting.getIdealRobotHeading().get().getRotations());
+   rotationController.setSetpoint(targeting.getIdealRobotHeading().get().getRotations());
 
 
    // System.out.println(targeting.getIdealRobotHeading().get().getRotations());
@@ -80,8 +80,8 @@ public class SimpleAlignAndShoot extends Command {
 
     //System.out.println(driveRequest.HeadingController.getPositionError());
     if (rotationController.atSetpoint()) {
-      //   shooter.setTargetRPS(targeting.getTargetFlywheelRPS);
-      //   hood.setTargetAngle(targeting.getIdealHoodAngle());
+      shooter.setTargetRPS(targeting.getIdealFlywheelRPS().get());
+      hood.setTargetAngle(targeting.getIdealHoodAngle());
       shooter.setTargetRPS(tunablerps);
       hood.setTargetAngle(() -> tunableHoodAngle);
 

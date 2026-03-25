@@ -16,7 +16,7 @@ public class HoodSubsystem extends SubsystemBase {
   public HoodSubsystem(HoodIO io) {
     this.io = io;
 
-    setDefaultCommand(setHoodAngleForever(() -> HoodConstants.minHoodAngle));
+    // setDefaultCommand(setHoodAngleForever(() -> HoodConstants.minHoodAngle));
   }
 
   @Override
