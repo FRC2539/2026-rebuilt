@@ -37,8 +37,8 @@ public class PivotSubsystem extends SubsystemBase {
 
   public Command setPosition(Rotation2d targetPosition) {
     return runOnce(() -> pivotIO.setPosition(targetPosition))
-        .andThen(Commands.run(() -> {}))
-        .until(() -> pivotIO.isAtSetpoint());
+        .andThen(Commands.run(() -> {}, this));
+        //.until(() -> pivotIO.isAtSetpoint());
   }
 
   public boolean isEncoderConnected() {

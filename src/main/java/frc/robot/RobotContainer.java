@@ -25,6 +25,9 @@ import frc.robot.subsystems.drivetrain.TunerConstants;
 import frc.robot.subsystems.hood.HoodConstants;
 import frc.robot.subsystems.hood.HoodIOTalonFXS;
 import frc.robot.subsystems.hood.HoodSubsystem;
+import frc.robot.subsystems.intake.pivot.PivotConstants;
+import frc.robot.subsystems.intake.pivot.PivotIOTalonFX;
+import frc.robot.subsystems.intake.pivot.PivotSubsystem;
 import frc.robot.subsystems.intake.roller.RollerIOTalonFX;
 import frc.robot.subsystems.intake.roller.RollerSubsystem;
 import frc.robot.subsystems.magicFloor.MagicFloorIOTalonFX;
@@ -62,7 +65,7 @@ public class RobotContainer {
   private static final double RPS_STEP = 1.5;
   private static final double HOOD_STEP = 0.005;
 
-  // public final PivotSubsystem pivot = new PivotSubsystem(new PivotIOTalonFX());
+  public final PivotSubsystem pivot = new PivotSubsystem(new PivotIOTalonFX());
   public final RollerSubsystem roller = new RollerSubsystem(new RollerIOTalonFX());
   public final ShooterSubsystem shooter = new ShooterSubsystem(new ShooterIOTalonFX());
   public final HoodSubsystem hood = new HoodSubsystem(new HoodIOTalonFXS());
@@ -165,7 +168,11 @@ public class RobotContainer {
     rightDriveController.getPOVRight().whileTrue(face270);
 
     // op binds
-    operatorController.getA().whileTrue(roller.setVoltage(-12));
+   // operatorController.getA().whileTrue(roller.setVoltage(-12));
+
+   operatorController.getA().whileTrue(pivot.PutDown());
+   operatorController.getB().whileTrue(pivot.PullUp());
+   operatorController.getX().whileTrue(pivot.setPosition(PivotConstants.intakeFeatherPosition));
     // operatorController.getY().whileTrue(pivot.Crunch());
 
     // operatorController
@@ -211,7 +218,7 @@ public class RobotContainer {
     //             () -> shooterRPSOffset,
     //             () -> hoodAngleOffsetRotations));
 
-    operatorController.getRightBumper().whileTrue(Commands.defer(() -> {return new SimpleAlignAndShoot(hood, targeting, shooter, magicFloor, transporter, drivetrain, Rotation2d.fromRotations(-.0656), tunablerps.get());}, Set.of(hood, targeting, shooter, magicFloor, transporter, drivetrain)));
+    operatorController.getRightBumper().whileTrue(Commands.defer(() -> {return new SimpleAlignAndShoot(hood, targeting, shooter, magicFloor, transporter, drivetrain, Rotation2d.fromRotations(tunableHoodAngle.get()), tunablerps.get());}, Set.of(hood, targeting, shooter, magicFloor, transporter, drivetrain)));
 
    // operatorController.getRightBumper().whileTrue(hood.setHoodAngleForever(() -> Rotation2d.fromRotations(0.169)));
 

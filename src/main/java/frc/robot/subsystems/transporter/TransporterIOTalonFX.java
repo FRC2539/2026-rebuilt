@@ -22,8 +22,8 @@ public class TransporterIOTalonFX implements TransporterIO {
                 .withCurrentLimits(
                     new CurrentLimitsConfigs()
                         .withSupplyCurrentLimitEnable(true)
-                        .withSupplyCurrentLimit(100))
-                .withMotorOutput(new MotorOutputConfigs().withNeutralMode(NeutralModeValue.Coast)));
+                        .withSupplyCurrentLimit(45))
+                .withMotorOutput(new MotorOutputConfigs().withNeutralMode(NeutralModeValue.Brake)));
 
     followerMotor.setControl(
         new Follower(TransporterConstants.leaderMotorID, MotorAlignmentValue.Opposed));

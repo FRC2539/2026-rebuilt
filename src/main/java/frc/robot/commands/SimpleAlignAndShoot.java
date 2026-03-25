@@ -82,7 +82,7 @@ public class SimpleAlignAndShoot extends Command {
     //System.out.println(driveRequest.HeadingController.getPositionError());
     if (rotationController.atSetpoint()) {
       shooter.setTargetRPS(targeting.getIdealFlywheelRPS().get());
-      hood.setTargetAngle(targeting.getIdealHoodAngle());
+      //hood.setTargetAngle(targeting.getIdealHoodAngle());
       shooter.setTargetRPS(tunablerps);
       hood.setTargetAngle(() -> tunableHoodAngle); //this one is winning and was using 0
 
