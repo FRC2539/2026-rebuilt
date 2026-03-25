@@ -54,7 +54,8 @@ public class SimpleAlignAndShoot extends Command {
     transporter = transporterSubsystem;
     drivetrain = drivetrainSubsystem;
 
-    hoodAngle = tunableHoodAngle;
+    //hoodAngle = tunableHoodAngle; //this looks to be inverted, and setting to 0 since in the constructor.
+    tunableHoodAngle = hoodAngle;
     tunablerps = rps;
 
     addRequirements(hood, targeting, shooter, floor, transporter, drivetrain);
@@ -83,7 +84,7 @@ public class SimpleAlignAndShoot extends Command {
       shooter.setTargetRPS(targeting.getIdealFlywheelRPS().get());
       hood.setTargetAngle(targeting.getIdealHoodAngle());
       shooter.setTargetRPS(tunablerps);
-      hood.setTargetAngle(() -> tunableHoodAngle);
+      hood.setTargetAngle(() -> tunableHoodAngle); //this one is winning and was using 0
 
       if ((shooter.isAtSetpoint() || hasSpunUp) && hood.isAtSetpoint()) {
         hasSpunUp = true;
