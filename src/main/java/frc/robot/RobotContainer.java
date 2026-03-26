@@ -43,7 +43,7 @@ public class RobotContainer {
 
   public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
 
-  // public final Auto auto;
+  public final Auto auto;
 
   public LoggedTunableNumber tunablerps = new LoggedTunableNumber("rps");
   public LoggedTunableNumber tunableHoodAngle = new LoggedTunableNumber("hood-angle");
@@ -97,7 +97,7 @@ public class RobotContainer {
     tunableHoodAngle.initDefault(0);
     configureBindings();
 
-    //   auto = new Auto(this);
+    auto = new Auto(this);
 
     drivetrain.setDefaultCommand(
         drivetrain.applyRequest(
