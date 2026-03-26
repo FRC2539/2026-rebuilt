@@ -1,69 +1,75 @@
-// package frc.robot;
+package frc.robot;
 
-// import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
-// import com.ctre.phoenix6.swerve.SwerveRequest;
-// import com.pathplanner.lib.auto.AutoBuilder;
-// import com.pathplanner.lib.auto.NamedCommands;
-// import com.pathplanner.lib.config.PIDConstants;
-// import com.pathplanner.lib.config.RobotConfig;
-// import com.pathplanner.lib.controllers.PPHolonomicDriveController;
-// import edu.wpi.first.wpilibj.DriverStation;
-// import edu.wpi.first.wpilibj2.command.Command;
-// import frc.robot.subsystems.drivetrain.CommandSwerveDrivetrain;
-// import frc.robot.subsystems.drivetrain.DriveConstants;
-// import java.util.Optional;
-// import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
+import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
+import com.ctre.phoenix6.swerve.SwerveRequest;
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
+import com.pathplanner.lib.config.PIDConstants;
+import com.pathplanner.lib.config.RobotConfig;
+import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 
-// public class Auto {
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.commands.SimpleAlignAndShoot;
+import frc.robot.subsystems.drivetrain.CommandSwerveDrivetrain;
+import frc.robot.subsystems.drivetrain.DriveConstants;
+import java.util.Optional;
+import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
-//   private final LoggedDashboardChooser<Command> autoChooser;
-//   private final RobotContainer container;
+public class Auto {
 
-//   private final SwerveRequest.ApplyRobotSpeeds autoRequest =
-//       new SwerveRequest.ApplyRobotSpeeds().withDriveRequestType(DriveRequestType.Velocity);
+  private final LoggedDashboardChooser<Command> autoChooser;
+  private final RobotContainer container;
 
-//   public Auto(RobotContainer container) {
-//     this.container = container;
+  private final SwerveRequest.ApplyRobotSpeeds autoRequest =
+      new SwerveRequest.ApplyRobotSpeeds().withDriveRequestType(DriveRequestType.Velocity);
 
-//     configureAutoBuilder();
-//     registerNamedCommands();
+  public Auto(RobotContainer container) {
+    this.container = container;
 
-//     autoChooser = new LoggedDashboardChooser<>("Auto Routine", AutoBuilder.buildAutoChooser());
-//   }
+    configureAutoBuilder();
+    registerNamedCommands();
 
-//   private void configureAutoBuilder() {
+    autoChooser = new LoggedDashboardChooser<>("Auto Routine", AutoBuilder.buildAutoChooser());
+  }
 
-//     // CommandSwerveDrivetrain drivetrain = container.drivetrain;
+  private void configureAutoBuilder() {
 
-//     RobotConfig config = DriveConstants.getRobotConfigPathplanner();
+    CommandSwerveDrivetrain drivetrain = container.drivetrain;
 
-//     AutoBuilder.configure(
-//         drivetrain::getRobotPose,
-//         drivetrain::resetPose,
-//         drivetrain::getRobotSpeeds,
-//         (speeds, feedforwards) ->
-//             drivetrain.setControl(
-//                 autoRequest
-//                     .withSpeeds(speeds)
-//                     .withWheelForceFeedforwardsX(feedforwards.robotRelativeForcesXNewtons())
-//                     .withWheelForceFeedforwardsY(feedforwards.robotRelativeForcesYNewtons())),
-//         new PPHolonomicDriveController(
-//             new PIDConstants(8.0, 0.0, 0.0), // translation
-//             new PIDConstants(4.0, 0.0, 0.0) // rotation
-//             ),
-//         config,
-//         () -> {
-//           Optional<DriverStation.Alliance> alliance = DriverStation.getAlliance();
-//           return alliance.isPresent() && alliance.get() == DriverStation.Alliance.Red;
-//         },
-//         drivetrain);
-//   }
+    RobotConfig config = DriveConstants.getRobotConfigPathplanner();
 
-//   private void registerNamedCommands() {
-//     NamedCommands.registerCommand(null, null);
-//   }
+    AutoBuilder.configure(
+        drivetrain::getRobotPose,
+        drivetrain::resetPose,
+        drivetrain::getRobotSpeeds,
+        (speeds, feedforwards) ->
+            drivetrain.setControl(
+                autoRequest
+                    .withSpeeds(speeds)
+                    .withWheelForceFeedforwardsX(feedforwards.robotRelativeForcesXNewtons())
+                    .withWheelForceFeedforwardsY(feedforwards.robotRelativeForcesYNewtons())),
+        new PPHolonomicDriveController(
+            new PIDConstants(8.0, 0.0, 0.0), // translation
+            new PIDConstants(4.0, 0.0, 0.0) // rotation
+            ),
+        config,
+        () -> {
+          Optional<DriverStation.Alliance> alliance = DriverStation.getAlliance();
+          return alliance.isPresent() && alliance.get() == DriverStation.Alliance.Red;
+        },
+        drivetrain);
+  }
 
-//   public Command getAutoCommand() {
-//     return autoChooser.get();
-//   }
-// }
+  private void registerNamedCommands() {
+    NamedCommands.registerCommand("shoot", new SimpleAlignAndShoot(container.hood, container.targeting, container.shooter, container.magicFloor, container.transporter, container.drivetrain, new Rotation2d(), 0));
+    NamedCommands.registerCommand("intake-deploy", container.pivot.PutDown());
+    NamedCommands.registerCommand("intake", container.roller.setVoltage(12));
+
+  }
+
+  public Command getAutoCommand() {
+    return autoChooser.get();
+  }
+}
