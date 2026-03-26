@@ -320,7 +320,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
             //     0, 0, .99999)); // increase values to trust vision estimate less. (x, y, heading)
             VecBuilder.fill(
                 0.5, 0.5,
-                .99999)); // increase values to trust vision estimate less. (x, y, heading)
+                Double.MAX_VALUE)); // increase values to trust vision estimate less. (x, y, heading)
       }
     }
   }

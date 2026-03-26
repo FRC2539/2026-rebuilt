@@ -64,7 +64,7 @@ public class Auto {
 
   private void registerNamedCommands() {
     NamedCommands.registerCommand("shoot", new SimpleAlignAndShoot(container.hood, container.targeting, container.shooter, container.magicFloor, container.transporter, container.drivetrain, new Rotation2d(), 0));
-    NamedCommands.registerCommand("intake-deploy", container.pivot.PutDown());
+    // NamedCommands.registerCommand("intake-deploy", container.pivot.PutDown());
     NamedCommands.registerCommand("intake", container.roller.setVoltage(12));
 
   }
