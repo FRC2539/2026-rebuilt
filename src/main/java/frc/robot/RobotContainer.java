@@ -141,17 +141,17 @@ public class RobotContainer {
 
   private void configureBindings() {
 
-    rightDriveController
-        .getLeftTopLeft()
-        .onTrue(
-            Commands.runOnce(
-                () ->
-                    drivetrain.resetPose(
-                        new Pose2d(
-                            drivetrain.getRobotPose().getX(),
-                            drivetrain.getRobotPose().getY(),
-                            drivetrain.getOperatorForwardDirection())),
-                drivetrain));
+    // rightDriveController
+    //     .getLeftTopLeft()
+    //     .onTrue(
+    //         Commands.runOnce(
+    //             () ->
+    //                 drivetrain.resetPose(
+    //                     new Pose2d(
+    //                         drivetrain.getRobotPose().getX(),
+    //                         drivetrain.getRobotPose().getY(),
+    //                         drivetrain.getOperatorForwardDirection())),
+    //             drivetrain));
 
 
     rightDriveController.getTrigger().whileTrue(roller.setVoltage(12));
@@ -186,21 +186,6 @@ public class RobotContainer {
     // operatorController.getA().onTrue(pivot.PutDown());
     // operatorController.getY().onTrue(pivot.PullUp());
     
-
-    operatorController
-        .getLeftTrigger()
-        .whileTrue(
-            new ShootWhileDriving(
-                drivetrain,
-                targeting,
-                shooter,
-                hood,
-                transporter,
-                magicFloor,
-                leftDriveController.getYAxis(),
-                leftDriveController.getXAxis(),
-                () -> shooterRPSOffset,
-                () -> hoodAngleOffsetRotations));
 
     operatorController
         .getRightBumper()

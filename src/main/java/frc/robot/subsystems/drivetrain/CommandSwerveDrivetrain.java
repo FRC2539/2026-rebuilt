@@ -16,6 +16,7 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.Notifier;
@@ -296,7 +297,6 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
   }
 
   public void filterAndAddMeasurements(PoseEstimate estimate) {
-    // System.out.println(estimate);
     if (estimate == null) {
 
     } else {
@@ -305,9 +305,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         rejectPose = true;
       }
 
-      // if (estimate.avgTagDist
-      //     > 3.5) { // reject tags if estimate is the average tag distance is more than 2 meters
-      // awa
+      // if (Math.abs(this.getRobotSpeeds().omegaRadiansPerSecond) > Units.degreesToRadians(180)) {
       //   rejectPose = true;
       // }
 
