@@ -63,7 +63,7 @@ public class RobotContainer {
   private static final double RPS_STEP = 1.5;
   private static final double HOOD_STEP = 0.005;
 
-  public final PivotSubsystem pivot = new PivotSubsystem(new PivotIOTalonFX());
+//   public final PivotSubsystem pivot = new PivotSubsystem(new PivotIOTalonFX());
   public final RollerSubsystem roller = new RollerSubsystem(new RollerIOTalonFX());
   public final ShooterSubsystem shooter = new ShooterSubsystem(new ShooterIOTalonFX());
   public final HoodSubsystem hood = new HoodSubsystem(new HoodIOTalonFXS());
@@ -88,7 +88,7 @@ public class RobotContainer {
 
   private final SwerveRequest.FieldCentric driveRequest =
       new SwerveRequest.FieldCentric()
-          .withDeadband(maxSpeed * 0.05)
+          .withDeadband(maxSpeed * 0.01)
           .withRotationalDeadband(maxAngularRate * 0.025)
           .withDriveRequestType(DriveRequestType.Velocity);
 
@@ -153,6 +153,9 @@ public class RobotContainer {
                             drivetrain.getOperatorForwardDirection())),
                 drivetrain));
 
+
+    rightDriveController.getTrigger().whileTrue(roller.setVoltage(12));
+
     // Cardinal directions
     rightDriveController.getPOVUp().whileTrue(face0);
     rightDriveController.getPOVLeft().whileTrue(face90);
@@ -177,9 +180,12 @@ public class RobotContainer {
 
     // op binds
     operatorController.getX().whileTrue(roller.setVoltage(-12));
-    operatorController.getB().whileTrue(transporter.setVoltage(5));
-    operatorController.getA().onTrue(pivot.Toggle());
-    operatorController.getY().onTrue(pivot.Crunch(roller));
+    operatorController.getB().whileTrue(transporter.setVoltage(3));
+    // operatorController.getA().onTrue(pivot.Toggle());
+    // operatorController.getY().onTrue(pivot.Crunch(roller));
+    // operatorController.getA().onTrue(pivot.PutDown());
+    // operatorController.getY().onTrue(pivot.PullUp());
+    
 
     operatorController
         .getLeftTrigger()
