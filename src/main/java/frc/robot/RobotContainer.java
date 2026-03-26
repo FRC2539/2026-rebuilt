@@ -4,8 +4,6 @@ import static edu.wpi.first.units.Units.MetersPerSecond;
 import static edu.wpi.first.units.Units.RadiansPerSecond;
 import static edu.wpi.first.units.Units.RotationsPerSecond;
 
-import java.util.Set;
-
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -14,8 +12,6 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.commands.FaceHubWhileDriving;
-import frc.robot.commands.LongDistanceFeed;
-import frc.robot.commands.MediumDistanceFeed;
 import frc.robot.commands.SimpleAlignAndShoot;
 import frc.robot.lib.controller.LogitechController;
 import frc.robot.lib.controller.ThrustmasterJoystick;
@@ -40,6 +36,7 @@ import frc.robot.subsystems.transporter.TransporterSubsystem;
 import frc.robot.subsystems.vision.VisionIOLimelight;
 import frc.robot.subsystems.vision.VisionSubsystem;
 import frc.robot.util.LoggedTunableNumber;
+import java.util.Set;
 
 public class RobotContainer {
 
@@ -156,7 +153,9 @@ public class RobotContainer {
                 drivetrain));
 
     // driver bind
-    // rightDriveController.getLeftThumb().onTrue(pivot.Toggle());
+    rightDriveController.getRightThumb().onTrue(pivot.Toggle());
+    rightDriveController.getLeftThumb().onTrue(pivot.Crunch(roller));
+
     rightDriveController.getTrigger().whileTrue(roller.setVoltage(12));
 
     rightDriveController.getBottomThumb().whileTrue(faceHubCommand);
@@ -168,11 +167,12 @@ public class RobotContainer {
     rightDriveController.getPOVRight().whileTrue(face270);
 
     // op binds
-   // operatorController.getA().whileTrue(roller.setVoltage(-12));
+    // operatorController.getA().whileTrue(roller.setVoltage(-12));
 
-   operatorController.getA().whileTrue(pivot.PutDown());
-   operatorController.getB().whileTrue(pivot.PullUp());
-   operatorController.getX().whileTrue(pivot.setPosition(PivotConstants.intakeFeatherPosition));
+    // operatorController.getA().whileTrue(pivot.PutDown());
+    // operatorController.getB().whileTrue(pivot.PullUp());
+    // operatorController.getX().whileTrue(pivot.setPosition(PivotConstants.intakeFeatherPosition));
+
     // operatorController.getY().whileTrue(pivot.Crunch());
 
     // operatorController
@@ -218,11 +218,29 @@ public class RobotContainer {
     //             () -> shooterRPSOffset,
     //             () -> hoodAngleOffsetRotations));
 
-    operatorController.getRightBumper().whileTrue(Commands.defer(() -> {return new SimpleAlignAndShoot(hood, targeting, shooter, magicFloor, transporter, drivetrain, Rotation2d.fromRotations(tunableHoodAngle.get()), tunablerps.get());}, Set.of(hood, targeting, shooter, magicFloor, transporter, drivetrain)));
+    operatorController
+        .getRightBumper()
+        .whileTrue(
+            Commands.defer(
+                () -> {
+                  return new SimpleAlignAndShoot(
+                      hood,
+                      targeting,
+                      shooter,
+                      magicFloor,
+                      transporter,
+                      drivetrain,
+                      Rotation2d.fromRotations(tunableHoodAngle.get()),
+                      tunablerps.get());
+                },
+                Set.of(hood, targeting, shooter, magicFloor, transporter, drivetrain)));
 
-   // operatorController.getRightBumper().whileTrue(hood.setHoodAngleForever(() -> Rotation2d.fromRotations(0.169)));
+    // operatorController.getRightBumper().whileTrue(hood.setHoodAngleForever(() ->
+    // Rotation2d.fromRotations(0.169)));
 
-    operatorController.getLeftBumper().whileTrue(hood.setHoodAngleForever(() -> HoodConstants.minHoodAngle));
+    operatorController
+        .getLeftBumper()
+        .whileTrue(hood.setHoodAngleForever(() -> HoodConstants.minHoodAngle));
     // operatorController
     //     .getLeftBumper()
     //     .whileTrue(
