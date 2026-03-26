@@ -35,21 +35,18 @@ public class TargetingSubsystem extends SubsystemBase {
       hubPosition = TargetingConstants.redHubPosition;
     }
 
-    // TargetingConstants.hubShotMap.put(
-    //     2.1, new ShotSettings(1.12, Rotation2d.fromRotations(0.0522), 70.0));
-    // TargetingConstants.hubShotMap.put(
-    //     2.706, new ShotSettings(1.13, Rotation2d.fromRotations(0.063721), 70.0)); // found it
-    // TargetingConstants.hubShotMap.put(
-    //     3.486, new ShotSettings(1.15, Rotation2d.fromRotations(0.075684), 75.0)); // found it
-    // TargetingConstants.hubShotMap.put(
-    //     4.135, new ShotSettings(1.16, Rotation2d.fromRotations(0.084229), 75.0)); // found it
-    // TargetingConstants.hubShotMap.put(
-    //     4.583, new ShotSettings(1.17, Rotation2d.fromRotations(0.091064), 80.0));
-    // TargetingConstants.hubShotMap.put(
-    //     5.122, new ShotSettings(1.17, Rotation2d.fromRotations(0.096), 80.0));
+    TargetingConstants.hubShotMap.put(
+        1.792, new ShotSettings(1.0, Rotation2d.fromRotations(-.0656), 35.0));
+    TargetingConstants.hubShotMap.put(
+        2.350, new ShotSettings(1.0, Rotation2d.fromRotations(-.0656), 37.0)); // found it
+    TargetingConstants.hubShotMap.put(
+        2.96, new ShotSettings(1.0, Rotation2d.fromRotations(0), 37.0)); // found it
+    TargetingConstants.hubShotMap.put(
+        3.374, new ShotSettings(1.0, Rotation2d.fromRotations(0.), 40.0)); // found it
+
     drivetrain = dt;
   }
-
+  
   @Override
   public void periodic() {
 
@@ -76,9 +73,9 @@ public class TargetingSubsystem extends SubsystemBase {
         realDisplacementToHub
             .getAngle().plus(Rotation2d.k180deg); // shooter is facing backwards, need to offset by 180 degrees
 
-    // ShotSettings mapValues = TargetingConstants.hubShotMap.get(realDistance);
+    ShotSettings mapValues = TargetingConstants.hubShotMap.get(realDistance);
 
-    ShotSettings mapValues = new ShotSettings(0.0, Rotation2d.kZero, 0.0);
+    //ShotSettings mapValues = new ShotSettings(0.0, Rotation2d.kZero, 0.0);
 
     desiredRobotPosition = new Pose2d(robotPose.getX(), robotPose.getY(), neededHeading);
     if (mapValues == null) {
