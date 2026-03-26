@@ -2,7 +2,6 @@ package frc.robot.commands;
 
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 import com.ctre.phoenix6.swerve.SwerveRequest;
-
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
@@ -33,8 +32,7 @@ public class SimpleAlignAndShoot extends Command {
   public boolean hasSpunUp = false;
 
   private final SwerveRequest.FieldCentric driveRequest =
-      new SwerveRequest.FieldCentric()
-          .withDriveRequestType(DriveRequestType.Velocity);
+      new SwerveRequest.FieldCentric().withDriveRequestType(DriveRequestType.Velocity);
 
   private final SwerveRequest.SwerveDriveBrake brakeRequest = new SwerveRequest.SwerveDriveBrake();
 
@@ -54,7 +52,8 @@ public class SimpleAlignAndShoot extends Command {
     transporter = transporterSubsystem;
     drivetrain = drivetrainSubsystem;
 
-    //hoodAngle = tunableHoodAngle; //this looks to be inverted, and setting to 0 since in the constructor.
+    // hoodAngle = tunableHoodAngle; //this looks to be inverted, and setting to 0 since in the
+    // constructor.
     tunableHoodAngle = hoodAngle;
     tunablerps = rps;
 
@@ -66,39 +65,33 @@ public class SimpleAlignAndShoot extends Command {
     rotationController.setTolerance(Units.degreesToRotations(1.25));
     System.out.println(rotationController.atSetpoint());
     rotationController.enableContinuousInput(-0.5, 0.5);
-
-
-    
   }
 
   @Override
   public void execute() {
-   rotationController.setSetpoint(targeting.getIdealRobotHeading().get().getRotations());
+    rotationController.setSetpoint(targeting.getIdealRobotHeading().get().getRotations());
 
-
-   // System.out.println(targeting.getIdealRobotHeading().get().getRotations());
-    double desiredRotationalRate = rotationController.calculate(drivetrain.getRobotPose().getRotation().getRotations(), targeting.getIdealRobotHeading().get().getRotations());
+    // System.out.println(targeting.getIdealRobotHeading().get().getRotations());
+    double desiredRotationalRate =
+        rotationController.calculate(
+            drivetrain.getRobotPose().getRotation().getRotations(),
+            targeting.getIdealRobotHeading().get().getRotations());
 
     shooter.setTargetRPS(targeting.getIdealFlywheelRPS().get());
-      hood.setTargetAngle(targeting.getIdealHoodAngle());
+    hood.setTargetAngle(targeting.getIdealHoodAngle());
 
-    //System.out.println(driveRequest.HeadingController.getPositionError());
+    // System.out.println(driveRequest.HeadingController.getPositionError());
     if (rotationController.atSetpoint()) {
-      //shooter.setTargetRPS();
-      //hood.setTargetAngle(() -> tunableHoodAngle); //this one is winning and was using 0
+      // shooter.setTargetRPS();
       if ((shooter.isAtSetpoint() || hasSpunUp) && hood.isAtSetpoint()) {
         hasSpunUp = true;
         floor.setVoltageFunction(8);
         transporter.setVoltageFunction(-5);
-
-       // drivetrain.setControl(brakeRequest);
-        // CommandScheduler.getInstance().schedule(floor.setVoltage(8), transporter.setVoltage(-8));
       }
 
     } else {
       drivetrain.setControl(driveRequest.withRotationalRate(desiredRotationalRate));
-    //}
+      // }
+    }
   }
-}
-
 }
