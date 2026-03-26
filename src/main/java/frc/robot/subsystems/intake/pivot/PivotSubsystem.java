@@ -4,16 +4,15 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import org.littletonrobotics.junction.Logger;
-
 import frc.robot.subsystems.intake.roller.RollerConstants;
 import frc.robot.subsystems.intake.roller.RollerSubsystem;
+import org.littletonrobotics.junction.Logger;
 
 public class PivotSubsystem extends SubsystemBase {
   private final PivotIO pivotIO;
   private final PivotIOInputsAutoLogged inputs = new PivotIOInputsAutoLogged();
 
-  private boolean isUp = false; 
+  private boolean isUp = false;
 
   public PivotSubsystem(PivotIO pivotIO) {
     this.pivotIO = pivotIO;
@@ -38,8 +37,7 @@ public class PivotSubsystem extends SubsystemBase {
   }
 
   public Command setPosition(Rotation2d targetPosition) {
-    return runOnce(() -> pivotIO.setPosition(targetPosition))
-        .andThen(Commands.run(() -> {}, this));
+    return runOnce(() -> pivotIO.setPosition(targetPosition)).andThen(Commands.run(() -> {}, this));
   }
 
   public boolean isEncoderConnected() {
@@ -53,32 +51,19 @@ public class PivotSubsystem extends SubsystemBase {
     return Math.abs(current - target) < PivotConstants.pivotDeadband.getRotations();
   }
 
-
   public Command Crunch(RollerSubsystem roller) {
     return Commands.runOnce(() -> isUp = !isUp)
         .andThen(
             Commands.either(
                 Commands.sequence(
                     PullUp(),
-                    Commands.runOnce(() -> roller.runRoller(RollerConstants.intakeVoltage))
-                ),
-                Commands.sequence(
-                    PutDown(),
-                    Commands.runOnce(() -> roller.runRoller(0))
-                ),
-                () -> isUp
-            )
-        );
+                    Commands.runOnce(() -> roller.runRoller(RollerConstants.intakeVoltage))),
+                Commands.sequence(PutDown(), Commands.runOnce(() -> roller.runRoller(0))),
+                () -> isUp));
   }
 
   public Command Toggle() {
     return Commands.runOnce(() -> isUp = !isUp)
-        .andThen(
-            Commands.either(
-                PullUp(),
-                PutDown(),
-                () -> isUp
-            )
-        );
+        .andThen(Commands.either(PullUp(), PutDown(), () -> isUp));
   }
 }

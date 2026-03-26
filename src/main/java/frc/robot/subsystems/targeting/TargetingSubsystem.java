@@ -46,7 +46,7 @@ public class TargetingSubsystem extends SubsystemBase {
 
     drivetrain = dt;
   }
-  
+
   @Override
   public void periodic() {
 
@@ -76,7 +76,7 @@ public class TargetingSubsystem extends SubsystemBase {
 
     ShotSettings mapValues = TargetingConstants.hubShotMap.get(realDistance);
 
-    //ShotSettings mapValues = new ShotSettings(0.0, Rotation2d.kZero, 0.0);
+    // ShotSettings mapValues = new ShotSettings(0.0, Rotation2d.kZero, 0.0);
 
     desiredRobotPosition = new Pose2d(robotPose.getX(), robotPose.getY(), neededHeading);
     if (mapValues == null) {
