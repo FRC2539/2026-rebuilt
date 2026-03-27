@@ -16,7 +16,6 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
-import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.Notifier;
@@ -317,8 +316,10 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
             // VecBuilder.fill(
             //     0, 0, .99999)); // increase values to trust vision estimate less. (x, y, heading)
             VecBuilder.fill(
-                0.5, 0.5,
-                Double.MAX_VALUE)); // increase values to trust vision estimate less. (x, y, heading)
+                0.5,
+                0.5,
+                Double
+                    .MAX_VALUE)); // increase values to trust vision estimate less. (x, y, heading)
       }
     }
   }

@@ -6,12 +6,10 @@ import static edu.wpi.first.units.Units.RotationsPerSecond;
 
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 import com.ctre.phoenix6.swerve.SwerveRequest;
-import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
-import frc.robot.commands.FaceHubWhileDriving;
 import frc.robot.commands.LongDistanceFeed;
 import frc.robot.commands.MediumDistanceFeed;
 import frc.robot.commands.SimpleAlignAndShoot;
@@ -107,7 +105,6 @@ public class RobotContainer {
             }));
   }
 
-
   private Command face0 =
       drivetrain.snapToAngle(
           () -> Rotation2d.fromDegrees(0), () -> getXVelocity(), () -> getYVelocity());
@@ -138,7 +135,6 @@ public class RobotContainer {
     //                         drivetrain.getOperatorForwardDirection())),
     //             drivetrain));
 
-
     rightDriveController.getTrigger().whileTrue(roller.setVoltage(12));
 
     // Cardinal directions
@@ -146,7 +142,24 @@ public class RobotContainer {
     rightDriveController.getPOVLeft().whileTrue(face90);
     rightDriveController.getPOVDown().whileTrue(face180);
     rightDriveController.getPOVRight().whileTrue(face270);
-   
+
+    leftDriveController
+        .getTrigger()
+        .whileTrue(
+            Commands.defer(
+                () -> {
+                  return new SimpleAlignAndShoot(
+                      hood,
+                      targeting,
+                      shooter,
+                      magicFloor,
+                      transporter,
+                      drivetrain,
+                      Rotation2d.fromRotations(tunableHoodAngle.get()),
+                      tunablerps.get());
+                },
+                Set.of(hood, targeting, shooter, magicFloor, transporter, drivetrain)));
+
     // op binds
     operatorController.getX().whileTrue(roller.setVoltage(-12));
     operatorController.getB().whileTrue(transporter.setVoltage(3));
@@ -154,7 +167,6 @@ public class RobotContainer {
     operatorController.getY().onTrue(pivot.Crunch(roller));
     operatorController.getA().onTrue(pivot.PutDown());
     operatorController.getY().onTrue(pivot.PullUp());
-    
 
     operatorController
         .getRightBumper()

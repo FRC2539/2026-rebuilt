@@ -7,7 +7,6 @@ import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.config.PIDConstants;
 import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
-
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -63,10 +62,19 @@ public class Auto {
   }
 
   private void registerNamedCommands() {
-    NamedCommands.registerCommand("shoot", new SimpleAlignAndShoot(container.hood, container.targeting, container.shooter, container.magicFloor, container.transporter, container.drivetrain, new Rotation2d(), 0));
+    NamedCommands.registerCommand(
+        "shoot",
+        new SimpleAlignAndShoot(
+            container.hood,
+            container.targeting,
+            container.shooter,
+            container.magicFloor,
+            container.transporter,
+            container.drivetrain,
+            new Rotation2d(),
+            0));
     // NamedCommands.registerCommand("intake-deploy", container.pivot.PutDown());
     NamedCommands.registerCommand("intake", container.roller.setVoltage(12));
-
   }
 
   public Command getAutoCommand() {
