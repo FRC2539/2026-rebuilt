@@ -87,6 +87,9 @@ public class SimpleAlignAndShoot extends Command {
         hasSpunUp = true;
         floor.setVoltageFunction(8);
         transporter.setVoltageFunction(-5);
+
+        // drivetrain.setControl(brakeRequest);
+        // CommandScheduler.getInstance().schedule(floor.setVoltage(8), transporter.setVoltage(-8));
       }
 
     } else {

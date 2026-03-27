@@ -66,13 +66,13 @@ public class Robot extends LoggedRobot {
     else LEDSegment.ConnectedIndicator.setSolidColor(ColorPalette.Black);
 
     // // Verify that all absolute encoders are connected
-    // if (m_robotContainer.pivotSubsystem.isEncoderConnected())
-    //   LEDSegment.PivotIndicator.setSolidColor(ColorPalette.Green);
-    // else LEDSegment.PivotIndicator.setSolidColor(ColorPalette.Black);
+    if (m_robotContainer.pivot.isEncoderConnected())
+      LEDSegment.PivotIndicator.setSolidColor(ColorPalette.Green);
+    else LEDSegment.PivotIndicator.setSolidColor(ColorPalette.Black);
 
-    // if (m_robotContainer.hood.isEncoderConnected())
-    //   LEDSegment.HoodIndicator.setSolidColor(ColorPalette.Green);
-    // else LEDSegment.HoodIndicator.setSolidColor(ColorPalette.Black);
+    if (m_robotContainer.hood.isEncoderConnected())
+      LEDSegment.HoodIndicator.setSolidColor(ColorPalette.Green);
+    else LEDSegment.HoodIndicator.setSolidColor(ColorPalette.Black);
   }
 
   @Override
