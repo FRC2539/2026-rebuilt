@@ -24,6 +24,7 @@ public class SimpleAlignAndShoot extends Command {
   Rotation2d tunableHoodAngle = new Rotation2d();
   double tunableRPS = 0;
   Rotation2d tunableHeadingOffset = new Rotation2d();
+  double tunableTransport = 0;
 
   PIDController rotationController = new PIDController(65, 0, 0.01);
 
@@ -42,7 +43,7 @@ public class SimpleAlignAndShoot extends Command {
       TransporterSubsystem transporterSubsystem,
       CommandSwerveDrivetrain drivetrainSubsystem,
       Rotation2d hoodAngle,
-      double rps, Rotation2d headingOffset) {
+      double rps, Rotation2d headingOffset, double transportVoltageOffset) {
     hood = hoodSubsystem;
     targeting = targetingSubsystem;
     shooter = shooterSubsystem;
@@ -53,6 +54,7 @@ public class SimpleAlignAndShoot extends Command {
     tunableHoodAngle = hoodAngle;
     tunableRPS = rps;
     tunableHeadingOffset = headingOffset;
+    tunableTransport = transportVoltageOffset;
 
     addRequirements(hood, targeting, shooter, floor, transporter, drivetrain);
   }
@@ -83,7 +85,7 @@ public class SimpleAlignAndShoot extends Command {
       if ((shooter.isAtSetpoint() || hasSpunUp) && hood.isAtSetpoint()) {
         hasSpunUp = true;
         floor.setVoltageFunction(8);
-        transporter.setVoltageFunction(-5);
+        transporter.setVoltageFunction(-5 - tunableTransport);
 
       }
 

@@ -72,7 +72,7 @@ public class Auto {
             container.transporter,
             container.drivetrain,
             new Rotation2d(),
-            0, new Rotation2d()));
+            0, new Rotation2d(), 0));
     // NamedCommands.registerCommand("intake-deploy", container.pivot.PutDown());
     NamedCommands.registerCommand("intake", container.roller.setVoltage(12));
   }

@@ -67,6 +67,10 @@ public class RobotContainer {
   public Rotation2d headingOffset = Rotation2d.kZero;
 
 
+  @AutoLogOutput
+  public double transporterOffset = 0;
+
+
   public final PivotSubsystem pivot = new PivotSubsystem(new PivotIOTalonFX());
   public final RollerSubsystem roller = new RollerSubsystem(new RollerIOTalonFX());
   public final ShooterSubsystem shooter = new ShooterSubsystem(new ShooterIOTalonFX());
@@ -161,7 +165,7 @@ public class RobotContainer {
                       transporter,
                       drivetrain,
                       hoodAngleOffset,
-                      shooterRPSOffset, headingOffset);
+                      shooterRPSOffset, headingOffset, transporterOffset);
                 },
                 Set.of(hood, targeting, shooter, magicFloor, transporter, drivetrain)));
 
@@ -211,6 +215,11 @@ public class RobotContainer {
     operatorController.getDPadUp().onTrue(Commands.runOnce(() -> shooterRPSOffset += 1));
 
     operatorController.getDPadDown().onTrue(Commands.runOnce(() -> shooterRPSOffset -= 1));
+
+    operatorController.getDPadLeft().onTrue(Commands.runOnce(() -> transporterOffset -= 1));
+
+    operatorController.getDPadRight().onTrue(Commands.runOnce(() -> transporterOffset += 1));
+
 
     // operatorController.getLeftTrigger().whileTrue(pivot.setVoltage(-2));
     // operatorController.getRightTrigger().whileTrue(pivot.setVoltage(2));
