@@ -216,9 +216,9 @@ public class RobotContainer {
 
     operatorController.getDPadDown().onTrue(Commands.runOnce(() -> shooterRPSOffset -= 1));
 
-    operatorController.getDPadLeft().onTrue(Commands.runOnce(() -> transporterOffset -= 1));
+    operatorController.getDPadLeft().onTrue(Commands.runOnce(() -> transporterOffset -= .5));
 
-    operatorController.getDPadRight().onTrue(Commands.runOnce(() -> transporterOffset += 1));
+    operatorController.getDPadRight().onTrue(Commands.runOnce(() -> transporterOffset += .5));
 
 
     // operatorController.getLeftTrigger().whileTrue(pivot.setVoltage(-2));
