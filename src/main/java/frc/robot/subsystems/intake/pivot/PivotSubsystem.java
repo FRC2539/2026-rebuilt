@@ -37,7 +37,7 @@ public class PivotSubsystem extends SubsystemBase {
   }
 
   public Command setPosition(Rotation2d targetPosition) {
-    return runOnce(() -> pivotIO.setPosition(targetPosition)).andThen(Commands.run(() -> {}, this));
+    return runOnce(() -> pivotIO.setPosition(targetPosition));
   }
 
   public boolean isEncoderConnected() {
@@ -46,9 +46,9 @@ public class PivotSubsystem extends SubsystemBase {
 
   public boolean isDown() {
     if (!isEncoderConnected()) return false;
-    double current = inputs.pivotPosition;
-    double target = PivotConstants.intakeDownPosition.getRotations();
-    return Math.abs(current - target) < PivotConstants.pivotDeadband.getRotations();
+    // double current = inputs.pivotPosition;
+    // double target = PivotConstants.intakeDownPosition.getRotations();
+    return inputs.pivotPosition < 0;
   }
 
   public Command Crunch(RollerSubsystem roller) {
@@ -62,8 +62,12 @@ public class PivotSubsystem extends SubsystemBase {
                 () -> isUp));
   }
 
-  public Command Toggle() {
-    return Commands.runOnce(() -> isUp = !isUp)
-        .andThen(Commands.either(PullUp(), PutDown(), () -> isUp));
+  // public Command Toggle() {
+  //   return Commands.runOnce(() -> isUp = !isUp)
+  //       .andThen(Commands.either(PullUp(), PutDown(), () -> isUp));
+  // }
+
+  public Command toggleIntake() {
+    return Commands.either(this.PullUp(), this.PutDown(), this::isDown);
   }
 }

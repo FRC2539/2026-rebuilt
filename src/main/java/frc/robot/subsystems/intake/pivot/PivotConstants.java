@@ -13,10 +13,10 @@ public class PivotConstants {
   public static final String pivotMotorCanBus = "CANivore";
   public static final String pivotEncoderCanBus = "CANivore";
 
-  public static final Rotation2d pivotDeadband = Rotation2d.fromDegrees(2);
+  public static final Rotation2d pivotDeadband = Rotation2d.fromDegrees(.00001);
 
-  public static final Rotation2d intakeUpPosition = Rotation2d.fromRotations(.9);
-  public static final Rotation2d intakeDownPosition = Rotation2d.fromRotations(0.2268);
+  public static final Rotation2d intakeUpPosition = Rotation2d.fromRotations(.119);
+  public static final Rotation2d intakeDownPosition = Rotation2d.fromRotations(-.71);
   public static final Rotation2d intakeFeatherPosition = Rotation2d.fromRotations(0.4); // 0.95
 
   public static final Slot0Configs slot0configs =
@@ -25,14 +25,14 @@ public class PivotConstants {
   public static final CurrentLimitsConfigs currentLimits =
       new CurrentLimitsConfigs().withSupplyCurrentLimit(40).withSupplyCurrentLimitEnable(true);
 
-  public static final FeedbackConfigs feedbackConfig =
-      new FeedbackConfigs()
-          .withFeedbackRemoteSensorID(pivotEncoderID)
-          .withFeedbackSensorSource(FeedbackSensorSourceValue.RemoteCANcoder);
+//   public static final FeedbackConfigs feedbackConfig =
+//       new FeedbackConfigs()
+//           .withFeedbackRemoteSensorID(pivotEncoderID)
+//           .withFeedbackSensorSource(FeedbackSensorSourceValue.RemoteCANcoder);
 
   public static final TalonFXConfiguration motorConfig =
       new TalonFXConfiguration()
           .withCurrentLimits(currentLimits)
-          .withFeedback(feedbackConfig)
+          //.withFeedback(feedbackConfig)
           .withSlot0(slot0configs);
 }

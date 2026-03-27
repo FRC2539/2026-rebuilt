@@ -295,6 +295,11 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     return getState().Pose;
   }
 
+  @AutoLogOutput
+  public boolean isPidgeonConnected() {
+    return this.getPigeon2().isConnected();
+  }
+
   public void filterAndAddMeasurements(PoseEstimate estimate) {
     if (estimate == null) {
 

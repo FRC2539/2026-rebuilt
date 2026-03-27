@@ -8,8 +8,8 @@ import edu.wpi.first.math.geometry.Rotation2d;
 
 public class PivotIOTalonFX implements PivotIO {
 
-  private final CANcoder pivotEncoder =
-      new CANcoder(PivotConstants.pivotEncoderID, PivotConstants.pivotEncoderCanBus);
+  // private final CANcoder pivotEncoder =
+  //     new CANcoder(PivotConstants.pivotEncoderID, PivotConstants.pivotEncoderCanBus);
   private final TalonFX pivotMotor =
       new TalonFX(PivotConstants.pivotMotorID, PivotConstants.pivotMotorCanBus);
 
@@ -18,14 +18,14 @@ public class PivotIOTalonFX implements PivotIO {
 
   public PivotIOTalonFX() {
     CANcoderConfiguration encoderConfig = new CANcoderConfiguration();
-    pivotEncoder.getConfigurator().apply(encoderConfig);
+    //pivotEncoder.getConfigurator().apply(encoderConfig);
 
     pivotMotor.getConfigurator().apply(PivotConstants.motorConfig);
   }
 
   public void updateInputs(PivotIOInputs inputs) {
     inputs.pivotPosition = pivotMotor.getPosition().getValueAsDouble();
-    inputs.throughboreConnected = pivotEncoder.isConnected();
+   // inputs.throughboreConnected = pivotEncoder.isConnected();
   }
 
   public void setPosition(Rotation2d position) {
