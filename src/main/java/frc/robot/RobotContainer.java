@@ -168,6 +168,8 @@ public class RobotContainer {
     // op binds
     operatorController.getX().whileTrue(roller.setVoltage(-12));
     operatorController.getB().whileTrue(transporter.setVoltage(3));
+
+    
    // operatorController.getY().onTrue(pivot.toggleIntake());
     // operatorController.getA().onTrue(pivot.PutDown());
     // operatorController.getY().onTrue(pivot.PullUp());
@@ -210,8 +212,12 @@ public class RobotContainer {
 
     operatorController.getDPadDown().onTrue(Commands.runOnce(() -> shooterRPSOffset -= 1));
 
-    operatorController.getLeftTrigger().whileTrue(pivot.setVoltage(-2));
-    operatorController.getRightTrigger().whileTrue(pivot.setVoltage(2));
+    // operatorController.getLeftTrigger().whileTrue(pivot.setVoltage(-2));
+    // operatorController.getRightTrigger().whileTrue(pivot.setVoltage(2));
+
+    leftDriveController.getLeftBottomMiddle().whileTrue(pivot.setVoltage(-2));
+    rightDriveController.getLeftBottomRight().whileTrue(pivot.setVoltage(2));
+    operatorController.getLeftTrigger().whileTrue(roller.setVoltage(12));
     operatorController.getA().onTrue(pivot.setVoltage(0));
 
     // Hood tuning

@@ -91,4 +91,13 @@ public class SimpleAlignAndShoot extends Command {
       drivetrain.setControl(driveRequest.withRotationalRate(desiredRotationalRate));
     }
   }
+
+    @Override
+  public void end(boolean interrupted) {
+    shooter.setTargetRPS(0);
+    shooter.setVoltage(0);
+    hood.setVoltage(0);
+    floor.setVoltage(0);
+    transporter.setVoltage(0);
+  }
 }
