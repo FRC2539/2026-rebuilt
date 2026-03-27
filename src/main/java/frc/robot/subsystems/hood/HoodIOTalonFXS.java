@@ -5,7 +5,6 @@ import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFXS;
 import com.ctre.phoenix6.signals.NeutralModeValue;
-import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Rotation2d;
 
 public class HoodIOTalonFXS implements HoodIO {
@@ -39,12 +38,12 @@ public class HoodIOTalonFXS implements HoodIO {
   public void setTargetAngle(Rotation2d desiredTargetAngle) {
     targetAngle = desiredTargetAngle;
 
-    targetAngle =
-        Rotation2d.fromDegrees(
-            MathUtil.clamp(
-                targetAngle.getDegrees(),
-                HoodConstants.minHoodAngle.getDegrees(),
-                HoodConstants.maxHoodAngle.getDegrees()));
+    // targetAngle =
+    //     Rotation2d.fromDegrees(
+    //         MathUtil.clamp(
+    //             targetAngle.getDegrees(),
+    //             HoodConstants.minHoodAngle.getDegrees(),
+    //             HoodConstants.maxHoodAngle.getDegrees()));
     motor.setControl(motorRequest.withPosition(targetAngle.getRotations()));
   }
 

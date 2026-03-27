@@ -25,8 +25,8 @@ public class MediumDistanceFeed extends Command {
   private static final Rotation2d RED_WALL = Rotation2d.fromDegrees(0);
   private static final Rotation2d BLUE_WALL = Rotation2d.fromDegrees(180);
 
-  private static final double BASE_RPS = 55.0;
-  private static final Rotation2d BASE_HOOD = Rotation2d.fromRotations(0.06);
+  private static final double BASE_RPS = 35.0;
+  private static final Rotation2d BASE_HOOD = Rotation2d.fromRotations(0);
 
   public MediumDistanceFeed(
       CommandSwerveDrivetrain drivetrain,

@@ -25,6 +25,10 @@ public class TransporterSubsystem extends SubsystemBase {
     return run(() -> transporterIO.setVoltage(voltage));
   }
 
+  public void setVoltageFunction(double voltage) {
+    transporterIO.setVoltage(voltage);
+  }
+
   public Command reverseVoltage(double voltage) {
     return run(() -> transporterIO.setVoltage(-voltage));
   }

@@ -25,8 +25,8 @@ public class LongDistanceFeed extends Command {
   private static final Rotation2d RED_WALL = Rotation2d.fromDegrees(0);
   private static final Rotation2d BLUE_WALL = Rotation2d.fromDegrees(180);
 
-  private static final double BASE_RPS = 45.0;
-  private static final Rotation2d BASE_HOOD = Rotation2d.fromRotations(0.08);
+  private static final double BASE_RPS = 55.0;
+  private static final Rotation2d BASE_HOOD = Rotation2d.fromRotations(0);
 
   public LongDistanceFeed(
       CommandSwerveDrivetrain drivetrain,
