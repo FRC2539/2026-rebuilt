@@ -27,7 +27,7 @@ public class SimpleAlignAndShoot extends Command {
   // private final SwerveRequest.FieldCentricFacingAngle driveRequest =
   //     new SwerveRequest.FieldCentricFacingAngle();
 
-  PIDController rotationController = new PIDController(40, 0, 0.01);
+  PIDController rotationController = new PIDController(65, 0, 0.01);
 
   public boolean hasSpunUp = false;
 
@@ -77,13 +77,12 @@ public class SimpleAlignAndShoot extends Command {
             drivetrain.getRobotPose().getRotation().getRotations(),
             targeting.getIdealRobotHeading().get().getRotations());
 
+    shooter.setTargetRPS(targeting.getIdealFlywheelRPS().get());
+    hood.setTargetAngle(targeting.getIdealHoodAngle());
+
     // System.out.println(driveRequest.HeadingController.getPositionError());
     if (rotationController.atSetpoint()) {
-      shooter.setTargetRPS(targeting.getIdealFlywheelRPS().get());
-      hood.setTargetAngle(targeting.getIdealHoodAngle());
-      shooter.setTargetRPS(tunablerps);
-      hood.setTargetAngle(() -> tunableHoodAngle); // this one is winning and was using 0
-
+      // shooter.setTargetRPS();
       if ((shooter.isAtSetpoint() || hasSpunUp) && hood.isAtSetpoint()) {
         hasSpunUp = true;
         floor.setVoltageFunction(8);

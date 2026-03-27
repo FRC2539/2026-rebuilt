@@ -18,7 +18,6 @@ import frc.robot.lib.controller.ThrustmasterJoystick;
 import frc.robot.subsystems.drivetrain.CommandSwerveDrivetrain;
 import frc.robot.subsystems.drivetrain.DriveConstants;
 import frc.robot.subsystems.drivetrain.TunerConstants;
-import frc.robot.subsystems.hood.HoodConstants;
 import frc.robot.subsystems.hood.HoodIOTalonFXS;
 import frc.robot.subsystems.hood.HoodSubsystem;
 import frc.robot.subsystems.intake.pivot.PivotIOTalonFX;
@@ -41,7 +40,7 @@ public class RobotContainer {
 
   public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
 
-  // public final Auto auto;
+  public final Auto auto;
 
   public LoggedTunableNumber tunablerps = new LoggedTunableNumber("rps");
   public LoggedTunableNumber tunableHoodAngle = new LoggedTunableNumber("hood-angle");
@@ -86,7 +85,7 @@ public class RobotContainer {
 
   private final SwerveRequest.FieldCentric driveRequest =
       new SwerveRequest.FieldCentric()
-          .withDeadband(maxSpeed * 0.05)
+          .withDeadband(maxSpeed * 0.01)
           .withRotationalDeadband(maxAngularRate * 0.025)
           .withDriveRequestType(DriveRequestType.Velocity);
 
@@ -95,7 +94,7 @@ public class RobotContainer {
     tunableHoodAngle.initDefault(0);
     configureBindings();
 
-    //   auto = new Auto(this);
+    auto = new Auto(this);
 
     drivetrain.setDefaultCommand(
         drivetrain.applyRequest(
@@ -139,79 +138,28 @@ public class RobotContainer {
 
   private void configureBindings() {
 
-    rightDriveController
-        .getLeftTopLeft()
-        .onTrue(
-            Commands.runOnce(
-                () ->
-                    drivetrain.resetPose(
-                        new Pose2d(
-                            drivetrain.getRobotPose().getX(),
-                            drivetrain.getRobotPose().getY(),
-                            drivetrain.getOperatorForwardDirection())),
-                drivetrain));
+    // rightDriveController
+    //     .getLeftTopLeft()
+    //     .onTrue(
+    //         Commands.runOnce(
+    //             () ->
+    //                 drivetrain.resetPose(
+    //                     new Pose2d(
+    //                         drivetrain.getRobotPose().getX(),
+    //                         drivetrain.getRobotPose().getY(),
+    //                         drivetrain.getOperatorForwardDirection())),
+    //             drivetrain));
 
-    // driver bind
-    // rightDriveController.getLeftThumb().onTrue(pivot.Toggle());
+
     rightDriveController.getTrigger().whileTrue(roller.setVoltage(12));
-
-    rightDriveController.getBottomThumb().whileTrue(faceHubCommand);
 
     // Cardinal directions
     rightDriveController.getPOVUp().whileTrue(face0);
     rightDriveController.getPOVLeft().whileTrue(face90);
     rightDriveController.getPOVDown().whileTrue(face180);
     rightDriveController.getPOVRight().whileTrue(face270);
-
-    // op binds
-    operatorController.getA().whileTrue(roller.setVoltage(-12));
-    // operatorController.getY().whileTrue(pivot.Crunch());
-
-    // operatorController
-    //     .getLeftTrigger()
-    //     .whileTrue(
-    //         new AutoShootWhileBracing(
-    //             drivetrain,
-    //             targeting,
-    //             shooter,
-    //             hood,
-    //             transporter,
-    //             magicFloor,
-    //             () -> shooterRPSOffset,
-    //             () -> hoodAngleOffsetRotations));
-
-    // operatorController
-    //     .getRightTrigger()
-    //     .whileTrue(
-    //         new ShootWhileDriving(
-    //             drivetrain,
-    //             targeting,
-    //             shooter,
-    //             hood,
-    //             transporter,
-    //             magicFloor,
-    //             leftDriveController.getYAxis(),
-    //             leftDriveController.getXAxis(),
-    //             () -> shooterRPSOffset,
-    //             () -> hoodAngleOffsetRotations));
-
-    // operatorController
-    //     .getRightBumper()
-    //     .whileTrue(
-    //         new MediumDistanceFeed(
-    //             drivetrain,
-    //             targeting,
-    //             shooter,
-    //             hood,
-    //             transporter,
-    //             magicFloor,
-    //             leftDriveController.getYAxis(),
-    //             leftDriveController.getXAxis(),
-    //             () -> shooterRPSOffset,
-    //             () -> hoodAngleOffsetRotations));
-
-    operatorController
-        .getRightBumper()
+    leftDriveController
+        .getTrigger()
         .whileTrue(
             Commands.defer(
                 () -> {
@@ -222,31 +170,49 @@ public class RobotContainer {
                       magicFloor,
                       transporter,
                       drivetrain,
-                      Rotation2d.fromRotations(-.0656),
+                      Rotation2d.fromRotations(tunableHoodAngle.get()),
                       tunablerps.get());
                 },
                 Set.of(hood, targeting, shooter, magicFloor, transporter, drivetrain)));
 
-    // operatorController.getRightBumper().whileTrue(hood.setHoodAngleForever(() ->
-    // Rotation2d.fromRotations(0.169)));
+    // op binds
+    operatorController.getX().whileTrue(roller.setVoltage(-12));
+    operatorController.getB().whileTrue(transporter.setVoltage(3));
+    // operatorController.getA().onTrue(pivot.Toggle());
+    // operatorController.getY().onTrue(pivot.Crunch(roller));
+    // operatorController.getA().onTrue(pivot.PutDown());
+    // operatorController.getY().onTrue(pivot.PullUp());
+    
+
+    operatorController
+        .getRightBumper()
+        .whileTrue(
+            new MediumDistanceFeed(
+                drivetrain,
+                targeting,
+                shooter,
+                hood,
+                transporter,
+                magicFloor,
+                leftDriveController.getYAxis(),
+                leftDriveController.getXAxis(),
+                () -> shooterRPSOffset,
+                () -> hoodAngleOffsetRotations));
 
     operatorController
         .getLeftBumper()
-        .whileTrue(hood.setHoodAngleForever(() -> HoodConstants.minHoodAngle));
-    // operatorController
-    //     .getLeftBumper()
-    //     .whileTrue(
-    //         new LongDistanceFeed(
-    //             drivetrain,
-    //             targeting,
-    //             shooter,
-    //             hood,
-    //             transporter,
-    //             magicFloor,
-    //             leftDriveController.getYAxis(),
-    //             leftDriveController.getXAxis(),
-    //             () -> shooterRPSOffset,
-    //             () -> hoodAngleOffsetRotations));
+        .whileTrue(
+            new LongDistanceFeed(
+                drivetrain,
+                targeting,
+                shooter,
+                hood,
+                transporter,
+                magicFloor,
+                leftDriveController.getYAxis(),
+                leftDriveController.getXAxis(),
+                () -> shooterRPSOffset,
+                () -> hoodAngleOffsetRotations));
 
     // Shooter tuning
     operatorController.getDPadUp().onTrue(Commands.runOnce(() -> shooterRPSOffset += RPS_STEP));
@@ -261,29 +227,6 @@ public class RobotContainer {
     operatorController
         .getDPadRight()
         .onTrue(Commands.runOnce(() -> hoodAngleOffsetRotations -= HOOD_STEP));
-
-    // operatorController.getRightTrigger().whileTrue(magicFloor.setVoltage(8));
-
-    // operatorController.getLeftBumper().whileTrue(transporter.setVoltage(-8));
-    // operatorController.getRightBumper().whileTrue(shooter.setShooterRPSForever(35.0));
-
-    // operatorController
-    //     .getB()
-    //     .whileTrue(hood.setHoodAngleForever(() -> Rotation2d.fromRotations(-0.1)));
-
-    // operatorController
-    //     .getX()
-    //     .whileTrue(hood.setHoodAngleForever(() -> Rotation2d.fromRotations(0.05)));
-
-    operatorController
-        .getLeftTrigger()
-        .whileTrue(
-            Commands.sequence(
-                Commands.parallel(
-                    shooter.setShooterRPSCommand(() -> 35.0),
-                    hood.setHoodAngle(() -> Rotation2d.fromRotations(0.05))),
-                Commands.waitSeconds(0.4),
-                Commands.parallel(magicFloor.setVoltage(8), transporter.setVoltage(-8))));
   }
 
   private ChassisSpeeds getDriverChassisSpeeds() {
@@ -306,6 +249,6 @@ public class RobotContainer {
   }
 
   public Command getAutonomousCommand() {
-    return Commands.none();
+    return auto.getAutoCommand();
   }
 }
