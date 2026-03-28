@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.subsystems.drivetrain.CommandSwerveDrivetrain;
+import frc.robot.subsystems.hood.HoodConstants;
 import frc.robot.subsystems.targeting.TargetingConstants.ShootingParameters;
 import frc.robot.subsystems.targeting.TargetingConstants.ShotSettings;
 import java.util.function.Supplier;
@@ -36,13 +37,13 @@ public class TargetingSubsystem extends SubsystemBase {
     }
 
     TargetingConstants.hubShotMap.put(
-        1.792, new ShotSettings(1.0, Rotation2d.fromRotations(-.0656), 35.0));
+        1.792, new ShotSettings(1.0, Rotation2d.fromRotations(HoodConstants.minHoodAngle.getRotations()), 35.0)); // -.0656 for this and the next one
     TargetingConstants.hubShotMap.put(
-        2.350, new ShotSettings(1.0, Rotation2d.fromRotations(-.0656), 37.0)); // found it
+        2.350, new ShotSettings(1.0, Rotation2d.fromRotations(HoodConstants.minHoodAngle.getRotations()), 37.0)); 
     TargetingConstants.hubShotMap.put(
-        2.96, new ShotSettings(1.0, Rotation2d.fromRotations(0), 37.0)); // found it
+        2.96, new ShotSettings(1.0, Rotation2d.fromRotations(HoodConstants.minHoodAngle.getRotations() + .0656), 40.0)); // these 2 were zero, i'm adding the old min angle  - james 
     TargetingConstants.hubShotMap.put(
-        3.374, new ShotSettings(1.0, Rotation2d.fromRotations(0.), 40.0)); // found it
+        3.374, new ShotSettings(1.0, Rotation2d.fromRotations(HoodConstants.minHoodAngle.getRotations() + .0656), 42.0)); 
 
     drivetrain = dt;
   }

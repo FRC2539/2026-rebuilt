@@ -48,7 +48,7 @@ public class PivotSubsystem extends SubsystemBase {
     if (!isEncoderConnected()) return false;
     // double current = inputs.pivotPosition;
     // double target = PivotConstants.intakeDownPosition.getRotations();
-    return inputs.pivotPosition < 0;
+    return inputs.pivotPosition < .8;
   }
 
   public Command Crunch(RollerSubsystem roller) {
@@ -62,10 +62,10 @@ public class PivotSubsystem extends SubsystemBase {
                 () -> isUp));
   }
 
-  // public Command Toggle() {
-  //   return Commands.runOnce(() -> isUp = !isUp)
-  //       .andThen(Commands.either(PullUp(), PutDown(), () -> isUp));
-  // }
+  public Command Toggle() {
+    return Commands.runOnce(() -> isUp = !isUp)
+        .andThen(Commands.either(PullUp(), PutDown(), () -> isUp));
+  }
 
   public Command toggleIntake() {
     return Commands.either(this.PullUp(), this.PutDown(), this::isDown);
