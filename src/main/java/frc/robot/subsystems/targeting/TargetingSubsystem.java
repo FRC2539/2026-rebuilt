@@ -41,9 +41,14 @@ public class TargetingSubsystem extends SubsystemBase {
     TargetingConstants.hubShotMap.put(
         2.350, new ShotSettings(1.0, Rotation2d.fromRotations(HoodConstants.minHoodAngle.getRotations()), 37.0)); 
     TargetingConstants.hubShotMap.put(
-        2.96, new ShotSettings(1.0, Rotation2d.fromRotations(HoodConstants.minHoodAngle.getRotations() + .0656), 40.0)); // these 2 were zero, i'm adding the old min angle  - james 
+        2.96, new ShotSettings(1.0, Rotation2d.fromRotations(HoodConstants.minHoodAngle.getRotations() + .0656), 40.0)); // WAS 40 RPS these 2 were zero, i'm adding the old min angle  - james 
     TargetingConstants.hubShotMap.put(
         3.374, new ShotSettings(1.0, Rotation2d.fromRotations(HoodConstants.minHoodAngle.getRotations() + .0656), 42.0)); 
+    TargetingConstants.hubShotMap.put(
+        3.634, new ShotSettings(1.0, Rotation2d.fromRotations(HoodConstants.minHoodAngle.getRotations() + (.0656 / 2.1)), 40.5)); // we were adding by .0656 
+
+
+
 
     drivetrain = dt;
   }

@@ -216,9 +216,13 @@ public class RobotContainer {
 
     operatorController.getDPadDown().onTrue(Commands.runOnce(() -> shooterRPSOffset -= 1));
 
-    operatorController.getDPadLeft().onTrue(Commands.runOnce(() -> transporterOffset -= .5));
+    // operatorController.getDPadLeft().onTrue(Commands.runOnce(() -> transporterOffset -= .5));
 
-    operatorController.getDPadRight().onTrue(Commands.runOnce(() -> transporterOffset += .5));
+    // operatorController.getDPadRight().onTrue(Commands.runOnce(() -> transporterOffset += .5));
+
+    operatorController.getDPadRight().onTrue(Commands.runOnce(() -> transporterOffset -= .5));
+
+    operatorController.getDPadLeft().onTrue(Commands.runOnce(() -> transporterOffset += .5));
 
 
     operatorController.getLeftTrigger().whileTrue(pivot.setVoltage(2.5)).onFalse(pivot.setVoltage(0));
@@ -229,13 +233,13 @@ public class RobotContainer {
 
 
     // Hood tuning
-    operatorController
-        .getDPadLeft()
-        .onTrue(Commands.runOnce(() -> hoodAngleOffset.plus(Rotation2d.fromRotations(.005))));
+    // operatorController
+    //     .getDPadLeft()
+    //     .onTrue(Commands.runOnce(() -> hoodAngleOffset.plus(Rotation2d.fromRotations(.005))));
 
-    operatorController
-        .getDPadRight()
-        .onTrue(Commands.runOnce(() -> hoodAngleOffset.minus(Rotation2d.fromRotations(.005))));
+    // operatorController
+    //     .getDPadRight()
+    //     .onTrue(Commands.runOnce(() -> hoodAngleOffset.minus(Rotation2d.fromRotations(.005))));
   }
 
   private ChassisSpeeds getDriverChassisSpeeds() {

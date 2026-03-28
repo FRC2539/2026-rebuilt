@@ -85,7 +85,7 @@ public class SimpleAlignAndShoot extends Command {
       if ((shooter.isAtSetpoint() || hasSpunUp) && hood.isAtSetpoint()) {
         hasSpunUp = true;
         floor.setVoltageFunction(8);
-        transporter.setVoltageFunction(-6 - tunableTransport);
+        transporter.setVoltageFunction(-6 - tunableTransport - 1.5);
 
       }
 
