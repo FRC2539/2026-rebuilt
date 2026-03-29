@@ -10,6 +10,7 @@ import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.commands.SimpleAlignAndShoot;
 import frc.robot.subsystems.drivetrain.CommandSwerveDrivetrain;
 import frc.robot.subsystems.drivetrain.DriveConstants;
@@ -73,8 +74,10 @@ public class Auto {
             container.drivetrain,
             new Rotation2d(),
             0, new Rotation2d(), 0));
+    NamedCommands.registerCommand("transport-stop", container.transporter.setVoltage(0).withTimeout(.2));
     NamedCommands.registerCommand("intake-deploy", container.pivot.setVoltage(-5).withTimeout(2.25).andThen(container.pivot.setVoltage(0)));
     NamedCommands.registerCommand("intake", container.roller.setVoltage(12));
+    NamedCommands.registerCommand("james-sputter", Commands.parallel(container.transporter.setVoltage(-5), container.shooter.setVoltage(5).withTimeout(1.5)));
   }
 
   public Command getAutoCommand() {

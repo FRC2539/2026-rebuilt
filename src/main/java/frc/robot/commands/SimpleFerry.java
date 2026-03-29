@@ -1,13 +1,15 @@
 package frc.robot.commands;
 
-import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
-
 import java.util.function.DoubleSupplier;
 
+import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 import com.ctre.phoenix6.swerve.SwerveRequest;
+
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.drivetrain.CommandSwerveDrivetrain;
 import frc.robot.subsystems.hood.HoodConstants;
@@ -63,19 +65,31 @@ public class SimpleFerry extends Command {
 
   @Override
   public void execute() {
-    rotationController.setSetpoint(Rotation2d.fromDegrees(180).getRotations());
+
+    double targetHeading = DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == Alliance.Red ? .5 : 0; // true, false.
+
+    // if (DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == Alliance.Red) {
+    //   rotationController.setSetpoint(Rotation2d.fromDegrees(180).getRotations());
+    // } else {
+    //   rotationController.setSetpoint(Rotation2d.fromDegrees(0).getRotations());?//
+    // }
+
+    rotationController.setSetpoint(targetHeading);
+
+    
+    
     //rotationController.setSetpoint(0.1056);
 
     double desiredRotationalRate =
         rotationController.calculate(
             drivetrain.getRobotPose().getRotation().getRotations(),
-            Rotation2d.fromDegrees(180).getRotations());
+            targetHeading);
     
-    shooter.setTargetRPS(50);
+    shooter.setTargetRPS(42);
     hood.setTargetAngle(() -> HoodConstants.maxHoodAngle);
     //hood.setTargetAngle(() -> Rotation2d.fromRotations(.035));
 
-    drivetrain.setControl(driveRequest.withRotationalRate(desiredRotationalRate).withVelocityX(xVel.getAsDouble()).withVelocityY(yVel.getAsDouble()));
+    drivetrain.setControl(driveRequest.withRotationalRate(desiredRotationalRate).withVelocityX(xVel.getAsDouble() / 2).withVelocityY(yVel.getAsDouble() / 2));
 
     if (rotationController.atSetpoint()) {
 
