@@ -23,7 +23,7 @@ public class PivotConstants {
       new Slot0Configs().withKP(26).withKD(0.1).withKS(5); // 26, 5
 
   public static final CurrentLimitsConfigs currentLimits =
-      new CurrentLimitsConfigs().withSupplyCurrentLimit(40).withSupplyCurrentLimitEnable(true);
+      new CurrentLimitsConfigs().withSupplyCurrentLimit(70).withSupplyCurrentLimitEnable(true);
 
   public static final FeedbackConfigs feedbackConfig =
       new FeedbackConfigs()

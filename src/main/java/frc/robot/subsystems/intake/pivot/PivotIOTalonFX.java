@@ -4,6 +4,8 @@ import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.NeutralModeValue;
+
 import edu.wpi.first.math.geometry.Rotation2d;
 
 public class PivotIOTalonFX implements PivotIO {
@@ -20,6 +22,7 @@ public class PivotIOTalonFX implements PivotIO {
     CANcoderConfiguration encoderConfig = new CANcoderConfiguration();
     pivotEncoder.getConfigurator().apply(encoderConfig);
 
+    pivotMotor.setNeutralMode(NeutralModeValue.Brake);
     pivotMotor.getConfigurator().apply(PivotConstants.motorConfig);
   }
 

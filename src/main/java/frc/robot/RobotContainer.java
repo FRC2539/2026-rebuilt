@@ -17,6 +17,7 @@ import frc.robot.commands.MediumDistanceFeed;
 import frc.robot.commands.SimpleAlignAndShoot;
 import frc.robot.commands.SimpleFerry;
 import frc.robot.commands.StaticShot;
+import frc.robot.commands.StaticShotHub;
 import frc.robot.lib.controller.LogitechController;
 import frc.robot.lib.controller.ThrustmasterJoystick;
 import frc.robot.subsystems.drivetrain.CommandSwerveDrivetrain;
@@ -168,9 +169,10 @@ public class RobotContainer {
                       hoodAngleOffset,
                       shooterRPSOffset, headingOffset, transporterOffset);
                 },
-                Set.of(hood, targeting, shooter, magicFloor, transporter, drivetrain)));
+                Set.of(hood, targeting, shooter, magicFloor, transporter,drivetrain)));
 
-    rightDriveController.getLeftThumb().whileTrue(Commands.defer(() -> {return new StaticShot(hood, targeting, shooter, magicFloor, transporter, drivetrain, hoodAngleOffset, shooterRPSOffset, headingOffset, transporterOffset);},  Set.of(hood, targeting, shooter, magicFloor, transporter, drivetrain)));
+    rightDriveController.getLeftThumb().whileTrue(Commands.defer(() -> {return new StaticShotHub(hood, targeting, shooter, magicFloor, transporter, drivetrain, hoodAngleOffset, shooterRPSOffset, headingOffset, transporterOffset);},  Set.of(hood, targeting, shooter, magicFloor, transporter, drivetrain)));
+    rightDriveController.getRightThumb().whileTrue(Commands.defer(() -> {return new StaticShot(hood, targeting, shooter, magicFloor, transporter, drivetrain, hoodAngleOffset, shooterRPSOffset, headingOffset, transporterOffset);},  Set.of(hood, targeting, shooter, magicFloor, transporter, drivetrain)));
     // op binds
     operatorController.getX().whileTrue(roller.setVoltage(-12));
     operatorController.getB().whileTrue(transporter.setVoltage(3));
