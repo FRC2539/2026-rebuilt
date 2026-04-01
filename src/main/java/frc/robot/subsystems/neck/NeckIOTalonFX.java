@@ -1,18 +1,25 @@
-package frc.robot.subsystems.transporter;
+package frc.robot.subsystems.neck;
 
 import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.ctre.phoenix6.configs.MotorOutputConfigs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.Follower;
+import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.MotorAlignmentValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
-public class TransporterIOTalonFX implements TransporterIO {
+import frc.robot.subsystems.shooter.ShooterConstants;
+import frc.robot.subsystems.transporter.TransporterConstants;
+import frc.robot.subsystems.transporter.TransporterIO.TransporterIOInputs;
 
-  TalonFX motor = new TalonFX(TransporterConstants.motorID);
+public class NeckIOTalonFX implements NeckIO{
 
-  public TransporterIOTalonFX() {
+    TalonFX motor = new TalonFX(NeckConstants.motorID);
+    private double targetRPS = 0;
+    VelocityVoltage controlRequest = new VelocityVoltage(targetRPS);
+
+  public NeckIOTalonFX() {
 
     motor
         .getConfigurator()
@@ -28,13 +35,27 @@ public class TransporterIOTalonFX implements TransporterIO {
   }
 
   @Override
-  public void updateInputs(TransporterIOInputs inputs) {
+  public void updateInputs(NeckIOInputs inputs) {
     inputs.voltage = motor.getMotorVoltage().getValueAsDouble();
     inputs.speed = motor.getVelocity().getValueAsDouble();
+    inputs.currentRPS = motor.getRotorVelocity().getValueAsDouble();
   }
 
   @Override
   public void setVoltage(double transportVoltage) {
     motor.setVoltage(transportVoltage);
+  }
+
+  @Override
+  public void setControlVelocityRPS(double targetVelocityRPS) {
+    this.targetRPS = targetVelocityRPS;
+
+    motor.setControl(controlRequest.withVelocity(targetVelocityRPS));
+  }
+
+  @Override
+  public boolean isAtSetpoint() {
+    return Math.abs(motor.getVelocity().getValueAsDouble() - targetRPS)
+        < ShooterConstants.goalDeadbandRPS;
   }
 }
