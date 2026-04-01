@@ -43,7 +43,9 @@ public class SimpleAlignAndShoot extends Command {
       TransporterSubsystem transporterSubsystem,
       CommandSwerveDrivetrain drivetrainSubsystem,
       Rotation2d hoodAngle,
-      double rps, Rotation2d headingOffset, double transportVoltageOffset) {
+      double rps,
+      Rotation2d headingOffset,
+      double transportVoltageOffset) {
     hood = hoodSubsystem;
     targeting = targetingSubsystem;
     shooter = shooterSubsystem;
@@ -69,16 +71,16 @@ public class SimpleAlignAndShoot extends Command {
   @Override
   public void execute() {
     rotationController.setSetpoint(targeting.getIdealRobotHeading().get().getRotations());
-    //rotationController.setSetpoint(0.1056);
+    // rotationController.setSetpoint(0.1056);
 
     double desiredRotationalRate =
         rotationController.calculate(
             drivetrain.getRobotPose().getRotation().plus(tunableHeadingOffset).getRotations(),
             targeting.getIdealRobotHeading().get().getRotations());
-    
+
     shooter.setTargetRPS(targeting.getIdealFlywheelRPS().get() + tunableRPS);
     hood.setTargetAngle(() -> targeting.getIdealHoodAngle().get().plus(tunableHoodAngle));
-    //hood.setTargetAngle(() -> Rotation2d.fromRotations(.035));
+    // hood.setTargetAngle(() -> Rotation2d.fromRotations(.035));
 
     if (rotationController.atSetpoint()) {
 
@@ -86,7 +88,6 @@ public class SimpleAlignAndShoot extends Command {
         hasSpunUp = true;
         floor.setVoltageFunction(8);
         transporter.setVoltageFunction(-6 - tunableTransport - 1.5);
-
       }
 
     } else {
@@ -94,7 +95,7 @@ public class SimpleAlignAndShoot extends Command {
     }
   }
 
-    @Override
+  @Override
   public void end(boolean interrupted) {
     shooter.setTargetRPS(0);
     shooter.setVoltage(0);

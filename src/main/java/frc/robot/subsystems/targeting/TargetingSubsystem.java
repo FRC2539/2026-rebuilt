@@ -11,8 +11,6 @@ import frc.robot.subsystems.drivetrain.CommandSwerveDrivetrain;
 import frc.robot.subsystems.hood.HoodConstants;
 import frc.robot.subsystems.targeting.TargetingConstants.ShootingParameters;
 import frc.robot.subsystems.targeting.TargetingConstants.ShotSettings;
-
-import java.lang.annotation.Target;
 import java.util.function.Supplier;
 import org.littletonrobotics.junction.AutoLogOutput;
 
@@ -39,19 +37,37 @@ public class TargetingSubsystem extends SubsystemBase {
     }
 
     TargetingConstants.hubShotMap.put(
-        1.792, new ShotSettings(1.0, Rotation2d.fromRotations(HoodConstants.minHoodAngle.getRotations()), 35.0)); // -.0656 for this and the next one
+        1.792,
+        new ShotSettings(
+            1.0,
+            Rotation2d.fromRotations(HoodConstants.minHoodAngle.getRotations()),
+            35.0)); // -.0656 for this and the next one
     TargetingConstants.hubShotMap.put(
-        2.350, new ShotSettings(1.0, Rotation2d.fromRotations(HoodConstants.minHoodAngle.getRotations()), 36.5)); // 37
+        2.350,
+        new ShotSettings(
+            1.0, Rotation2d.fromRotations(HoodConstants.minHoodAngle.getRotations()), 36.5)); // 37
     TargetingConstants.hubShotMap.put(
-        2.96, new ShotSettings(1.0, Rotation2d.fromRotations(HoodConstants.minHoodAngle.getRotations() + .0656), 39.0)); // WAS 40 RPS these 2 were zero, i'm adding the old min angle  - james 
+        2.96,
+        new ShotSettings(
+            1.0,
+            Rotation2d.fromRotations(HoodConstants.minHoodAngle.getRotations() + .0656),
+            39.0)); // WAS 40 RPS these 2 were zero, i'm adding the old min angle  - james
     TargetingConstants.hubShotMap.put(
-        3.374, new ShotSettings(1.0, Rotation2d.fromRotations(HoodConstants.minHoodAngle.getRotations() + .0656 + .039), 42.0)); 
-    TargetingConstants.hubShotMap.put(3.45, new ShotSettings(1.0, Rotation2d.fromRotations(HoodConstants.minHoodAngle.getRotations() + .03), 42.5));
+        3.374,
+        new ShotSettings(
+            1.0,
+            Rotation2d.fromRotations(HoodConstants.minHoodAngle.getRotations() + .0656 + .039),
+            42.0));
     TargetingConstants.hubShotMap.put(
-        3.634, new ShotSettings(1.0, Rotation2d.fromRotations(HoodConstants.minHoodAngle.getRotations() + (.0656 / 1.14)), 42.0)); // we were adding by .0656 
-
-
-
+        3.45,
+        new ShotSettings(
+            1.0, Rotation2d.fromRotations(HoodConstants.minHoodAngle.getRotations() + .03), 42.5));
+    TargetingConstants.hubShotMap.put(
+        3.634,
+        new ShotSettings(
+            1.0,
+            Rotation2d.fromRotations(HoodConstants.minHoodAngle.getRotations() + (.0656 / 1.14)),
+            42.0)); // we were adding by .0656
 
     drivetrain = dt;
   }

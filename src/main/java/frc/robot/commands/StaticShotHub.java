@@ -26,7 +26,6 @@ public class StaticShotHub extends Command {
 
   public boolean hasSpunUp = false;
 
-
   private final SwerveRequest.SwerveDriveBrake brakeRequest = new SwerveRequest.SwerveDriveBrake();
 
   public StaticShotHub(
@@ -37,7 +36,9 @@ public class StaticShotHub extends Command {
       TransporterSubsystem transporterSubsystem,
       CommandSwerveDrivetrain drivetrainSubsystem,
       Rotation2d hoodAngle,
-      double rps, Rotation2d headingOffset, double transportVoltageOffset) {
+      double rps,
+      Rotation2d headingOffset,
+      double transportVoltageOffset) {
     hood = hoodSubsystem;
     targeting = targetingSubsystem;
     shooter = shooterSubsystem;
@@ -54,24 +55,23 @@ public class StaticShotHub extends Command {
   }
 
   @Override
-  public void initialize() {
-  }
+  public void initialize() {}
 
   @Override
   public void execute() {
     shooter.setTargetRPS(37 + tunableRPS);
     hood.setTargetAngle(() -> Rotation2d.fromRotations(HoodConstants.minHoodAngle.getRotations()));
 
-      if ((shooter.isAtSetpoint() || hasSpunUp) && hood.isAtSetpoint()) {
-        hasSpunUp = true;
-        floor.setVoltageFunction(8);
-        transporter.setVoltageFunction(-6 - tunableTransport - 1.5);
-      }
+    if ((shooter.isAtSetpoint() || hasSpunUp) && hood.isAtSetpoint()) {
+      hasSpunUp = true;
+      floor.setVoltageFunction(8);
+      transporter.setVoltageFunction(-6 - tunableTransport - 1.5);
+    }
 
-      drivetrain.setControl(brakeRequest);
+    drivetrain.setControl(brakeRequest);
   }
 
-    @Override
+  @Override
   public void end(boolean interrupted) {
     shooter.setTargetRPS(0);
     shooter.setVoltage(0);

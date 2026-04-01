@@ -1,35 +1,18 @@
 package frc.robot.subsystems.neck;
 
-import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
-import com.ctre.phoenix6.configs.MotorOutputConfigs;
-import com.ctre.phoenix6.configs.TalonFXConfiguration;
-import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
-import com.ctre.phoenix6.signals.MotorAlignmentValue;
-import com.ctre.phoenix6.signals.NeutralModeValue;
-
 import frc.robot.subsystems.shooter.ShooterConstants;
-import frc.robot.subsystems.transporter.TransporterConstants;
-import frc.robot.subsystems.transporter.TransporterIO.TransporterIOInputs;
 
-public class NeckIOTalonFX implements NeckIO{
+public class NeckIOTalonFX implements NeckIO {
 
-    TalonFX motor = new TalonFX(NeckConstants.motorID);
-    private double targetRPS = 0;
-    VelocityVoltage controlRequest = new VelocityVoltage(targetRPS);
+  TalonFX motor = new TalonFX(NeckConstants.motorID);
+  private double targetRPS = 0;
+  VelocityVoltage controlRequest = new VelocityVoltage(targetRPS);
 
   public NeckIOTalonFX() {
 
-    motor
-        .getConfigurator()
-        .apply(
-            new TalonFXConfiguration()
-                .withCurrentLimits(
-                    new CurrentLimitsConfigs()
-                        .withSupplyCurrentLimitEnable(true)
-                        .withSupplyCurrentLimit(45))
-                .withMotorOutput(new MotorOutputConfigs().withNeutralMode(NeutralModeValue.Brake)));
+    motor.getConfigurator().apply(NeckConstants.talonFXConfig);
 
     motor.setVoltage(0);
   }
