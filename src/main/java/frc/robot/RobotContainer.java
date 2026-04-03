@@ -158,7 +158,7 @@ public class RobotContainer {
                       shooter,
                       magicFloor,
                       transporter,
-                      drivetrain,
+                      drivetrain, neck,
                       hoodAngleOffset,
                       shooterRPSOffset,
                       headingOffset,

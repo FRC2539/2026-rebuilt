@@ -71,7 +71,7 @@ public class Auto {
             container.shooter,
             container.magicFloor,
             container.transporter,
-            container.drivetrain,
+            container.drivetrain, container.neck,
             new Rotation2d(),
             0,
             new Rotation2d(),

@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.drivetrain.CommandSwerveDrivetrain;
 import frc.robot.subsystems.hood.HoodSubsystem;
 import frc.robot.subsystems.magicFloor.MagicFloorSubsystem;
+import frc.robot.subsystems.neck.NeckSubsystem;
 import frc.robot.subsystems.shooter.ShooterSubsystem;
 import frc.robot.subsystems.targeting.TargetingSubsystem;
 import frc.robot.subsystems.transporter.TransporterSubsystem;
@@ -21,6 +22,7 @@ public class SimpleAlignAndShoot extends Command {
   MagicFloorSubsystem floor;
   TransporterSubsystem transporter;
   CommandSwerveDrivetrain drivetrain;
+  NeckSubsystem neck;
   Rotation2d tunableHoodAngle = new Rotation2d();
   double tunableRPS = 0;
   Rotation2d tunableHeadingOffset = new Rotation2d();
@@ -29,6 +31,7 @@ public class SimpleAlignAndShoot extends Command {
   PIDController rotationController = new PIDController(65, 0, 0.01);
 
   public boolean hasSpunUp = false;
+  public boolean neckIsReady = false;
 
   private final SwerveRequest.FieldCentric driveRequest =
       new SwerveRequest.FieldCentric().withDriveRequestType(DriveRequestType.Velocity);
@@ -42,6 +45,7 @@ public class SimpleAlignAndShoot extends Command {
       MagicFloorSubsystem magicFloorSubsystem,
       TransporterSubsystem transporterSubsystem,
       CommandSwerveDrivetrain drivetrainSubsystem,
+      NeckSubsystem neckSubsystem,
       Rotation2d hoodAngle,
       double rps,
       Rotation2d headingOffset,
@@ -53,12 +57,13 @@ public class SimpleAlignAndShoot extends Command {
     transporter = transporterSubsystem;
     drivetrain = drivetrainSubsystem;
 
+    neck = neckSubsystem;
     tunableHoodAngle = hoodAngle;
     tunableRPS = rps;
     tunableHeadingOffset = headingOffset;
     tunableTransport = transportVoltageOffset;
 
-    addRequirements(hood, targeting, shooter, floor, transporter, drivetrain);
+    addRequirements(hood, targeting, shooter, floor, transporter, drivetrain, neck);
   }
 
   @Override
@@ -79,15 +84,17 @@ public class SimpleAlignAndShoot extends Command {
             targeting.getIdealRobotHeading().get().getRotations());
 
     shooter.setTargetRPS(targeting.getIdealFlywheelRPS().get() + tunableRPS);
+    neck.setTargetRPS(55);
     hood.setTargetAngle(() -> targeting.getIdealHoodAngle().get().plus(tunableHoodAngle));
     // hood.setTargetAngle(() -> Rotation2d.fromRotations(.035));
 
     if (rotationController.atSetpoint()) {
 
-      if ((shooter.isAtSetpoint() || hasSpunUp) && hood.isAtSetpoint()) {
+      if ((shooter.isAtSetpoint() || hasSpunUp) && hood.isAtSetpoint() && (neck.isAtSetpoint() || neckIsReady)) {
+        neckIsReady = true;
         hasSpunUp = true;
         floor.setVoltageFunction(8);
-        transporter.setVoltageFunction(-6 - tunableTransport - 1.5);
+        transporter.setVoltageFunction(-7.5 - tunableTransport);
       }
 
     } else {
