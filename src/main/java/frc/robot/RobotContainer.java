@@ -6,14 +6,11 @@ import static edu.wpi.first.units.Units.RotationsPerSecond;
 
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 import com.ctre.phoenix6.swerve.SwerveRequest;
-
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
-import frc.robot.commands.LongDistanceFeed;
-import frc.robot.commands.MediumDistanceFeed;
 import frc.robot.commands.SimpleAlignAndShoot;
 import frc.robot.commands.SimpleFerry;
 import frc.robot.commands.StaticShot;
@@ -32,6 +29,8 @@ import frc.robot.subsystems.intake.roller.RollerSubsystem;
 import frc.robot.subsystems.lights.LightsSubsystem;
 import frc.robot.subsystems.magicFloor.MagicFloorIOTalonFX;
 import frc.robot.subsystems.magicFloor.MagicFloorSubsystem;
+import frc.robot.subsystems.neck.NeckIOTalonFX;
+import frc.robot.subsystems.neck.NeckSubsystem;
 import frc.robot.subsystems.shooter.ShooterIOTalonFX;
 import frc.robot.subsystems.shooter.ShooterSubsystem;
 import frc.robot.subsystems.targeting.TargetingSubsystem;
@@ -40,7 +39,6 @@ import frc.robot.subsystems.transporter.TransporterSubsystem;
 import frc.robot.subsystems.vision.VisionIOLimelight;
 import frc.robot.subsystems.vision.VisionSubsystem;
 import java.util.Set;
-
 import org.littletonrobotics.junction.AutoLogOutput;
 
 public class RobotContainer {
@@ -59,24 +57,19 @@ public class RobotContainer {
 
   private final LogitechController operatorController = new LogitechController(2);
 
-  @AutoLogOutput
-  public double shooterRPSOffset = 0;
+  @AutoLogOutput public double shooterRPSOffset = 0;
 
-  @AutoLogOutput
-  public Rotation2d hoodAngleOffset = Rotation2d.kZero;
+  @AutoLogOutput public Rotation2d hoodAngleOffset = Rotation2d.kZero;
 
-  @AutoLogOutput
-  public Rotation2d headingOffset = Rotation2d.kZero;
+  @AutoLogOutput public Rotation2d headingOffset = Rotation2d.kZero;
 
-
-  @AutoLogOutput
-  public double transporterOffset = 0;
-
+  @AutoLogOutput public double transporterOffset = 0;
 
   public final PivotSubsystem pivot = new PivotSubsystem(new PivotIOTalonFX());
   public final RollerSubsystem roller = new RollerSubsystem(new RollerIOTalonFX());
   public final ShooterSubsystem shooter = new ShooterSubsystem(new ShooterIOTalonFX());
   public final HoodSubsystem hood = new HoodSubsystem(new HoodIOTalonFXS());
+  public final NeckSubsystem neck = new NeckSubsystem(new NeckIOTalonFX());
   public final TransporterSubsystem transporter =
       new TransporterSubsystem(new TransporterIOTalonFX());
   public final MagicFloorSubsystem magicFloor = new MagicFloorSubsystem(new MagicFloorIOTalonFX());
@@ -165,20 +158,56 @@ public class RobotContainer {
                       shooter,
                       magicFloor,
                       transporter,
+                      drivetrain, neck,
+                      hoodAngleOffset,
+                      shooterRPSOffset,
+                      headingOffset,
+                      transporterOffset);
+                },
+                Set.of(hood, targeting, shooter, magicFloor, transporter, drivetrain)));
+
+    rightDriveController
+        .getLeftThumb()
+        .whileTrue(
+            Commands.defer(
+                () -> {
+                  return new StaticShotHub(
+                      hood,
+                      targeting,
+                      shooter,
+                      magicFloor,
+                      transporter,
                       drivetrain,
                       hoodAngleOffset,
-                      shooterRPSOffset, headingOffset, transporterOffset);
+                      shooterRPSOffset,
+                      headingOffset,
+                      transporterOffset);
                 },
-                Set.of(hood, targeting, shooter, magicFloor, transporter,drivetrain)));
-
-    rightDriveController.getLeftThumb().whileTrue(Commands.defer(() -> {return new StaticShotHub(hood, targeting, shooter, magicFloor, transporter, drivetrain, hoodAngleOffset, shooterRPSOffset, headingOffset, transporterOffset);},  Set.of(hood, targeting, shooter, magicFloor, transporter, drivetrain)));
-    rightDriveController.getRightThumb().whileTrue(Commands.defer(() -> {return new StaticShot(hood, targeting, shooter, magicFloor, transporter, drivetrain, hoodAngleOffset, shooterRPSOffset, headingOffset, transporterOffset);},  Set.of(hood, targeting, shooter, magicFloor, transporter, drivetrain)));
+                Set.of(hood, targeting, shooter, magicFloor, transporter, drivetrain)));
+    rightDriveController
+        .getRightThumb()
+        .whileTrue(
+            Commands.defer(
+                () -> {
+                  return new StaticShot(
+                      hood,
+                      targeting,
+                      shooter,
+                      magicFloor,
+                      transporter,
+                      drivetrain,
+                      neck,
+                      hoodAngleOffset,
+                      shooterRPSOffset,
+                      headingOffset,
+                      transporterOffset);
+                },
+                Set.of(hood, targeting, shooter, magicFloor, transporter, drivetrain)));
     // op binds
     operatorController.getX().whileTrue(roller.setVoltage(-12));
     operatorController.getB().whileTrue(transporter.setVoltage(3));
 
-    
-   //operatorController.getY().onTrue(pivot.toggleIntake());
+    // operatorController.getY().onTrue(pivot.toggleIntake());
     // operatorController.getA().onTrue(pivot.PutDown());
     // operatorController.getY().onTrue(pivot.PullUp());
 
@@ -197,11 +226,31 @@ public class RobotContainer {
     //             () -> shooterRPSOffset,
     //             () -> hoodAngleOffset.getRotations()));
 
-    operatorController.getRightBumper().whileTrue(new SimpleFerry(hood, targeting, shooter, magicFloor, transporter, drivetrain, () -> getXVelocity(), () -> getYVelocity()));
-    operatorController.getLeftBumper().whileTrue(new SimpleFerry(hood, targeting, shooter, magicFloor, transporter, drivetrain, () -> getXVelocity(), () -> getYVelocity()));
+    operatorController
+        .getRightBumper()
+        .whileTrue(
+            new SimpleFerry(
+                hood,
+                targeting,
+                shooter,
+                magicFloor,
+                transporter,
+                drivetrain,
+                () -> getXVelocity(),
+                () -> getYVelocity()));
+    operatorController
+        .getLeftBumper()
+        .whileTrue(
+            new SimpleFerry(
+                hood,
+                targeting,
+                shooter,
+                magicFloor,
+                transporter,
+                drivetrain,
+                () -> getXVelocity(),
+                () -> getYVelocity()));
 
-
-    
     // operatorController
     //     .getLeftBumper()
     //     .whileTrue(
@@ -229,18 +278,28 @@ public class RobotContainer {
 
     // operatorController.getDPadLeft().onTrue(Commands.runOnce(() -> transporterOffset += .5));
 
+    operatorController
+        .getLeftTrigger()
+        .whileTrue(pivot.setVoltage(2.5))
+        .onFalse(pivot.setVoltage(0));
+    // operatorController
+    //     .getRightTrigger()
+    //     .whileTrue(pivot.setVoltage(-3))
+    //     .onFalse(pivot.setVoltage(0));
+    operatorController.getRightTrigger().whileTrue(neck.setNeckRPSCommand(() -> 4.0)).onFalse(neck.setVoltage(0));
+    // operatorController.getA().onTrue(pivot.setVoltage(0));
 
-    operatorController.getLeftTrigger().whileTrue(pivot.setVoltage(2.5)).onFalse(pivot.setVoltage(0));
-    operatorController.getRightTrigger().whileTrue(pivot.setVoltage(-3)).onFalse(pivot.setVoltage(0));
-    //operatorController.getA().onTrue(pivot.setVoltage(0));
-
-   operatorController.getA().whileTrue(roller.setVoltage(12));
-
-   leftDriveController.getLeftBottomMiddle().onTrue(Commands.runOnce(() -> transporterOffset += .5));
-   leftDriveController.getLeftBottomRight().onTrue(Commands.runOnce(() -> transporterOffset -= .5));
+    operatorController.getA().whileTrue(roller.setVoltage(12));
 
 
-    // hood tuning 
+    leftDriveController
+        .getLeftBottomMiddle()
+        .onTrue(Commands.runOnce(() -> transporterOffset += .5));
+    leftDriveController
+        .getLeftBottomRight()
+        .onTrue(Commands.runOnce(() -> transporterOffset -= .5));
+
+    // hood tuning
     operatorController
         .getDPadUp()
         .onTrue(Commands.runOnce(() -> hoodAngleOffset.plus(Rotation2d.fromRotations(.005))));

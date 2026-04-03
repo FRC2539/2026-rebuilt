@@ -3,19 +3,16 @@ package frc.robot.subsystems.transporter;
 import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.ctre.phoenix6.configs.MotorOutputConfigs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
-import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.hardware.TalonFX;
-import com.ctre.phoenix6.signals.MotorAlignmentValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
 public class TransporterIOTalonFX implements TransporterIO {
 
-  TalonFX leaderMotor = new TalonFX(TransporterConstants.leaderMotorID);
-  TalonFX followerMotor = new TalonFX(TransporterConstants.followerMotorID);
+  TalonFX motor = new TalonFX(TransporterConstants.motorID);
 
   public TransporterIOTalonFX() {
 
-    leaderMotor
+    motor
         .getConfigurator()
         .apply(
             new TalonFXConfiguration()
@@ -25,19 +22,17 @@ public class TransporterIOTalonFX implements TransporterIO {
                         .withSupplyCurrentLimit(45))
                 .withMotorOutput(new MotorOutputConfigs().withNeutralMode(NeutralModeValue.Brake)));
 
-    followerMotor.setControl(
-        new Follower(TransporterConstants.leaderMotorID, MotorAlignmentValue.Opposed));
-    leaderMotor.setVoltage(0);
+    motor.setVoltage(0);
   }
 
   @Override
   public void updateInputs(TransporterIOInputs inputs) {
-    inputs.voltage = leaderMotor.getMotorVoltage().getValueAsDouble();
-    inputs.speed = leaderMotor.getVelocity().getValueAsDouble();
+    inputs.voltage = motor.getMotorVoltage().getValueAsDouble();
+    inputs.speed = motor.getVelocity().getValueAsDouble();
   }
 
   @Override
   public void setVoltage(double transportVoltage) {
-    leaderMotor.setVoltage(transportVoltage);
+    motor.setVoltage(transportVoltage);
   }
 }

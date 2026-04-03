@@ -1,10 +1,7 @@
 package frc.robot.commands;
 
-import java.util.function.DoubleSupplier;
-
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 import com.ctre.phoenix6.swerve.SwerveRequest;
-
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
@@ -18,6 +15,7 @@ import frc.robot.subsystems.magicFloor.MagicFloorSubsystem;
 import frc.robot.subsystems.shooter.ShooterSubsystem;
 import frc.robot.subsystems.targeting.TargetingSubsystem;
 import frc.robot.subsystems.transporter.TransporterSubsystem;
+import java.util.function.DoubleSupplier;
 
 public class SimpleFerry extends Command {
   public final Rotation2d angleDeadband = Rotation2d.fromDegrees(1.5);
@@ -43,7 +41,9 @@ public class SimpleFerry extends Command {
       ShooterSubsystem shooterSubsystem,
       MagicFloorSubsystem magicFloorSubsystem,
       TransporterSubsystem transporterSubsystem,
-      CommandSwerveDrivetrain drivetrainSubsystem, DoubleSupplier x, DoubleSupplier y) {
+      CommandSwerveDrivetrain drivetrainSubsystem,
+      DoubleSupplier x,
+      DoubleSupplier y) {
     hood = hoodSubsystem;
     targeting = targetingSubsystem;
     shooter = shooterSubsystem;
@@ -59,16 +59,20 @@ public class SimpleFerry extends Command {
   @Override
   public void initialize() {
     rotationController.setTolerance(Units.degreesToRotations(6));
-    //System.out.println(rotationController.atSetpoint());
+    // System.out.println(rotationController.atSetpoint());
     rotationController.enableContinuousInput(-0.5, 0.5);
   }
 
   @Override
   public void execute() {
 
-    double targetHeading = DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == Alliance.Red ? .5 : 0; // true, false.
+    double targetHeading =
+        DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == Alliance.Red
+            ? .5
+            : 0; // true, false.
 
-    // if (DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == Alliance.Red) {
+    // if (DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() ==
+    // Alliance.Red) {
     //   rotationController.setSetpoint(Rotation2d.fromDegrees(180).getRotations());
     // } else {
     //   rotationController.setSetpoint(Rotation2d.fromDegrees(0).getRotations());?//
@@ -76,20 +80,21 @@ public class SimpleFerry extends Command {
 
     rotationController.setSetpoint(targetHeading);
 
-    
-    
-    //rotationController.setSetpoint(0.1056);
+    // rotationController.setSetpoint(0.1056);
 
     double desiredRotationalRate =
         rotationController.calculate(
-            drivetrain.getRobotPose().getRotation().getRotations(),
-            targetHeading);
-    
+            drivetrain.getRobotPose().getRotation().getRotations(), targetHeading);
+
     shooter.setTargetRPS(42);
     hood.setTargetAngle(() -> HoodConstants.maxHoodAngle);
-    //hood.setTargetAngle(() -> Rotation2d.fromRotations(.035));
+    // hood.setTargetAngle(() -> Rotation2d.fromRotations(.035));
 
-    drivetrain.setControl(driveRequest.withRotationalRate(desiredRotationalRate).withVelocityX(xVel.getAsDouble() / 2).withVelocityY(yVel.getAsDouble() / 2));
+    drivetrain.setControl(
+        driveRequest
+            .withRotationalRate(desiredRotationalRate)
+            .withVelocityX(xVel.getAsDouble() / 2)
+            .withVelocityY(yVel.getAsDouble() / 2));
 
     if (rotationController.atSetpoint()) {
 
@@ -97,12 +102,9 @@ public class SimpleFerry extends Command {
         hasSpunUp = true;
         floor.setVoltageFunction(8);
         transporter.setVoltageFunction(-5);
-
       }
 
     } else {
     }
   }
-
-
 }

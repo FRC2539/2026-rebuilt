@@ -71,13 +71,22 @@ public class Auto {
             container.shooter,
             container.magicFloor,
             container.transporter,
-            container.drivetrain,
+            container.drivetrain, container.neck,
             new Rotation2d(),
-            0, new Rotation2d(), 0));
-    NamedCommands.registerCommand("transport-stop", container.transporter.setVoltage(0).withTimeout(.2));
-    NamedCommands.registerCommand("intake-deploy", container.pivot.setVoltage(-5).withTimeout(2.25).andThen(container.pivot.setVoltage(0)));
+            0,
+            new Rotation2d(),
+            0));
+    NamedCommands.registerCommand(
+        "transport-stop", container.transporter.setVoltage(0).withTimeout(.2));
+    NamedCommands.registerCommand(
+        "intake-deploy",
+        container.pivot.setVoltage(-5).withTimeout(2.25).andThen(container.pivot.setVoltage(0)));
     NamedCommands.registerCommand("intake", container.roller.setVoltage(12));
-    NamedCommands.registerCommand("james-sputter", Commands.parallel(container.transporter.setVoltage(-5), container.shooter.setVoltage(5).withTimeout(1.5)));
+    NamedCommands.registerCommand(
+        "james-sputter",
+        Commands.parallel(
+            container.transporter.setVoltage(-5),
+            container.shooter.setVoltage(5).withTimeout(1.5)));
   }
 
   public Command getAutoCommand() {
