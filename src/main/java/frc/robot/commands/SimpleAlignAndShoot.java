@@ -27,6 +27,7 @@ public class SimpleAlignAndShoot extends Command {
   double tunableRPS = 0;
   Rotation2d tunableHeadingOffset = new Rotation2d();
   double tunableTransport = 0;
+  public double tunableNeckRPS = 0;
 
   PIDController rotationController = new PIDController(65, 0, 0.01);
 
@@ -48,7 +49,7 @@ public class SimpleAlignAndShoot extends Command {
       NeckSubsystem neckSubsystem,
       Rotation2d hoodAngle,
       double rps,
-      Rotation2d headingOffset,
+      Rotation2d headingOffset, double neckRPS,
       double transportVoltageOffset) {
     hood = hoodSubsystem;
     targeting = targetingSubsystem;
@@ -62,6 +63,7 @@ public class SimpleAlignAndShoot extends Command {
     tunableRPS = rps;
     tunableHeadingOffset = headingOffset;
     tunableTransport = transportVoltageOffset;
+    tunableNeckRPS = neckRPS;
 
     addRequirements(hood, targeting, shooter, floor, transporter, drivetrain, neck);
   }
@@ -76,7 +78,6 @@ public class SimpleAlignAndShoot extends Command {
   @Override
   public void execute() {
     rotationController.setSetpoint(targeting.getIdealRobotHeading().get().getRotations());
-    // rotationController.setSetpoint(0.1056);
 
     double desiredRotationalRate =
         rotationController.calculate(
@@ -84,7 +85,7 @@ public class SimpleAlignAndShoot extends Command {
             targeting.getIdealRobotHeading().get().getRotations());
 
     shooter.setTargetRPS(targeting.getIdealFlywheelRPS().get() + tunableRPS);
-    neck.setTargetRPS(55);
+    neck.setTargetRPS(targeting.getIdealNeckRPS().get() + tunableNeckRPS);
     hood.setTargetAngle(() -> targeting.getIdealHoodAngle().get().plus(tunableHoodAngle));
     // hood.setTargetAngle(() -> Rotation2d.fromRotations(.035));
 
@@ -94,7 +95,7 @@ public class SimpleAlignAndShoot extends Command {
         neckIsReady = true;
         hasSpunUp = true;
         floor.setVoltageFunction(8);
-        transporter.setVoltageFunction(-7.5 - tunableTransport);
+        transporter.setVoltageFunction(-9.5 - tunableTransport);
       }
 
     } else {

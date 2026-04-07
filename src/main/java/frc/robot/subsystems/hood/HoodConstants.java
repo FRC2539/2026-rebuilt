@@ -17,10 +17,10 @@ public final class HoodConstants {
   public static final int hoodEncoderID = 41;
   public static final String kCanBus = "rio";
 
-  public static final Rotation2d maxHoodAngle = Rotation2d.fromRotations(.4555); // 0.02
-  public static final Rotation2d minHoodAngle = Rotation2d.fromRotations(.2490);
+  public static final Rotation2d maxHoodAngle = Rotation2d.fromRotations(.0083); // 0.02
+  public static final Rotation2d minHoodAngle = Rotation2d.fromRotations(-.37); 
 
-  public static final Rotation2d angleDeadband = Rotation2d.fromRotations(0.05);
+  public static final Rotation2d angleDeadband = Rotation2d.fromRotations(0.008);
   public static final TalonFXConfiguration motorConfig = new TalonFXConfiguration();
 
   public static final ExternalFeedbackConfigs feedbackConfig =
@@ -29,7 +29,7 @@ public final class HoodConstants {
           .withFeedbackRemoteSensorID(hoodEncoderID)
           .withSensorToMechanismRatio(1);
 
-  public static final Slot0Configs slot0configs = new Slot0Configs().withKP(50).withKS(0).withKV(0);
+  public static final Slot0Configs slot0configs = new Slot0Configs().withKP(38).withKS(0).withKV(0);
 
   public static final MotorOutputConfigs outputConfigs =
       new MotorOutputConfigs().withInverted(InvertedValue.CounterClockwise_Positive);

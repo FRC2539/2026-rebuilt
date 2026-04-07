@@ -16,7 +16,7 @@ import org.littletonrobotics.junction.AutoLogOutput;
 
 public class TargetingSubsystem extends SubsystemBase {
   private ShootingParameters calculatedParams =
-      new ShootingParameters(new Rotation2d(), new Rotation2d(), 0.0);
+      new ShootingParameters(new Rotation2d(), new Rotation2d(), 0.0, 0.0);
 
   @AutoLogOutput public Pose2d hubPosition;
   @AutoLogOutput public Pose2d desiredRobotPosition;
@@ -25,6 +25,7 @@ public class TargetingSubsystem extends SubsystemBase {
   @AutoLogOutput public Rotation2d targetRobotAngle;
   @AutoLogOutput public Rotation2d targetHoodAngle;
   @AutoLogOutput public double targetFlywheelRPS;
+  @AutoLogOutput public double targetNeckRPS;
 
   CommandSwerveDrivetrain drivetrain;
 
@@ -37,37 +38,34 @@ public class TargetingSubsystem extends SubsystemBase {
     }
 
     TargetingConstants.hubShotMap.put(
-        1.792,
+        1.776,
         new ShotSettings(
             1.0,
             Rotation2d.fromRotations(HoodConstants.minHoodAngle.getRotations()),
-            35.0)); // -.0656 for this and the next one
+            30.5, 55.0)); // -.0656 for this and the next one
     TargetingConstants.hubShotMap.put(
-        2.350,
+        2.56,
         new ShotSettings(
-            1.0, Rotation2d.fromRotations(HoodConstants.minHoodAngle.getRotations()), 36.5)); // 37
+            1.0, Rotation2d.fromRotations(HoodConstants.minHoodAngle.getRotations() + .02), 34.0, 55.0)); // 37
     TargetingConstants.hubShotMap.put(
-        2.96,
-        new ShotSettings(
-            1.0,
-            Rotation2d.fromRotations(HoodConstants.minHoodAngle.getRotations() + .0656),
-            39.0)); // WAS 40 RPS these 2 were zero, i'm adding the old min angle  - james
-    TargetingConstants.hubShotMap.put(
-        3.374,
+        3.127,
         new ShotSettings(
             1.0,
-            Rotation2d.fromRotations(HoodConstants.minHoodAngle.getRotations() + .0656 + .039),
-            42.0));
+            Rotation2d.fromRotations(HoodConstants.minHoodAngle.getRotations() + .06),
+            35.5, 45.0)); // WAS 40 RPS these 2 were zero, i'm adding the old min angle  - james
     TargetingConstants.hubShotMap.put(
-        3.45,
-        new ShotSettings(
-            1.0, Rotation2d.fromRotations(HoodConstants.minHoodAngle.getRotations() + .03), 42.5));
-    TargetingConstants.hubShotMap.put(
-        3.634,
+        3.568,
         new ShotSettings(
             1.0,
-            Rotation2d.fromRotations(HoodConstants.minHoodAngle.getRotations() + (.0656 / 1.14)),
-            42.0)); // we were adding by .0656
+            Rotation2d.fromRotations(HoodConstants.minHoodAngle.getRotations() + .06),
+            40.0, 55.0));
+    TargetingConstants.hubShotMap.put(
+        4.6,
+        new ShotSettings(
+            1.0,
+            Rotation2d.fromRotations(HoodConstants.minHoodAngle.getRotations() + .12),
+            42.0, 55.0));
+
 
     drivetrain = dt;
   }
@@ -110,8 +108,9 @@ public class TargetingSubsystem extends SubsystemBase {
 
     targetHoodAngle = mapValues.hoodAngle();
     targetFlywheelRPS = mapValues.wheelRPS();
+    targetNeckRPS = mapValues.neckRPS();
     return new ShootingParameters(
-        neededHeading, mapValues.hoodAngle(), Math.rint(mapValues.wheelRPS()));
+        neededHeading, mapValues.hoodAngle(), Math.rint(mapValues.wheelRPS()), targetNeckRPS);
   }
 
   public Supplier<Rotation2d> getIdealRobotHeading() {
@@ -124,5 +123,9 @@ public class TargetingSubsystem extends SubsystemBase {
 
   public Supplier<Double> getIdealFlywheelRPS() {
     return () -> calculatedParams.flywheelRPS();
+  }
+
+  public Supplier<Double> getIdealNeckRPS() {
+    return () -> calculatedParams.neckRPS();
   }
 }

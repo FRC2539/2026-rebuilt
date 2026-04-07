@@ -12,7 +12,7 @@ public class PivotSubsystem extends SubsystemBase {
   private final PivotIO pivotIO;
   private final PivotIOInputsAutoLogged inputs = new PivotIOInputsAutoLogged();
 
-  private boolean isUp = false;
+  private boolean hasFeathered = false;
 
   public PivotSubsystem(PivotIO pivotIO) {
     this.pivotIO = pivotIO;
@@ -22,6 +22,7 @@ public class PivotSubsystem extends SubsystemBase {
   public void periodic() {
     pivotIO.updateInputs(inputs);
     Logger.processInputs("RealOutputs/IntakeSubsystemPivot", inputs);
+
   }
 
   public Command PullUp() {
@@ -37,7 +38,7 @@ public class PivotSubsystem extends SubsystemBase {
   }
 
   public Command setPosition(Rotation2d targetPosition) {
-    return runOnce(() -> pivotIO.setPosition(targetPosition));
+    return runOnce(() -> pivotIO.setPosition(targetPosition)).andThen(Commands.waitUntil(() -> pivotIO.isAtSetpoint()));
   }
 
   public boolean isEncoderConnected() {
@@ -45,29 +46,28 @@ public class PivotSubsystem extends SubsystemBase {
   }
 
   public boolean isDown() {
-    if (!isEncoderConnected()) return false;
-    // double current = inputs.pivotPosition;
-    // double target = PivotConstants.intakeDownPosition.getRotations();
-    return inputs.pivotPosition < .8;
+    return inputs.pivotPosition > .35;
   }
 
-  public Command Crunch(RollerSubsystem roller) {
-    return Commands.runOnce(() -> isUp = !isUp)
-        .andThen(
-            Commands.either(
-                Commands.sequence(
-                    PullUp(),
-                    Commands.runOnce(() -> roller.runRoller(RollerConstants.intakeVoltage))),
-                Commands.sequence(PutDown(), Commands.runOnce(() -> roller.runRoller(0))),
-                () -> isUp));
-  }
-
-  public Command Toggle() {
-    return Commands.runOnce(() -> isUp = !isUp)
-        .andThen(Commands.either(PullUp(), PutDown(), () -> isUp));
+  public boolean isFeathered() {  
+    return inputs.pivotPosition < .44 && inputs.pivotPosition > .3 ;
   }
 
   public Command toggleIntake() {
     return Commands.either(this.PullUp(), this.PutDown(), this::isDown);
   }
+
+
+  // public Command feather() {
+  //   return setPosition(Rotation2d.fromRotations(.4))
+  // }
+
+  // public Command feather() {
+  //   return Commands.either(this.setPosition(Rotation2d.fromRotations(.4)), this.PutDown(), () -> {
+  //     return inputs.pivotPosition > .35 && <
+  //   });
+  // }
+
+  
+
 }

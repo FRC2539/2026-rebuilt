@@ -11,7 +11,7 @@ public class NeckConstants {
   public static double currentLimit = 0.0;
 
   public static final Slot0Configs SlotConfigs =
-      new Slot0Configs().withKP(0.3).withKI(0).withKD(0).withKS(.25).withKA(0).withKV(.115);
+      new Slot0Configs().withKP(0.5).withKI(0).withKD(0).withKS(.25).withKA(0).withKV(.115);
 
   public static TalonFXConfiguration talonFXConfig =
       new TalonFXConfiguration()
