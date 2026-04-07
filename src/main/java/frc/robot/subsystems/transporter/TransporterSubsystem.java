@@ -12,7 +12,7 @@ public class TransporterSubsystem extends SubsystemBase {
   public TransporterSubsystem(TransporterIO transporterIO) {
     this.transporterIO = transporterIO;
 
-    setDefaultCommand(setVoltage(.5));
+    setDefaultCommand(setVoltage(.25));
   }
 
   @Override

@@ -4,15 +4,11 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.subsystems.intake.roller.RollerConstants;
-import frc.robot.subsystems.intake.roller.RollerSubsystem;
 import org.littletonrobotics.junction.Logger;
 
 public class PivotSubsystem extends SubsystemBase {
   private final PivotIO pivotIO;
   private final PivotIOInputsAutoLogged inputs = new PivotIOInputsAutoLogged();
-
-  private boolean hasFeathered = false;
 
   public PivotSubsystem(PivotIO pivotIO) {
     this.pivotIO = pivotIO;
@@ -22,7 +18,6 @@ public class PivotSubsystem extends SubsystemBase {
   public void periodic() {
     pivotIO.updateInputs(inputs);
     Logger.processInputs("RealOutputs/IntakeSubsystemPivot", inputs);
-
   }
 
   public Command PullUp() {
@@ -38,7 +33,8 @@ public class PivotSubsystem extends SubsystemBase {
   }
 
   public Command setPosition(Rotation2d targetPosition) {
-    return runOnce(() -> pivotIO.setPosition(targetPosition)).andThen(Commands.waitUntil(() -> pivotIO.isAtSetpoint()));
+    return runOnce(() -> pivotIO.setPosition(targetPosition))
+        .andThen(Commands.waitUntil(() -> pivotIO.isAtSetpoint()));
   }
 
   public boolean isEncoderConnected() {
@@ -49,25 +45,18 @@ public class PivotSubsystem extends SubsystemBase {
     return inputs.pivotPosition > .35;
   }
 
-  public boolean isFeathered() {  
-    return inputs.pivotPosition < .44 && inputs.pivotPosition > .3 ;
-  }
-
   public Command toggleIntake() {
     return Commands.either(this.PullUp(), this.PutDown(), this::isDown);
   }
 
-
-  // public Command feather() {
-  //   return setPosition(Rotation2d.fromRotations(.4))
-  // }
-
-  // public Command feather() {
-  //   return Commands.either(this.setPosition(Rotation2d.fromRotations(.4)), this.PutDown(), () -> {
-  //     return inputs.pivotPosition > .35 && <
-  //   });
-  // }
-
-  
-
+  public Command feather() {
+    return Commands.either(
+        this.setPosition(Rotation2d.fromRotations(.4)),
+        this.PutDown(),
+        () -> {
+          return inputs.pivotPosition
+              > .50; // I really just need an arbitrary bumber here to serve as a "cutoff" between
+          // up and down, .35 used above is too low.
+        });
+  }
 }

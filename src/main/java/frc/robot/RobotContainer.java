@@ -11,6 +11,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import frc.robot.commands.FieldRelativeAngleSnap;
 import frc.robot.commands.SimpleAlignAndShoot;
 import frc.robot.commands.SimpleFerry;
 import frc.robot.commands.StaticShot;
@@ -109,22 +110,6 @@ public class RobotContainer {
             }));
   }
 
-  private Command face0 =
-      drivetrain.snapToAngle(
-          () -> Rotation2d.fromDegrees(0), () -> getXVelocity(), () -> getYVelocity());
-
-  private Command face90 =
-      drivetrain.snapToAngle(
-          () -> Rotation2d.fromDegrees(90), () -> getXVelocity(), () -> getYVelocity());
-
-  private Command face180 =
-      drivetrain.snapToAngle(
-          () -> Rotation2d.fromDegrees(180), () -> getXVelocity(), () -> getYVelocity());
-
-  private Command face270 =
-      drivetrain.snapToAngle(
-          () -> Rotation2d.fromDegrees(270), () -> getXVelocity(), () -> getYVelocity());
-
   private void configureBindings() {
 
     leftDriveController
@@ -141,11 +126,27 @@ public class RobotContainer {
 
     rightDriveController.getTrigger().whileTrue(roller.setVoltage(12));
 
-    // // Cardinal directions
-    // rightDriveController.getPOVUp().whileTrue(face0);
-    // rightDriveController.getPOVLeft().whileTrue(face90);
-    // rightDriveController.getPOVDown().whileTrue(face180);
-    // rightDriveController.getPOVRight().whileTrue(face270);
+
+    rightDriveController
+        .getPOVUp()
+        .whileTrue(
+            new FieldRelativeAngleSnap(
+                Rotation2d.kZero, drivetrain, () -> getXVelocity(), () -> getYVelocity()));
+    rightDriveController
+        .getPOVDown()
+        .whileTrue(
+            new FieldRelativeAngleSnap(
+                Rotation2d.k180deg, drivetrain, () -> getXVelocity(), () -> getYVelocity()));
+    rightDriveController
+        .getPOVLeft()
+        .whileTrue(
+            new FieldRelativeAngleSnap(
+                Rotation2d.kCW_90deg, drivetrain, () -> getXVelocity(), () -> getYVelocity()));
+    rightDriveController
+        .getPOVRight()
+        .whileTrue(
+            new FieldRelativeAngleSnap(
+                Rotation2d.kCCW_90deg, drivetrain, () -> getXVelocity(), () -> getYVelocity()));
 
     leftDriveController
         .getTrigger()
@@ -158,10 +159,12 @@ public class RobotContainer {
                       shooter,
                       magicFloor,
                       transporter,
-                      drivetrain, neck,
+                      drivetrain,
+                      neck,
                       Rotation2d.fromRotations(hoodAngleOffset),
                       shooterRPSOffset,
-                      new Rotation2d(), neckRPSOffset,
+                      new Rotation2d(),
+                      neckRPSOffset,
                       transporterOffset);
                 },
                 Set.of(hood, targeting, shooter, magicFloor, transporter, drivetrain, neck)));
@@ -211,7 +214,6 @@ public class RobotContainer {
     // operatorController.getA().onTrue(pivot.PutDown());
     // operatorController.getY().onTrue(pivot.PullUp());
 
-    
     operatorController
         .getRightBumper()
         .whileTrue(
@@ -237,17 +239,18 @@ public class RobotContainer {
                 () -> getXVelocity(),
                 () -> getYVelocity()));
 
-
-
     operatorController.getDPadLeft().onTrue(Commands.runOnce(() -> shooterRPSOffset += 1));
 
     operatorController.getDPadRight().onTrue(Commands.runOnce(() -> shooterRPSOffset -= 1));
 
-    operatorController.getRightTrigger().onTrue(Commands.defer(() -> pivot.feather(), Set.of(pivot)));
+    operatorController
+        .getRightTrigger()
+        .onTrue(Commands.defer(() -> pivot.feather().alongWith(roller.setVoltage(12)), Set.of(pivot, roller)));
 
-    operatorController.getLeftTrigger().onTrue(Commands.defer(() -> pivot.toggleIntake(), Set.of(pivot)));
+    operatorController
+        .getLeftTrigger()
+        .onTrue(Commands.defer(() -> pivot.toggleIntake(), Set.of(pivot)));
     operatorController.getA().whileTrue(roller.setVoltage(12));
-
 
     leftDriveController
         .getLeftBottomMiddle()
@@ -256,23 +259,13 @@ public class RobotContainer {
         .getLeftBottomRight()
         .onTrue(Commands.runOnce(() -> transporterOffset -= .5));
 
+    rightDriveController.getLeftBottomMiddle().onTrue(Commands.runOnce(() -> neckRPSOffset += 1));
+    rightDriveController.getLeftBottomRight().onTrue(Commands.runOnce(() -> neckRPSOffset -= 1));
 
-     rightDriveController
-        .getLeftBottomMiddle()
-        .onTrue(Commands.runOnce(() -> neckRPSOffset += 1));
-    rightDriveController
-        .getLeftBottomRight()
-        .onTrue(Commands.runOnce(() -> neckRPSOffset -= 1));
-
-    
     // hood tuning
-    operatorController
-        .getDPadUp()
-        .onTrue(Commands.runOnce(() -> hoodAngleOffset += .02));
+    operatorController.getDPadUp().onTrue(Commands.runOnce(() -> hoodAngleOffset += .02));
 
-    operatorController
-        .getDPadDown()
-        .onTrue(Commands.runOnce(() -> hoodAngleOffset -= .02));
+    operatorController.getDPadDown().onTrue(Commands.runOnce(() -> hoodAngleOffset -= .02));
   }
 
   private ChassisSpeeds getDriverChassisSpeeds() {

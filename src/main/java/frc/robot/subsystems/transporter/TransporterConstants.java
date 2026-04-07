@@ -5,5 +5,4 @@ public class TransporterConstants {
   public static double currentLimit = 0.0;
 
   public static double transportShootVoltage = -1;
-
 }

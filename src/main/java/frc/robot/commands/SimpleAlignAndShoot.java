@@ -5,6 +5,7 @@ import com.ctre.phoenix6.swerve.SwerveRequest;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.drivetrain.CommandSwerveDrivetrain;
 import frc.robot.subsystems.hood.HoodSubsystem;
@@ -29,6 +30,9 @@ public class SimpleAlignAndShoot extends Command {
   double tunableTransport = 0;
   public double tunableNeckRPS = 0;
 
+  public Timer transportPulseTimer = new Timer();
+
+  public Timer floorPulseTimer = new Timer();
   PIDController rotationController = new PIDController(65, 0, 0.01);
 
   public boolean hasSpunUp = false;
@@ -49,7 +53,8 @@ public class SimpleAlignAndShoot extends Command {
       NeckSubsystem neckSubsystem,
       Rotation2d hoodAngle,
       double rps,
-      Rotation2d headingOffset, double neckRPS,
+      Rotation2d headingOffset,
+      double neckRPS,
       double transportVoltageOffset) {
     hood = hoodSubsystem;
     targeting = targetingSubsystem;
@@ -70,6 +75,12 @@ public class SimpleAlignAndShoot extends Command {
 
   @Override
   public void initialize() {
+    transportPulseTimer.reset();
+    transportPulseTimer.start();
+
+    floorPulseTimer.reset();
+    floorPulseTimer.start();
+
     rotationController.setTolerance(Units.degreesToRotations(1.25));
     System.out.println(rotationController.atSetpoint());
     rotationController.enableContinuousInput(-0.5, 0.5);
@@ -77,6 +88,12 @@ public class SimpleAlignAndShoot extends Command {
 
   @Override
   public void execute() {
+    if (transportPulseTimer.get() > .3) { // backspin transport to clear jammed balls out
+      transporter.setVoltageFunction(3.5);
+    } else {
+      transporter.setVoltageFunction(0);
+    }
+
     rotationController.setSetpoint(targeting.getIdealRobotHeading().get().getRotations());
 
     double desiredRotationalRate =
@@ -87,20 +104,34 @@ public class SimpleAlignAndShoot extends Command {
     shooter.setTargetRPS(targeting.getIdealFlywheelRPS().get() + tunableRPS);
     neck.setTargetRPS(targeting.getIdealNeckRPS().get() + tunableNeckRPS);
     hood.setTargetAngle(() -> targeting.getIdealHoodAngle().get().plus(tunableHoodAngle));
-    // hood.setTargetAngle(() -> Rotation2d.fromRotations(.035));
 
     if (rotationController.atSetpoint()) {
 
-      if ((shooter.isAtSetpoint() || hasSpunUp) && hood.isAtSetpoint() && (neck.isAtSetpoint() || neckIsReady)) {
+      if ((shooter.isAtSetpoint() || hasSpunUp)
+          && hood.isAtSetpoint()
+          && (neck.isAtSetpoint() || neckIsReady)) {
         neckIsReady = true;
         hasSpunUp = true;
         floor.setVoltageFunction(8);
-        transporter.setVoltageFunction(-9.5 - tunableTransport);
+        //transporter.setVoltageFunction(-9.5 - tunableTransport);
+        pulseTransport();
       }
 
     } else {
       drivetrain.setControl(driveRequest.withRotationalRate(desiredRotationalRate));
     }
+  }
+
+
+  public void pulseTransport() {
+    double desiredVoltage = -9.5;
+    if (floorPulseTimer.get() > .3) {
+      floorPulseTimer.reset();
+      desiredVoltage = 0;
+    } else {
+      desiredVoltage = -9.5;
+    }
+    transporter.setVoltageFunction(desiredVoltage);
   }
 
   @Override
