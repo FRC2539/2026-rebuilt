@@ -6,6 +6,8 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.subsystems.neck.NeckIO.NeckIOInputs;
 import java.util.function.Supplier;
 
+import org.littletonrobotics.junction.Logger;
+
 public class NeckSubsystem extends SubsystemBase {
 
   NeckIO neckIO;
@@ -20,7 +22,7 @@ public class NeckSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     neckIO.updateInputs(inputs);
-    // Logger.processInputs("RealOutputs/NeckSubsystem", inputs);
+   // Logger.processInputs("RealOutputs/NeckSubsystem", inputs);
   }
 
   public void setTargetRPS(double targetRPS) {

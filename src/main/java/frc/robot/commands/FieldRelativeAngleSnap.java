@@ -18,7 +18,7 @@ public class FieldRelativeAngleSnap extends Command {
 
   public CommandSwerveDrivetrain drivetrain;
   public Rotation2d allianceRelativeTargetRotation;
-  public PIDController rotationController = new PIDController(65, 0, 0.01);
+  public PIDController rotationController = new PIDController(45, 0, .8);
   DoubleSupplier xVelocity;
   DoubleSupplier yVelocity;
 
@@ -43,15 +43,18 @@ public class FieldRelativeAngleSnap extends Command {
   @Override
   public void execute() {
 
+
     Rotation2d fieldRelativeTargetRotation = allianceRelativeTargetRotation;
     if (DriverStation.getAlliance().isPresent()
         && DriverStation.getAlliance().get().equals(Alliance.Red)) {
-      Rotation2d adjustedTargetRotation = allianceRelativeTargetRotation.plus(Rotation2d.k180deg);
-      fieldRelativeTargetRotation =
-          Rotation2d.fromRotations(
-              MathUtil.inputModulus(adjustedTargetRotation.getRotations(), -.5, .5));
+      fieldRelativeTargetRotation = allianceRelativeTargetRotation.plus(Rotation2d.fromRotations(.5));
+      
     }
 
+
+    // fieldRelativeTargetRotation =
+    //       Rotation2d.fromRotations(
+    //           MathUtil.inputModulus(fieldRelativeTargetRotation.getRotations(), -.5, .5));
     double desiredRotationalRate =
         rotationController.calculate(
             drivetrain.getHeading().getRotations(), fieldRelativeTargetRotation.getRotations());

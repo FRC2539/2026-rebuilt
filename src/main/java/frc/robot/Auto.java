@@ -10,6 +10,7 @@ import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.commands.ShootWithMap;
 import frc.robot.commands.SimpleAlignAndShoot;
 import frc.robot.subsystems.drivetrain.CommandSwerveDrivetrain;
 import frc.robot.subsystems.drivetrain.DriveConstants;
@@ -76,7 +77,22 @@ public class Auto {
             0,
             new Rotation2d(),
             0,
-            0));
+            0, () -> 0, () -> 0));
+
+            NamedCommands.registerCommand(
+        "shawn-shoot",
+        new ShootWithMap(
+            container.hood,
+            container.targeting,
+            container.shooter,
+            container.magicFloor,
+            container.transporter,
+            container.neck,
+            new Rotation2d(),
+            0,
+            new Rotation2d(),
+            0,
+            0, () -> 0, () -> 0));
     NamedCommands.registerCommand(
         "transport-stop", container.transporter.setVoltage(0).withTimeout(.2));
     NamedCommands.registerCommand("intake-deploy", container.pivot.PutDown().withTimeout(1.5));

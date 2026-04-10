@@ -141,12 +141,12 @@ public class RobotContainer {
         .getPOVLeft()
         .whileTrue(
             new FieldRelativeAngleSnap(
-                Rotation2d.kCW_90deg, drivetrain, () -> getXVelocity(), () -> getYVelocity()));
+                Rotation2d.fromRotations(.25), drivetrain, () -> getXVelocity(), () -> getYVelocity()));
     rightDriveController
         .getPOVRight()
         .whileTrue(
             new FieldRelativeAngleSnap(
-                Rotation2d.kCCW_90deg, drivetrain, () -> getXVelocity(), () -> getYVelocity()));
+                    Rotation2d.fromRotations(-.25), drivetrain, () -> getXVelocity(), () -> getYVelocity()));
 
     leftDriveController
         .getTrigger()
@@ -165,7 +165,7 @@ public class RobotContainer {
                       shooterRPSOffset,
                       new Rotation2d(),
                       neckRPSOffset,
-                      transporterOffset);
+                      transporterOffset, () -> getXVelocity(), () -> getYVelocity());
                 },
                 Set.of(hood, targeting, shooter, magicFloor, transporter, drivetrain, neck)));
 
@@ -245,7 +245,7 @@ public class RobotContainer {
 
     operatorController
         .getRightTrigger()
-        .onTrue(Commands.defer(() -> pivot.feather().alongWith(roller.setVoltage(12)), Set.of(pivot, roller)));
+        .onTrue(Commands.defer(() -> pivot.feather().alongWith(roller.setVoltage(12)), Set.of(pivot, roller))).onFalse(roller.setVoltage(0));
 
     operatorController
         .getLeftTrigger()

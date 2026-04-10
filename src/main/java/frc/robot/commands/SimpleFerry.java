@@ -86,7 +86,7 @@ public class SimpleFerry extends Command {
         rotationController.calculate(
             drivetrain.getRobotPose().getRotation().getRotations(), targetHeading);
 
-    shooter.setTargetRPS(42);
+    shooter.setTargetRPS(38);
     hood.setTargetAngle(() -> HoodConstants.maxHoodAngle);
     // hood.setTargetAngle(() -> Rotation2d.fromRotations(.035));
 

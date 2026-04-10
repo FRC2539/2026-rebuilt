@@ -42,7 +42,7 @@ public class PivotSubsystem extends SubsystemBase {
   }
 
   public boolean isDown() {
-    return inputs.pivotPosition > .35;
+    return inputs.pivotPosition > .48;// .35
   }
 
   public Command toggleIntake() {

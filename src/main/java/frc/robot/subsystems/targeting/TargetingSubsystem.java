@@ -61,16 +61,31 @@ public class TargetingSubsystem extends SubsystemBase {
     TargetingConstants.hubShotMap.put(
         3.568,
         new ShotSettings(
-            1.2,
+            1.4,
             Rotation2d.fromRotations(HoodConstants.minHoodAngle.getRotations() + .06),
             40.0,
             55.0));
     TargetingConstants.hubShotMap.put(
         4.6,
         new ShotSettings(
-            1.2,
+            1.5,
             Rotation2d.fromRotations(HoodConstants.minHoodAngle.getRotations() + .12),
             42.0,
+            55.0));
+        TargetingConstants.hubShotMap.put(
+        5.6,
+        new ShotSettings(
+            1.7,
+            Rotation2d.fromRotations(HoodConstants.minHoodAngle.getRotations() + .12),
+            46.0,
+            55.0));
+
+        TargetingConstants.hubShotMap.put(
+        6.6,
+        new ShotSettings(
+            1.7,
+            Rotation2d.fromRotations(HoodConstants.minHoodAngle.getRotations() + .14),
+            50.0,
             55.0));
 
     drivetrain = dt;
@@ -132,10 +147,10 @@ public class TargetingSubsystem extends SubsystemBase {
 
     realDistance = realDisplacementToHub.getNorm();
 
-    Rotation2d neededHeading =
-        realDisplacementToHub
-            .getAngle()
-            .plus(Rotation2d.k180deg); // shooter is facing backwards, need to offset by 180 degrees
+    // Rotation2d neededHeading =
+    //     realDisplacementToHub
+    //         .getAngle()
+    //         .plus(Rotation2d.k180deg); // shooter is facing backwards, need to offset by 180 degrees
 
     ShotSettings mapValues = TargetingConstants.hubShotMap.get(realDistance);
     double estimatedFlightTime = mapValues.timeOfFlight();
@@ -144,7 +159,7 @@ public class TargetingSubsystem extends SubsystemBase {
 
     double virtualDistance = realDistance;
 
-    for (int i = 0; i < 10; i++) {
+    for (int i = 0; i < 4; i++) {
       virtualTarget = targetPose.minus(filteredRobotVelocity.times(estimatedFlightTime));
 
       virtualDistance = futureRobotPose.getDistance(virtualTarget);
@@ -155,6 +170,10 @@ public class TargetingSubsystem extends SubsystemBase {
 
       estimatedFlightTime = newFlightTime;
     }
+
+    Translation2d adjustedAimingVector = realDisplacementToHub.minus(filteredRobotVelocity.times(estimatedFlightTime));
+
+    Rotation2d neededHeading = adjustedAimingVector.getAngle().plus(Rotation2d.k180deg);
 
     mapValues = TargetingConstants.hubShotMap.get(virtualDistance);
 

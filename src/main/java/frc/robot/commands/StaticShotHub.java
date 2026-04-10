@@ -2,6 +2,7 @@ package frc.robot.commands;
 
 import com.ctre.phoenix6.swerve.SwerveRequest;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.drivetrain.CommandSwerveDrivetrain;
 import frc.robot.subsystems.hood.HoodConstants;
@@ -23,6 +24,7 @@ public class StaticShotHub extends Command {
   double tunableRPS = 0;
   Rotation2d tunableHeadingOffset = new Rotation2d();
   double tunableTransport = 0;
+    public Timer floorPulseTimer = new Timer();
 
   public boolean hasSpunUp = false;
 
@@ -55,7 +57,10 @@ public class StaticShotHub extends Command {
   }
 
   @Override
-  public void initialize() {}
+  public void initialize() {
+    floorPulseTimer.reset();
+    floorPulseTimer.stop();
+  }
 
   @Override
   public void execute() {
@@ -63,12 +68,26 @@ public class StaticShotHub extends Command {
     hood.setTargetAngle(() -> Rotation2d.fromRotations(HoodConstants.minHoodAngle.getRotations()));
 
     if ((shooter.isAtSetpoint() || hasSpunUp) && hood.isAtSetpoint()) {
+      floorPulseTimer.start();
       hasSpunUp = true;
-      floor.setVoltageFunction(8);
+      //floor.setVoltageFunction(8);
       transporter.setVoltageFunction(-6 - tunableTransport - 1.5);
+      pulseFloor();
     }
 
     drivetrain.setControl(brakeRequest);
+  }
+
+    public void pulseFloor() {
+      double desiredVoltage = -9.5;
+    if (floorPulseTimer.get() > .8) {
+      floorPulseTimer.reset();
+      floorPulseTimer.start();
+      desiredVoltage = 0;
+    } else {
+      desiredVoltage = -9.5;
+    }
+    transporter.setVoltageFunction(desiredVoltage);
   }
 
   @Override

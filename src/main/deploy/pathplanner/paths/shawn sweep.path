@@ -20,60 +20,60 @@
         "y": 0.6092187499999999
       },
       "prevControl": {
-        "x": 2.6517158847234543,
-        "y": 0.641410409272405
+        "x": 2.651030712489372,
+        "y": 0.628561152452806
       },
       "nextControl": {
-        "x": 5.554647269344254,
-        "y": 0.4478816502976827
+        "x": 6.070974702380952,
+        "y": 0.4917633928571433
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 6.116651785714286,
-        "y": 0.7313309671694754
+        "x": 7.584843749999999,
+        "y": 1.3009002976190482
       },
       "prevControl": {
-        "x": 5.810850470893621,
-        "y": 0.6870702505506079
+        "x": 7.160699404761904,
+        "y": 1.0659895833333337
       },
       "nextControl": {
-        "x": 7.339934838065662,
-        "y": 0.9083850931680502
+        "x": 8.666111907732029,
+        "y": 1.89975650805525
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 6.555794143744453,
-        "y": 4.240221827861578
+        "x": 7.800178571428571,
+        "y": 4.198132440476191
       },
       "prevControl": {
-        "x": 6.138621386058186,
-        "y": 3.4516352410525926
+        "x": 8.12644345238095,
+        "y": 3.4382603149955653
       },
       "nextControl": {
-        "x": 7.238043228955625,
-        "y": 5.5298853246924065
+        "x": 7.224546084186121,
+        "y": 5.53878265173954
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 8.141233362910382,
-        "y": 4.240221827861578
+        "x": 6.514694940476191,
+        "y": 4.048050595238096
       },
       "prevControl": {
-        "x": 8.1071771669029,
-        "y": 4.700791335772299
+        "x": 6.480638744468709,
+        "y": 4.508620103148816
       },
       "nextControl": {
-        "x": 8.310239574090506,
-        "y": 1.954614019520851
+        "x": 6.683701151656314,
+        "y": 1.7624427868973687
       },
       "isLocked": false,
       "linkedName": null
@@ -102,33 +102,79 @@
       "rotationDegrees": -4.332313983188506
     },
     {
-      "waypointRelativePos": 1.4949109414758264,
+      "waypointRelativePos": 1.2443693693693696,
       "rotationDegrees": 3.589669387173456
     },
     {
-      "waypointRelativePos": 2.3256997455470763,
+      "waypointRelativePos": 2.5337837837837833,
       "rotationDegrees": 82.8468338314234
     },
     {
       "waypointRelativePos": 3.0,
-      "rotationDegrees": 39.80557109195991
+      "rotationDegrees": 115.0
     },
     {
       "waypointRelativePos": 3.7659033078880433,
-      "rotationDegrees": -66.15911236879134
+      "rotationDegrees": -95.10714656019232
     },
     {
       "waypointRelativePos": 4.26208651399491,
-      "rotationDegrees": -153.05580177002716
-    },
-    {
-      "waypointRelativePos": 4.770992366412213,
-      "rotationDegrees": 180.0
+      "rotationDegrees": -138.0
     }
   ],
-  "constraintZones": [],
-  "pointTowardsZones": [],
-  "eventMarkers": [],
+  "constraintZones": [
+    {
+      "name": "Constraints Zone",
+      "minWaypointRelativePos": 0.0,
+      "maxWaypointRelativePos": 0.5872483221476511,
+      "constraints": {
+        "maxVelocity": 0.75,
+        "maxAcceleration": 7.25,
+        "maxAngularVelocity": 600.0,
+        "maxAngularAcceleration": 720.0,
+        "nominalVoltage": 12.0,
+        "unlimited": false
+      }
+    }
+  ],
+  "pointTowardsZones": [
+    {
+      "fieldPosition": {
+        "x": 4.65,
+        "y": 4.05
+      },
+      "rotationOffset": 180.0,
+      "minWaypointRelativePos": 0.0,
+      "maxWaypointRelativePos": 0.5033557046979865,
+      "name": "Point Towards Zone"
+    }
+  ],
+  "eventMarkers": [
+    {
+      "name": "SHOOOT",
+      "waypointRelativePos": 0,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "race",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "shawn-shoot"
+              }
+            },
+            {
+              "type": "wait",
+              "data": {
+                "waitTime": 2.7
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
   "globalConstraints": {
     "maxVelocity": 3.0,
     "maxAcceleration": 7.25,
@@ -142,9 +188,9 @@
     "rotation": -138.0
   },
   "reversed": false,
-  "folder": "right citrus",
+  "folder": "improved right",
   "idealStartingState": {
-    "velocity": 0,
+    "velocity": 1.0,
     "rotation": -138.0
   },
   "useDefaultConstraints": true
