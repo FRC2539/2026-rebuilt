@@ -11,7 +11,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "improved right sweep"
+                  "pathName": "Copy of right sweep"
                 }
               },
               {
@@ -62,19 +62,13 @@
           }
         },
         {
-          "type": "named",
-          "data": {
-            "name": "transport-stop"
-          }
-        },
-        {
           "type": "deadline",
           "data": {
             "commands": [
               {
                 "type": "path",
                 "data": {
-                  "pathName": "improved right sooperdooperlooper"
+                  "pathName": "Copy of right sooperdooperlooper"
                 }
               },
               {
@@ -84,12 +78,6 @@
                 }
               }
             ]
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 0.3
           }
         },
         {
@@ -114,7 +102,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "improved right sooperdooperlooper"
+            "pathName": "Copy of right sooperdooperlooper"
           }
         }
       ]

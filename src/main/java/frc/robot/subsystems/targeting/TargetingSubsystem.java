@@ -16,7 +16,7 @@ import org.littletonrobotics.junction.AutoLogOutput;
 
 public class TargetingSubsystem extends SubsystemBase {
   private ShootingParameters calculatedParams =
-      new ShootingParameters(new Rotation2d(), new Rotation2d(), 0.0, 0.0);
+      new ShootingParameters(new Rotation2d(), HoodConstants.minHoodAngle, 0.0, 0.0);
 
   @AutoLogOutput public Pose2d hubPosition;
   @AutoLogOutput public Pose2d desiredRobotPosition;
@@ -48,22 +48,22 @@ public class TargetingSubsystem extends SubsystemBase {
         2.56,
         new ShotSettings(
             1.2,
-            Rotation2d.fromRotations(HoodConstants.minHoodAngle.getRotations() + .02),
-            34.0,
+            Rotation2d.fromRotations(HoodConstants.minHoodAngle.getRotations() + .05),
+            34.0 + 1,
             55.0)); 
     TargetingConstants.hubShotMap.put(
         3.127,
         new ShotSettings(
             1.2,
             Rotation2d.fromRotations(HoodConstants.minHoodAngle.getRotations() + .06),
-            35.5,
-            45.0)); 
+            35.5 + 1,
+            45.0 + 5)); 
     TargetingConstants.hubShotMap.put(
         3.568,
         new ShotSettings(
             1.4,
-            Rotation2d.fromRotations(HoodConstants.minHoodAngle.getRotations() + .06),
-            40.0,
+            Rotation2d.fromRotations(HoodConstants.minHoodAngle.getRotations() + .06 + .05),
+            40.0 - 4,
             55.0));
     TargetingConstants.hubShotMap.put(
         4.6,
@@ -72,6 +72,8 @@ public class TargetingSubsystem extends SubsystemBase {
             Rotation2d.fromRotations(HoodConstants.minHoodAngle.getRotations() + .12),
             42.0,
             55.0));
+
+
         TargetingConstants.hubShotMap.put(
         5.6,
         new ShotSettings(
@@ -84,7 +86,7 @@ public class TargetingSubsystem extends SubsystemBase {
         6.6,
         new ShotSettings(
             1.7,
-            Rotation2d.fromRotations(HoodConstants.minHoodAngle.getRotations() + .14),
+            Rotation2d.fromRotations(HoodConstants.minHoodAngle.getRotations() + .12),
             50.0,
             55.0));
 
@@ -93,7 +95,6 @@ public class TargetingSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
-
     if (DriverStation.getAlliance().isPresent()
         && DriverStation.getAlliance().get() == Alliance.Red) {
       hubPosition = TargetingConstants.redHubPosition;
@@ -102,8 +103,10 @@ public class TargetingSubsystem extends SubsystemBase {
     }
     Pose2d robotPose = drivetrain.getRobotPose();
 
-    calculatedParams =
-        calculateShotSOTM(robotPose, drivetrain.getFieldSpeeds(), hubPosition.getTranslation());
+
+    calculatedParams = calculateShotSOTM(robotPose, drivetrain.getFieldSpeeds(), hubPosition.getTranslation());
+    
+    
   }
 
   public ShootingParameters calculateShot(

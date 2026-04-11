@@ -20,24 +20,12 @@ public class VisionIOLimelight implements VisionIO {
 
   @Override
   public void updateInputs(VisionIOInputs inputs) {
-    LimelightHelpers.Flush();
-
-    inputs.targetX = LimelightHelpers.getTX(cameraName);
-    inputs.targetY = LimelightHelpers.getTY(cameraName);
-    inputs.targetA = LimelightHelpers.getTA(cameraName);
-    inputs.hasTarget = LimelightHelpers.getTV(cameraName);
-
     updateHeading(currentHeading);
   }
 
   @Override
   public PoseEstimate getPoseEstimateMT2() {
     return LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(cameraName);
-  }
-
-  @Override
-  public Pose2d getPose() {
-    return getPoseEstimateMT2().pose;
   }
 
   @Override

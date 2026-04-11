@@ -27,7 +27,7 @@ public class VisionSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
-    double lowestAvgDistance = Double.POSITIVE_INFINITY;
+    LimelightHelpers.Flush();
     PoseEstimate bestPoseEstimate = null;
     for (int i = 0; i < io.length; i++) {
       io[i].updateInputs(inputs[i]);
@@ -36,16 +36,11 @@ public class VisionSubsystem extends SubsystemBase {
       PoseEstimate currentPoseEstimate = io[i].getPoseEstimateMT2();
 
       if (LimelightHelpers.validPoseEstimate(currentPoseEstimate)) {
-        //  if (currentPoseEstimate.avgTagDist < lowestAvgDistance) {
-        lowestAvgDistance = currentPoseEstimate.avgTagDist;
         bestPoseEstimate = currentPoseEstimate;
-        // System.out.println("Merged Pose!");
-        // }
+
       }
 
-      // if (LimelightHelpers.validPoseEstimate(currentPoseEstimate)) {
-      //   consumer.accept(currentPoseEstimate);
-      // }
+
     }
 
     if (bestPoseEstimate != null) {

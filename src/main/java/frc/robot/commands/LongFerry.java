@@ -18,7 +18,7 @@ import frc.robot.subsystems.targeting.TargetingSubsystem;
 import frc.robot.subsystems.transporter.TransporterSubsystem;
 import java.util.function.DoubleSupplier;
 
-public class SimpleFerry extends Command {
+public class LongFerry extends Command {
   public final Rotation2d angleDeadband = Rotation2d.fromDegrees(1.5);
   HoodSubsystem hood;
   TargetingSubsystem targeting;
@@ -38,7 +38,7 @@ public class SimpleFerry extends Command {
   private final SwerveRequest.FieldCentric driveRequest =
       new SwerveRequest.FieldCentric().withDriveRequestType(DriveRequestType.Velocity);
 
-  public SimpleFerry(
+  public LongFerry(
       HoodSubsystem hoodSubsystem,
       TargetingSubsystem targetingSubsystem,
       ShooterSubsystem shooterSubsystem,
@@ -91,7 +91,7 @@ public class SimpleFerry extends Command {
             drivetrain.getRobotPose().getRotation().getRotations(), targetHeading);
 
     
-    shooter.setTargetRPS(45);
+    shooter.setTargetRPS(55);
     neck.setTargetRPS(55);
     hood.setTargetAngle(() -> {return HoodConstants.maxHoodAngle;});
 

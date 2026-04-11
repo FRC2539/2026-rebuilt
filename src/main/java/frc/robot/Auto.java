@@ -10,6 +10,7 @@ import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.commands.ShootWithMap;
 import frc.robot.commands.SimpleAlignAndShoot;
 import frc.robot.subsystems.drivetrain.CommandSwerveDrivetrain;
@@ -97,6 +98,8 @@ public class Auto {
         "transport-stop", container.transporter.setVoltage(0).withTimeout(.2));
     NamedCommands.registerCommand("intake-deploy", container.pivot.PutDown().withTimeout(1.5));
     NamedCommands.registerCommand("intake", container.roller.setVoltage(12));
+
+    NamedCommands.registerCommand("back-feed", Commands.parallel(container.transporter.setVoltage(4), container.neck.setNeckRPSCommand(() -> -10.0), container.shooter.setShooterRPSCommand(() -> -10.0)));
     
   }
 

@@ -12,6 +12,7 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.commands.FieldRelativeAngleSnap;
+import frc.robot.commands.LongFerry;
 import frc.robot.commands.SimpleAlignAndShoot;
 import frc.robot.commands.SimpleFerry;
 import frc.robot.commands.StaticShot;
@@ -124,7 +125,7 @@ public class RobotContainer {
                             drivetrain.getOperatorForwardDirection())),
                 drivetrain));
 
-    rightDriveController.getTrigger().whileTrue(roller.setVoltage(12));
+    rightDriveController.getTrigger().whileTrue(roller.setVoltage(11));
 
 
     rightDriveController
@@ -223,19 +224,19 @@ public class RobotContainer {
                 shooter,
                 magicFloor,
                 transporter,
-                drivetrain,
+                drivetrain, neck,
                 () -> getXVelocity(),
                 () -> getYVelocity()));
     operatorController
         .getLeftBumper()
         .whileTrue(
-            new SimpleFerry(
+            new LongFerry(
                 hood,
                 targeting,
                 shooter,
                 magicFloor,
                 transporter,
-                drivetrain,
+                drivetrain, neck,
                 () -> getXVelocity(),
                 () -> getYVelocity()));
 
@@ -245,7 +246,7 @@ public class RobotContainer {
 
     operatorController
         .getRightTrigger()
-        .onTrue(Commands.defer(() -> pivot.feather().alongWith(roller.setVoltage(12)), Set.of(pivot, roller))).onFalse(roller.setVoltage(0));
+        .onTrue(Commands.defer(() -> pivot.feather(), Set.of(pivot)));//.onFalse(roller.setVoltage(0));
 
     operatorController
         .getLeftTrigger()

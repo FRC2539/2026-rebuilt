@@ -4,6 +4,8 @@ import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 
 import java.util.function.DoubleSupplier;
 
+import org.ejml.data.IScalar;
+
 import com.ctre.phoenix6.swerve.SwerveRequest;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.filter.SlewRateLimiter;
@@ -42,7 +44,7 @@ public class SimpleAlignAndShoot extends Command {
   SlewRateLimiter xLimiter = new SlewRateLimiter(1.2);
   SlewRateLimiter yLimiter = new SlewRateLimiter(1.2);
   public Timer floorPulseTimer = new Timer();
-  PIDController rotationController = new PIDController(35, 0, 0.1);
+  PIDController rotationController = new PIDController(65, 0, 0.2);
 
   public boolean hasSpunUp = false;
   public boolean neckIsReady = false;
@@ -93,7 +95,7 @@ public class SimpleAlignAndShoot extends Command {
     floorPulseTimer.start();
 
     rotationController.setTolerance(Units.degreesToRotations(1.25)); // 1.25
-    System.out.println(rotationController.atSetpoint());
+   // System.out.println(rotationController.atSetpoint());
     rotationController.enableContinuousInput(-0.5, 0.5);
   }
 
