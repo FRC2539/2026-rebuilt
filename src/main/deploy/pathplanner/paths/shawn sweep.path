@@ -3,16 +3,16 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.2400532386867784,
+        "x": 2.8457054125998225,
         "y": 2.542111801242236
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.150328536305826,
+        "x": 1.75598071021887,
         "y": 0.6940476190476192
       },
       "isLocked": false,
-      "linkedName": "right shot point"
+      "linkedName": null
     },
     {
       "anchor": {
@@ -48,32 +48,32 @@
     },
     {
       "anchor": {
-        "x": 7.800178571428571,
-        "y": 4.198132440476191
+        "x": 7.883700088731144,
+        "y": 3.7171073646850035
       },
       "prevControl": {
-        "x": 8.12644345238095,
-        "y": 3.4382603149955653
+        "x": 8.209964969683524,
+        "y": 2.957235239204378
       },
       "nextControl": {
-        "x": 7.224546084186121,
-        "y": 5.53878265173954
+        "x": 7.308067601488695,
+        "y": 5.057757575948353
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 6.514694940476191,
-        "y": 4.048050595238096
+        "x": 6.394835847382431,
+        "y": 3.8458740017746225
       },
       "prevControl": {
-        "x": 6.480638744468709,
-        "y": 4.508620103148816
+        "x": 6.398530344451706,
+        "y": 4.307686135434004
       },
       "nextControl": {
-        "x": 6.683701151656314,
-        "y": 1.7624427868973687
+        "x": 6.378740017746229,
+        "y": 1.8338952972493336
       },
       "isLocked": false,
       "linkedName": null
@@ -94,7 +94,7 @@
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 0.7,
+      "waypointRelativePos": 0.4442970822281173,
       "rotationDegrees": -16.548726551255378
     },
     {
@@ -145,7 +145,7 @@
       },
       "rotationOffset": 180.0,
       "minWaypointRelativePos": 0.0,
-      "maxWaypointRelativePos": 0.5033557046979865,
+      "maxWaypointRelativePos": 0.29362416107382583,
       "name": "Point Towards Zone"
     }
   ],
@@ -167,7 +167,7 @@
             {
               "type": "wait",
               "data": {
-                "waitTime": 2.7
+                "waitTime": 1.6
               }
             }
           ]

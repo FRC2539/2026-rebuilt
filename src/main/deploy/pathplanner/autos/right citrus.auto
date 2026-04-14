@@ -63,6 +63,25 @@
                 "data": {
                   "name": "shoot"
                 }
+              },
+              {
+                "type": "sequential",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "wait",
+                      "data": {
+                        "waitTime": 2.2
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "intake-up"
+                      }
+                    }
+                  ]
+                }
               }
             ]
           }
@@ -88,6 +107,12 @@
                 "data": {
                   "name": "back-feed"
                 }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "intake-deploy"
+                }
               }
             ]
           }
@@ -99,7 +124,7 @@
               {
                 "type": "wait",
                 "data": {
-                  "waitTime": 3.6
+                  "waitTime": 6.0
                 }
               },
               {
@@ -107,14 +132,27 @@
                 "data": {
                   "name": "shoot"
                 }
+              },
+              {
+                "type": "sequential",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "wait",
+                      "data": {
+                        "waitTime": 2.2
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "intake-up"
+                      }
+                    }
+                  ]
+                }
               }
             ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "shoot"
           }
         }
       ]

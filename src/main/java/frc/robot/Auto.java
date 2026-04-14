@@ -82,7 +82,7 @@ public class Auto {
 
             NamedCommands.registerCommand(
         "shawn-shoot",
-        new ShootWithMap(
+        new ShootWithMap( 
             container.hood,
             container.targeting,
             container.shooter,
@@ -99,7 +99,8 @@ public class Auto {
     NamedCommands.registerCommand("intake-deploy", container.pivot.PutDown().withTimeout(1.5));
     NamedCommands.registerCommand("intake", container.roller.setVoltage(12));
 
-    NamedCommands.registerCommand("back-feed", Commands.parallel(container.transporter.setVoltage(4), container.neck.setNeckRPSCommand(() -> -10.0), container.shooter.setShooterRPSCommand(() -> -10.0)));
+    NamedCommands.registerCommand("back-feed", Commands.parallel(container.transporter.setVoltage(4), container.neck.setNeckRPSCommand(() -> -10.0)));
+    NamedCommands.registerCommand("intake-up", container.pivot.PullUp().withTimeout(1.5));
     
   }
 
