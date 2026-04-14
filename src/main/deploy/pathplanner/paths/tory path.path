@@ -1,0 +1,95 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 2.9503283052351374,
+        "y": 5.50374445430346
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 2.153584738243123,
+        "y": 5.680798580301686
+      },
+      "isLocked": false,
+      "linkedName": "leftEnd"
+    },
+    {
+      "anchor": {
+        "x": 0.7985342261904762,
+        "y": 5.653273809523809
+      },
+      "prevControl": {
+        "x": 1.072591845293179,
+        "y": 6.886533095485975
+      },
+      "nextControl": {
+        "x": 0.6697675891008579,
+        "y": 5.073823942620526
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 1.3487932564330074,
+        "y": 5.028917480035492
+      },
+      "prevControl": {
+        "x": 0.7130079858030163,
+        "y": 4.980629991126886
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": null
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [
+    {
+      "name": "Constraints Zone",
+      "minWaypointRelativePos": 0,
+      "maxWaypointRelativePos": 2.0,
+      "constraints": {
+        "maxVelocity": 0.75,
+        "maxAcceleration": 7.25,
+        "maxAngularVelocity": 600.0,
+        "maxAngularAcceleration": 720.0,
+        "nominalVoltage": 12.0,
+        "unlimited": false
+      }
+    }
+  ],
+  "pointTowardsZones": [
+    {
+      "fieldPosition": {
+        "x": 4.65,
+        "y": 4.1
+      },
+      "rotationOffset": 180.0,
+      "minWaypointRelativePos": 0.0,
+      "maxWaypointRelativePos": 2.0,
+      "name": "Point Towards Zone"
+    }
+  ],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 3.0,
+    "maxAcceleration": 7.25,
+    "maxAngularVelocity": 600.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 155.7255588655606
+  },
+  "reversed": false,
+  "folder": "right citrus",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": 135.00993567834405
+  },
+  "useDefaultConstraints": true
+}

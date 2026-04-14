@@ -11,7 +11,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "right sweep"
+                  "pathName": "Copy of right sweep"
                 }
               },
               {
@@ -38,12 +38,6 @@
                     }
                   ]
                 }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "back-feed"
-                }
               }
             ]
           }
@@ -55,32 +49,13 @@
               {
                 "type": "wait",
                 "data": {
-                  "waitTime": 3.6
+                  "waitTime": 3.3
                 }
               },
               {
                 "type": "named",
                 "data": {
                   "name": "shoot"
-                }
-              },
-              {
-                "type": "sequential",
-                "data": {
-                  "commands": [
-                    {
-                      "type": "wait",
-                      "data": {
-                        "waitTime": 2.2
-                      }
-                    },
-                    {
-                      "type": "named",
-                      "data": {
-                        "name": "intake-up"
-                      }
-                    }
-                  ]
                 }
               }
             ]
@@ -93,25 +68,13 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "right sooperdooperlooper"
+                  "pathName": "Copy of right sooperdooperlooper"
                 }
               },
               {
                 "type": "named",
                 "data": {
                   "name": "intake"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "back-feed"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "intake-deploy"
                 }
               }
             ]
@@ -124,7 +87,7 @@
               {
                 "type": "wait",
                 "data": {
-                  "waitTime": 6.0
+                  "waitTime": 3.3
                 }
               },
               {
@@ -132,33 +95,20 @@
                 "data": {
                   "name": "shoot"
                 }
-              },
-              {
-                "type": "sequential",
-                "data": {
-                  "commands": [
-                    {
-                      "type": "wait",
-                      "data": {
-                        "waitTime": 2.2
-                      }
-                    },
-                    {
-                      "type": "named",
-                      "data": {
-                        "name": "intake-up"
-                      }
-                    }
-                  ]
-                }
               }
             ]
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Copy of right sooperdooperlooper"
           }
         }
       ]
     }
   },
   "resetOdom": true,
-  "folder": null,
+  "folder": "old autos",
   "choreoAuto": false
 }

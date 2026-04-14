@@ -9,7 +9,7 @@ import edu.wpi.first.math.interpolation.InverseInterpolator;
 import frc.robot.subsystems.hood.HoodConstants;
 
 public class TargetingConstants {
-  public static double estimatedShotLatency = 0.9;
+  public static double estimatedShotLatency = 0.1;
   public static double fieldLengthMeters = 16.54098798984;
   public static Rotation2d ferryingHoodAngle =
       Rotation2d.fromRotations(HoodConstants.maxHoodAngle.getRotations() - 0.03);
@@ -26,7 +26,8 @@ public class TargetingConstants {
   public static final InterpolatingTreeMap<Double, ShotSettings> hubShotMap =
       new InterpolatingTreeMap<>(InverseInterpolator.forDouble(), ShotSettings::interpolate);
 
-  public static record ShotSettings(Double timeOfFlight, Rotation2d hoodAngle, Double wheelRPS, Double neckRPS)
+  public static record ShotSettings(
+      Double timeOfFlight, Rotation2d hoodAngle, Double wheelRPS, Double neckRPS)
       implements Interpolatable<ShotSettings> {
     @Override
     public ShotSettings interpolate(ShotSettings endValue, double t) {
@@ -35,7 +36,8 @@ public class TargetingConstants {
           Rotation2d.fromDegrees(
               MathUtil.interpolate(
                   this.hoodAngle.getDegrees(), endValue.hoodAngle.getDegrees(), t)),
-          MathUtil.interpolate(this.wheelRPS, endValue.wheelRPS, t), MathUtil.interpolate(this.neckRPS, endValue.neckRPS, t));
+          MathUtil.interpolate(this.wheelRPS, endValue.wheelRPS, t),
+          MathUtil.interpolate(this.neckRPS, endValue.neckRPS, t));
     }
   }
 

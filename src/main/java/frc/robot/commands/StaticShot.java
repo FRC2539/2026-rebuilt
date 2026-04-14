@@ -67,17 +67,28 @@ public class StaticShot extends Command {
     shooter.setTargetRPS(42 + tunableRPS);
     neck.setTargetRPS(55 - tunableNeckRPS);
     // hood.setTargetAngle(
-    //     () -> Rotation2d.fromRotations(HoodConstants.minHoodAngle.getRotations() + (.0656 / 1.14)));
+    //     () -> Rotation2d.fromRotations(HoodConstants.minHoodAngle.getRotations() + (.0656 /
+    // 1.14)));
 
-    System.out.println("shooter:" + shooter.isAtSetpoint() + "hood:" + hood.isAtSetpoint() + "neck:" + neck.isAtSetpoint());
-    hood.setTargetAngle(() -> Rotation2d.fromRotations(HoodConstants.minHoodAngle.getRotations() + tunableHoodAngle.getRotations()));
+    System.out.println(
+        "shooter:"
+            + shooter.isAtSetpoint()
+            + "hood:"
+            + hood.isAtSetpoint()
+            + "neck:"
+            + neck.isAtSetpoint());
+    hood.setTargetAngle(
+        () ->
+            Rotation2d.fromRotations(
+                HoodConstants.minHoodAngle.getRotations() + tunableHoodAngle.getRotations()));
 
-    if ((shooter.isAtSetpoint() || hasSpunUp) && hood.isAtSetpoint() && (neck.isAtSetpoint() || hasNeckPrepared)) {
+    if ((shooter.isAtSetpoint() || hasSpunUp)
+        && hood.isAtSetpoint()
+        && (neck.isAtSetpoint() || hasNeckPrepared)) {
       hasSpunUp = true;
       hasNeckPrepared = true;
       floor.setVoltageFunction(8);
       transporter.setVoltageFunction(-9.5 - tunableTransport);
-
     }
 
     drivetrain.setControl(brakeRequest);

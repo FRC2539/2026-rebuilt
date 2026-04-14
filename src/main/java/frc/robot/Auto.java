@@ -11,6 +11,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import frc.robot.commands.ShootWithMap;
 import frc.robot.commands.SimpleAlignAndShoot;
 import frc.robot.subsystems.drivetrain.CommandSwerveDrivetrain;
 import frc.robot.subsystems.drivetrain.DriveConstants;
@@ -71,22 +72,36 @@ public class Auto {
             container.shooter,
             container.magicFloor,
             container.transporter,
-            container.drivetrain, container.neck,
+            container.drivetrain,
+            container.neck,
             new Rotation2d(),
             0,
             new Rotation2d(),
-            0, 0));
+            0,
+            0, () -> 0, () -> 0));
+
+            NamedCommands.registerCommand(
+        "shawn-shoot",
+        new ShootWithMap( 
+            container.hood,
+            container.targeting,
+            container.shooter,
+            container.magicFloor,
+            container.transporter,
+            container.neck,
+            new Rotation2d(),
+            0,
+            new Rotation2d(),
+            0,
+            0, () -> 0, () -> 0));
     NamedCommands.registerCommand(
         "transport-stop", container.transporter.setVoltage(0).withTimeout(.2));
-    // NamedCommands.registerCommand(
-    //     "intake-deploy",
-    //     container.pivot.setVoltage(-5).withTimeout(2.25).andThen(container.pivot.setVoltage(0)));
+    NamedCommands.registerCommand("intake-deploy", container.pivot.PutDown().withTimeout(1.5));
     NamedCommands.registerCommand("intake", container.roller.setVoltage(12));
-    NamedCommands.registerCommand(
-        "james-sputter",
-        Commands.parallel(
-            container.transporter.setVoltage(-5),
-            container.shooter.setVoltage(5).withTimeout(1.5)));
+
+    NamedCommands.registerCommand("back-feed", Commands.parallel(container.transporter.setVoltage(4), container.neck.setNeckRPSCommand(() -> -10.0)));
+    NamedCommands.registerCommand("intake-up", container.pivot.PullUp().withTimeout(1.5));
+    
   }
 
   public Command getAutoCommand() {

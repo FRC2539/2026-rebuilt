@@ -63,25 +63,6 @@
                 "data": {
                   "name": "shoot"
                 }
-              },
-              {
-                "type": "sequential",
-                "data": {
-                  "commands": [
-                    {
-                      "type": "wait",
-                      "data": {
-                        "waitTime": 2.2
-                      }
-                    },
-                    {
-                      "type": "named",
-                      "data": {
-                        "name": "intake-up"
-                      }
-                    }
-                  ]
-                }
               }
             ]
           }
@@ -93,7 +74,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "right sooperdooperlooper"
+                  "pathName": "right hub sweep"
                 }
               },
               {
@@ -107,12 +88,6 @@
                 "data": {
                   "name": "back-feed"
                 }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "intake-deploy"
-                }
               }
             ]
           }
@@ -124,7 +99,7 @@
               {
                 "type": "wait",
                 "data": {
-                  "waitTime": 6.0
+                  "waitTime": 3.6
                 }
               },
               {
@@ -132,24 +107,30 @@
                 "data": {
                   "name": "shoot"
                 }
+              }
+            ]
+          }
+        },
+        {
+          "type": "deadline",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "right hub sweep"
+                }
               },
               {
-                "type": "sequential",
+                "type": "named",
                 "data": {
-                  "commands": [
-                    {
-                      "type": "wait",
-                      "data": {
-                        "waitTime": 2.2
-                      }
-                    },
-                    {
-                      "type": "named",
-                      "data": {
-                        "name": "intake-up"
-                      }
-                    }
-                  ]
+                  "name": "intake"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "back-feed"
                 }
               }
             ]

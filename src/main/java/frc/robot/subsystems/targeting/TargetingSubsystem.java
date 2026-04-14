@@ -16,7 +16,7 @@ import org.littletonrobotics.junction.AutoLogOutput;
 
 public class TargetingSubsystem extends SubsystemBase {
   private ShootingParameters calculatedParams =
-      new ShootingParameters(new Rotation2d(), new Rotation2d(), 0.0, 0.0);
+      new ShootingParameters(new Rotation2d(), HoodConstants.minHoodAngle, 0.0, 0.0);
 
   @AutoLogOutput public Pose2d hubPosition;
   @AutoLogOutput public Pose2d desiredRobotPosition;
@@ -40,39 +40,61 @@ public class TargetingSubsystem extends SubsystemBase {
     TargetingConstants.hubShotMap.put(
         1.776,
         new ShotSettings(
-            1.0,
+            1.2,
             Rotation2d.fromRotations(HoodConstants.minHoodAngle.getRotations()),
-            30.5, 55.0)); // -.0656 for this and the next one
+            30.5,
+            55.0)); 
     TargetingConstants.hubShotMap.put(
         2.56,
         new ShotSettings(
-            1.0, Rotation2d.fromRotations(HoodConstants.minHoodAngle.getRotations() + .02), 34.0, 55.0)); // 37
+            1.2,
+            Rotation2d.fromRotations(HoodConstants.minHoodAngle.getRotations() + .05),
+            34.0 + 1,
+            55.0)); 
     TargetingConstants.hubShotMap.put(
         3.127,
         new ShotSettings(
-            1.0,
+            1.2,
             Rotation2d.fromRotations(HoodConstants.minHoodAngle.getRotations() + .06),
-            35.5, 45.0)); // WAS 40 RPS these 2 were zero, i'm adding the old min angle  - james
+            35.5 + 1,
+            45.0 + 5)); 
     TargetingConstants.hubShotMap.put(
         3.568,
         new ShotSettings(
-            1.0,
-            Rotation2d.fromRotations(HoodConstants.minHoodAngle.getRotations() + .06),
-            40.0, 55.0));
+            1.4,
+            Rotation2d.fromRotations(HoodConstants.minHoodAngle.getRotations() + .06 + .05),
+            40.0 - 4,
+            55.0));
     TargetingConstants.hubShotMap.put(
         4.6,
         new ShotSettings(
-            1.0,
+            1.5,
             Rotation2d.fromRotations(HoodConstants.minHoodAngle.getRotations() + .12),
-            42.0, 55.0));
+            42.0,
+            55.0));
 
+
+        TargetingConstants.hubShotMap.put(
+        5.6,
+        new ShotSettings(
+            1.7,
+            Rotation2d.fromRotations(HoodConstants.minHoodAngle.getRotations() + .12),
+            46.0,
+            55.0));
+
+        TargetingConstants.hubShotMap.put(
+        6.6,
+        new ShotSettings(
+            1.7,
+            Rotation2d.fromRotations(HoodConstants.minHoodAngle.getRotations() + .12),
+            50.0,
+            55.0));
 
     drivetrain = dt;
   }
 
   @Override
   public void periodic() {
-
     if (DriverStation.getAlliance().isPresent()
         && DriverStation.getAlliance().get() == Alliance.Red) {
       hubPosition = TargetingConstants.redHubPosition;
@@ -81,8 +103,10 @@ public class TargetingSubsystem extends SubsystemBase {
     }
     Pose2d robotPose = drivetrain.getRobotPose();
 
-    calculatedParams =
-        calculateShot(robotPose, drivetrain.getFieldSpeeds(), hubPosition.getTranslation());
+
+    calculatedParams = calculateShotSOTM(robotPose, drivetrain.getFieldSpeeds(), hubPosition.getTranslation());
+    
+    
   }
 
   public ShootingParameters calculateShot(
@@ -99,8 +123,6 @@ public class TargetingSubsystem extends SubsystemBase {
 
     ShotSettings mapValues = TargetingConstants.hubShotMap.get(realDistance);
 
-    // ShotSettings mapValues = new ShotSettings(0.0, Rotation2d.kZero, 0.0);
-
     desiredRobotPosition = new Pose2d(robotPose.getX(), robotPose.getY(), neededHeading);
     if (mapValues == null) {
       return calculatedParams; // Return last known good params
@@ -110,7 +132,62 @@ public class TargetingSubsystem extends SubsystemBase {
     targetFlywheelRPS = mapValues.wheelRPS();
     targetNeckRPS = mapValues.neckRPS();
     return new ShootingParameters(
-        neededHeading, mapValues.hoodAngle(), Math.rint(mapValues.wheelRPS()), targetNeckRPS);
+        neededHeading, mapValues.hoodAngle(), mapValues.wheelRPS(), targetNeckRPS);
+  }
+
+  public ShootingParameters calculateShotSOTM(
+      Pose2d robotPose, ChassisSpeeds fieldSpeeds, Translation2d targetPose) {
+
+    Translation2d filteredRobotVelocity =
+        new Translation2d(fieldSpeeds.vxMetersPerSecond, fieldSpeeds.vyMetersPerSecond);
+
+    Translation2d futureRobotPose =
+        robotPose
+            .getTranslation()
+            .plus(filteredRobotVelocity.times(TargetingConstants.estimatedShotLatency));
+
+    Translation2d realDisplacementToHub = targetPose.minus(futureRobotPose);
+
+    realDistance = realDisplacementToHub.getNorm();
+
+    // Rotation2d neededHeading =
+    //     realDisplacementToHub
+    //         .getAngle()
+    //         .plus(Rotation2d.k180deg); // shooter is facing backwards, need to offset by 180 degrees
+
+    ShotSettings mapValues = TargetingConstants.hubShotMap.get(realDistance);
+    double estimatedFlightTime = mapValues.timeOfFlight();
+
+    Translation2d virtualTarget = targetPose;
+
+    double virtualDistance = realDistance;
+
+    for (int i = 0; i < 4; i++) {
+      virtualTarget = targetPose.minus(filteredRobotVelocity.times(estimatedFlightTime));
+
+      virtualDistance = futureRobotPose.getDistance(virtualTarget);
+
+      double newFlightTime = TargetingConstants.hubShotMap.get(virtualDistance).timeOfFlight();
+
+      if (Math.abs(newFlightTime - estimatedFlightTime) < 0.005) break;
+
+      estimatedFlightTime = newFlightTime;
+    }
+
+    Translation2d adjustedAimingVector = realDisplacementToHub.minus(filteredRobotVelocity.times(estimatedFlightTime));
+
+    Rotation2d neededHeading = adjustedAimingVector.getAngle().plus(Rotation2d.k180deg);
+
+    mapValues = TargetingConstants.hubShotMap.get(virtualDistance);
+
+    targetHoodAngle = mapValues.hoodAngle();
+    targetFlywheelRPS = mapValues.wheelRPS();
+    targetNeckRPS = mapValues.neckRPS();
+
+    desiredRobotPosition = new Pose2d(robotPose.getX(), robotPose.getY(), neededHeading);
+
+    return new ShootingParameters(
+        neededHeading, mapValues.hoodAngle(), mapValues.wheelRPS(), targetNeckRPS);
   }
 
   public Supplier<Rotation2d> getIdealRobotHeading() {
