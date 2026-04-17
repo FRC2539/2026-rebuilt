@@ -41,7 +41,7 @@ public class StaticShot extends Command {
       NeckSubsystem neckSubsystem,
       Rotation2d hoodAngle,
       double rps,
-      double neckRPS,
+      double neckRPSOffset,
       double transportVoltageOffset) {
     hood = hoodSubsystem;
     targeting = targetingSubsystem;
@@ -53,7 +53,7 @@ public class StaticShot extends Command {
 
     tunableHoodAngle = hoodAngle;
     tunableRPS = rps;
-    tunableNeckRPS = neckRPS;
+    tunableNeckRPS = neckRPSOffset;
     tunableTransport = transportVoltageOffset;
 
     addRequirements(hood, targeting, shooter, floor, transporter, drivetrain, neck);
@@ -64,23 +64,12 @@ public class StaticShot extends Command {
 
   @Override
   public void execute() {
-    shooter.setTargetRPS(42 + tunableRPS);
-    neck.setTargetRPS(55 - tunableNeckRPS);
-    // hood.setTargetAngle(
-    //     () -> Rotation2d.fromRotations(HoodConstants.minHoodAngle.getRotations() + (.0656 /
-    // 1.14)));
+    shooter.setTargetRPS(35 + tunableRPS);
+    neck.setTargetRPS(55 + tunableNeckRPS);
 
-    System.out.println(
-        "shooter:"
-            + shooter.isAtSetpoint()
-            + "hood:"
-            + hood.isAtSetpoint()
-            + "neck:"
-            + neck.isAtSetpoint());
     hood.setTargetAngle(
         () ->
-            Rotation2d.fromRotations(
-                HoodConstants.minHoodAngle.getRotations() + tunableHoodAngle.getRotations()));
+            Rotation2d.fromRotations(HoodConstants.minHoodAngle.getRotations() + .05));
 
     if ((shooter.isAtSetpoint() || hasSpunUp)
         && hood.isAtSetpoint()

@@ -114,7 +114,7 @@ public class RobotContainer {
   private void configureBindings() {
 
     leftDriveController
-        .getLeftTopLeft()
+        .getRightTopLeft()
         .onTrue(
             Commands.runOnce(
                 () ->
@@ -175,16 +175,17 @@ public class RobotContainer {
         .whileTrue(
             Commands.defer(
                 () -> {
-                  return new StaticShotHub(
+                  return new StaticShot(
                       hood,
                       targeting,
                       shooter,
                       magicFloor,
                       transporter,
                       drivetrain,
+                      neck,
                       Rotation2d.fromRotations(hoodAngleOffset),
                       shooterRPSOffset,
-                      new Rotation2d(),
+                      neckRPSOffset,
                       transporterOffset);
                 },
                 Set.of(hood, targeting, shooter, magicFloor, transporter, drivetrain, neck)));

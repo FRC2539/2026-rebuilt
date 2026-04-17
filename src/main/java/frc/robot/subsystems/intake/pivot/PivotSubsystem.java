@@ -51,9 +51,9 @@ public class PivotSubsystem extends SubsystemBase {
 
   public Command feather() {
     return Commands.either(
-        this.setPosition(Rotation2d.fromRotations(.4)),
+        this.setPosition(Rotation2d.fromRotations(.444)), // feather
         this.PutDown(),
-        () -> {
+        () -> { // is the intake down, a second random number, basically.
           return inputs.pivotPosition
               > .50; // I really just need an arbitrary bumber here to serve as a "cutoff" between
           // up and down, .35 used above is too low.
