@@ -211,7 +211,7 @@ public class RobotContainer {
     // op binds
     operatorController.getX().whileTrue(roller.setVoltage(-12));
     operatorController.getB().whileTrue(transporter.setVoltage(3));
-
+    operatorController.getY().whileTrue(shooter.setShooterRPSForever(-30));
     // operatorController.getY().onTrue(Commands.defer(() -> pivot.toggleIntake(), Set.of(pivot)));
     // operatorController.getA().onTrue(pivot.PutDown());
     // operatorController.getY().onTrue(pivot.PullUp());

@@ -63,25 +63,6 @@
                 "data": {
                   "name": "shoot"
                 }
-              },
-              {
-                "type": "sequential",
-                "data": {
-                  "commands": [
-                    {
-                      "type": "wait",
-                      "data": {
-                        "waitTime": 2.2
-                      }
-                    },
-                    {
-                      "type": "named",
-                      "data": {
-                        "name": "intake-up"
-                      }
-                    }
-                  ]
-                }
               }
             ]
           }
@@ -106,12 +87,6 @@
                 "type": "named",
                 "data": {
                   "name": "back-feed"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "intake-deploy"
                 }
               }
             ]
