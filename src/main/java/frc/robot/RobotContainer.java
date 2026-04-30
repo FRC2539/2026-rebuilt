@@ -264,6 +264,7 @@ public class RobotContainer {
     rightDriveController.getLeftBottomMiddle().onTrue(Commands.runOnce(() -> neckRPSOffset += 1));
     rightDriveController.getLeftBottomRight().onTrue(Commands.runOnce(() -> neckRPSOffset -= 1));
 
+    leftDriveController.getLeftTopMiddle().onTrue(Commands.defer(() -> pivot.toggleIntake(), Set.of(pivot)));
     // hood tuning
     operatorController.getDPadUp().onTrue(Commands.runOnce(() -> hoodAngleOffset += .02));
 
