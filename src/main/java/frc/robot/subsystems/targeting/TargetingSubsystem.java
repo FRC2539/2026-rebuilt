@@ -42,7 +42,7 @@ public class TargetingSubsystem extends SubsystemBase {
         new ShotSettings(
             1.2,
             Rotation2d.fromRotations(HoodConstants.minHoodAngle.getRotations()),
-            30.5,
+            31.5, // 30.5
             55.0)); 
     TargetingConstants.hubShotMap.put(
         2.56,
@@ -63,7 +63,7 @@ public class TargetingSubsystem extends SubsystemBase {
         new ShotSettings(
             1.4,
             Rotation2d.fromRotations(HoodConstants.minHoodAngle.getRotations() + .06 + .05),
-            40.0 - 4,
+            40.0 - 5, // 36.0
             55.0));
     TargetingConstants.hubShotMap.put(
         4.6,
