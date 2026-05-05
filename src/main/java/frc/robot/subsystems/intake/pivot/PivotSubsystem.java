@@ -51,7 +51,7 @@ public class PivotSubsystem extends SubsystemBase {
 
   public Command feather() { 
     return Commands.either(
-        this.setPosition(Rotation2d.fromRotations(.427)), // feather
+        this.setPosition(Rotation2d.fromRotations(.3845)), // feather // .3989
         this.PutDown(),
         () -> { // is the intake down, a second random number, basically.
           return inputs.pivotPosition

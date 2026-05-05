@@ -84,12 +84,12 @@
         "y": 5.632740213523132
       },
       "prevControl": {
-        "x": 7.6130429609461565,
-        "y": 5.566063238395974
+        "x": 7.6012333014716,
+        "y": 5.781333027861773
       },
       "nextControl": {
-        "x": 6.010569395017795,
-        "y": 5.70805456702254
+        "x": 6.0257564102564105,
+        "y": 5.465269230769231
       },
       "isLocked": false,
       "linkedName": null
@@ -169,13 +169,13 @@
   },
   "goalEndState": {
     "velocity": 1.0,
-    "rotation": 135.00993567834405
+    "rotation": 135.01
   },
   "reversed": false,
   "folder": "left race",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 135.00993567834405
+    "rotation": 135.01
   },
   "useDefaultConstraints": true
 }

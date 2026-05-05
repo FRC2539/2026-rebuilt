@@ -21,7 +21,7 @@ import frc.robot.subsystems.shooter.ShooterSubsystem;
 import frc.robot.subsystems.targeting.TargetingSubsystem;
 import frc.robot.subsystems.transporter.TransporterSubsystem;
 
-public class SimpleAlignAndShoot extends Command {
+public class HailMary extends Command {
   public final Rotation2d angleDeadband = Rotation2d.fromDegrees(1.5);
   HoodSubsystem hood;
   TargetingSubsystem targeting;
@@ -54,7 +54,7 @@ public class SimpleAlignAndShoot extends Command {
 
   private final SwerveRequest.SwerveDriveBrake brakeRequest = new SwerveRequest.SwerveDriveBrake();
 
-  public SimpleAlignAndShoot(
+  public HailMary(
       HoodSubsystem hoodSubsystem,
       TargetingSubsystem targetingSubsystem,
       ShooterSubsystem shooterSubsystem,
@@ -102,22 +102,6 @@ public class SimpleAlignAndShoot extends Command {
   @Override
   public void execute() {
 
-    // if (transportPulseTimer.get() > .3) { // backspin transport to clear jammed balls out
-    //   transporter.setVoltageFunction(3.5);
-    // } else {
-    //   transporter.setVoltageFunction(0);
-    // }
-
-
-    System.out.println(
-        "shooter:"
-            + shooter.isAtSetpoint()
-            + "hood:"
-            + hood.isAtSetpoint()
-            + "neck:"
-            + neck.isAtSetpoint() + "rotation:" + rotationController.atSetpoint());
-
-
     rotationController.setSetpoint(targeting.getIdealRobotHeading().get().plus(tunableHeadingOffset).getRotations());
 
     double desiredRotationalRate =
@@ -129,24 +113,16 @@ public class SimpleAlignAndShoot extends Command {
     neck.setTargetRPS(targeting.getIdealNeckRPS().get() + tunableNeckRPS);
     hood.setTargetAngle(() -> targeting.getIdealHoodAngle().get().plus(tunableHoodAngle));
 
-    if (rotationController.atSetpoint()) {
 
-      if ((shooter.isAtSetpoint() || hasSpunUp)
-          && hood.isAtSetpoint()
-          && (neck.isAtSetpoint() || neckIsReady)) {
-        neckIsReady = true;
-        hasSpunUp = true;
-        floor.setVoltageFunction(8);
-        transporter.setVoltageFunction(-9.5 - tunableTransport); // -9.5
+
+    floor.setVoltageFunction(8);
+    transporter.setVoltageFunction(-9.5 - tunableTransport); // -9.5
         //pulseFloor();
-      }
-
-    } else {
-      //drivetrain.setControl(driveRequest.withRotationalRate(desiredRotationalRate));//.withVelocityX(xSupplier.getAsDouble()).withVelocityY(ySupplier.getAsDouble()));
-    }
-
+      
     drivetrain.setControl(driveRequest.withRotationalRate(desiredRotationalRate).withVelocityX(xLimiter.calculate(xSupplier.getAsDouble()) / 2).withVelocityY(yLimiter.calculate(ySupplier.getAsDouble()) / 2));
-  }
+
+    } 
+  
 
 
   // public void pulseFloor() {
