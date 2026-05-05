@@ -11,7 +11,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "worlds right sweep"
+                  "pathName": "316-compatible right sweep"
                 }
               },
               {
@@ -55,7 +55,7 @@
               {
                 "type": "wait",
                 "data": {
-                  "waitTime": 3.6
+                  "waitTime": 4.6
                 }
               },
               {
@@ -74,7 +74,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "worlds second pass"
+                  "pathName": "316-compatible superdooperlooper"
                 }
               },
               {

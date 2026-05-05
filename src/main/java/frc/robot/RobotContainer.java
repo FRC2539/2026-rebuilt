@@ -11,7 +11,9 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import frc.robot.commands.DynamicShot;
 import frc.robot.commands.FieldRelativeAngleSnap;
+import frc.robot.commands.HailMary;
 import frc.robot.commands.LongFerry;
 import frc.robot.commands.SimpleAlignAndShoot;
 import frc.robot.commands.SimpleFerry;
@@ -67,6 +69,8 @@ public class RobotContainer {
 
   @AutoLogOutput public double transporterOffset = 0;
 
+  @AutoLogOutput public double tunableHeadingOffsetDeg = 0;
+
   public final PivotSubsystem pivot = new PivotSubsystem(new PivotIOTalonFX());
   public final RollerSubsystem roller = new RollerSubsystem(new RollerIOTalonFX());
   public final ShooterSubsystem shooter = new ShooterSubsystem(new ShooterIOTalonFX());
@@ -114,7 +118,7 @@ public class RobotContainer {
   private void configureBindings() {
 
     leftDriveController
-        .getLeftTopLeft()
+        .getRightTopLeft()
         .onTrue(
             Commands.runOnce(
                 () ->
@@ -164,27 +168,66 @@ public class RobotContainer {
                       neck,
                       Rotation2d.fromRotations(hoodAngleOffset),
                       shooterRPSOffset,
-                      new Rotation2d(),
+                      Rotation2d.fromDegrees(tunableHeadingOffsetDeg),
                       neckRPSOffset,
                       transporterOffset, () -> getXVelocity(), () -> getYVelocity());
                 },
                 Set.of(hood, targeting, shooter, magicFloor, transporter, drivetrain, neck)));
 
-    rightDriveController
-        .getLeftThumb()
+    leftDriveController
+        .getBottomThumb()
         .whileTrue(
             Commands.defer(
                 () -> {
-                  return new StaticShotHub(
+                  return new HailMary(
                       hood,
                       targeting,
                       shooter,
                       magicFloor,
                       transporter,
                       drivetrain,
+                      neck,
                       Rotation2d.fromRotations(hoodAngleOffset),
                       shooterRPSOffset,
-                      new Rotation2d(),
+                      Rotation2d.fromDegrees(tunableHeadingOffsetDeg),
+                      neckRPSOffset,
+                      transporterOffset, () -> getXVelocity(), () -> getYVelocity());
+                },
+                Set.of(hood, targeting, shooter, magicFloor, transporter, drivetrain, neck)));
+
+
+    rightDriveController
+        .getLeftThumb()
+        .whileTrue(
+            Commands.defer(
+                () -> {
+                  return new StaticShot(
+                      hood,
+                      targeting,
+                      shooter,
+                      magicFloor,
+                      transporter,
+                      drivetrain,
+                      neck,
+                      Rotation2d.fromRotations(hoodAngleOffset),
+                      shooterRPSOffset,
+                      neckRPSOffset,
+                      transporterOffset);
+                },
+                Set.of(hood, targeting, shooter, magicFloor, transporter, drivetrain, neck)));
+    rightDriveController.getBottomThumb().whileTrue(Commands.defer(
+                () -> {
+                  return new DynamicShot(
+                      hood,
+                      targeting,
+                      shooter,
+                      magicFloor,
+                      transporter,
+                      drivetrain,
+                      neck,
+                      Rotation2d.fromRotations(hoodAngleOffset),
+                      shooterRPSOffset,
+                      neckRPSOffset,
                       transporterOffset);
                 },
                 Set.of(hood, targeting, shooter, magicFloor, transporter, drivetrain, neck)));
@@ -210,7 +253,7 @@ public class RobotContainer {
     // op binds
     operatorController.getX().whileTrue(roller.setVoltage(-12));
     operatorController.getB().whileTrue(transporter.setVoltage(3));
-
+    operatorController.getY().whileTrue(shooter.setShooterRPSForever(-30));
     // operatorController.getY().onTrue(Commands.defer(() -> pivot.toggleIntake(), Set.of(pivot)));
     // operatorController.getA().onTrue(pivot.PutDown());
     // operatorController.getY().onTrue(pivot.PullUp());
@@ -260,9 +303,10 @@ public class RobotContainer {
         .getLeftBottomRight()
         .onTrue(Commands.runOnce(() -> transporterOffset -= .5));
 
-    rightDriveController.getLeftBottomMiddle().onTrue(Commands.runOnce(() -> neckRPSOffset += 1));
-    rightDriveController.getLeftBottomRight().onTrue(Commands.runOnce(() -> neckRPSOffset -= 1));
+    rightDriveController.getLeftBottomMiddle().onTrue(Commands.runOnce(() -> tunableHeadingOffsetDeg += 1)); //CCW +
+    rightDriveController.getLeftBottomRight().onTrue(Commands.runOnce(() -> tunableHeadingOffsetDeg -= 1));
 
+    leftDriveController.getLeftTopMiddle().onTrue(Commands.defer(() -> pivot.toggleIntake(), Set.of(pivot)));
     // hood tuning
     operatorController.getDPadUp().onTrue(Commands.runOnce(() -> hoodAngleOffset += .02));
 

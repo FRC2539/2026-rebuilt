@@ -1,8 +1,9 @@
 {
-  "robotWidth": 0.9,
-  "robotLength": 0.9,
+  "robotWidth": 0.8,
+  "robotLength": 0.889,
   "holonomicMode": true,
   "pathFolders": [
+    "3rd shenanagins",
     "improved right",
     "left race",
     "right citrus"

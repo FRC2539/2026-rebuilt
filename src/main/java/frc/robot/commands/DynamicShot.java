@@ -12,7 +12,7 @@ import frc.robot.subsystems.shooter.ShooterSubsystem;
 import frc.robot.subsystems.targeting.TargetingSubsystem;
 import frc.robot.subsystems.transporter.TransporterSubsystem;
 
-public class StaticShot extends Command {
+public class DynamicShot extends Command {
   public final Rotation2d angleDeadband = Rotation2d.fromDegrees(1.5);
   HoodSubsystem hood;
   TargetingSubsystem targeting;
@@ -31,7 +31,7 @@ public class StaticShot extends Command {
   public boolean hasNeckPrepared = false;
   private final SwerveRequest.SwerveDriveBrake brakeRequest = new SwerveRequest.SwerveDriveBrake();
 
-  public StaticShot(
+  public DynamicShot(
       HoodSubsystem hoodSubsystem,
       TargetingSubsystem targetingSubsystem,
       ShooterSubsystem shooterSubsystem,
@@ -64,12 +64,12 @@ public class StaticShot extends Command {
 
   @Override
   public void execute() {
-    shooter.setTargetRPS(35 + tunableRPS);
-    neck.setTargetRPS(55 + tunableNeckRPS);
+    shooter.setTargetRPS(targeting.getIdealFlywheelRPS().get() + tunableRPS);
+    neck.setTargetRPS(targeting.getIdealNeckRPS().get() + tunableNeckRPS);
 
     hood.setTargetAngle(
         () ->
-            Rotation2d.fromRotations(HoodConstants.minHoodAngle.getRotations() + .05));
+           targeting.getIdealHoodAngle().get());
 
     if ((shooter.isAtSetpoint() || hasSpunUp)
         && hood.isAtSetpoint()

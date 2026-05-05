@@ -17,8 +17,8 @@ public class PivotConstants {
 
   public static final Rotation2d pivotDeadband = Rotation2d.fromRotations(.008);
 
-  public static final Rotation2d intakeUpPosition = Rotation2d.fromRotations(.23971);
-  public static final Rotation2d intakeDownPosition = Rotation2d.fromRotations(.582);
+  public static final Rotation2d intakeUpPosition = Rotation2d.fromRotations(.2575);
+  public static final Rotation2d intakeDownPosition = Rotation2d.fromRotations(.5855);
 
   // public static final Rotation2d intakeFeatherPosition = Rotation2d.fromRotations(0.4); // 0.95
 

@@ -89,7 +89,7 @@
   "folder": "right citrus",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 135.00993567834405
+    "rotation": 135.01
   },
   "useDefaultConstraints": true
 }

@@ -11,7 +11,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "worlds right sweep"
+                  "pathName": "worlds left sweep"
                 }
               },
               {
@@ -27,7 +27,7 @@
                     {
                       "type": "wait",
                       "data": {
-                        "waitTime": 0.75
+                        "waitTime": 0.5
                       }
                     },
                     {
@@ -74,7 +74,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "worlds second pass"
+                  "pathName": "left second sweep"
                 }
               },
               {
