@@ -48,28 +48,28 @@ public class TargetingSubsystem extends SubsystemBase {
         2.56,
         new ShotSettings(
             1.2,
-            Rotation2d.fromRotations(HoodConstants.minHoodAngle.getRotations() + .05),
+            Rotation2d.fromRotations(HoodConstants.minHoodAngle.getRotations() + .07),//+0.05
             34.0 + 1,
             55.0)); 
     TargetingConstants.hubShotMap.put(
         3.127,
         new ShotSettings(
             1.2,
-            Rotation2d.fromRotations(HoodConstants.minHoodAngle.getRotations() + .06),
+            Rotation2d.fromRotations(HoodConstants.minHoodAngle.getRotations() + .08),//+0.06
             35.5 + 1,
             45.0 + 5)); 
     TargetingConstants.hubShotMap.put(
         3.568,
         new ShotSettings(
             1.4,
-            Rotation2d.fromRotations(HoodConstants.minHoodAngle.getRotations() + .06 + .05),
+            Rotation2d.fromRotations(HoodConstants.minHoodAngle.getRotations() + .06 + .07),//+0.05
             40.0 - 5, // 36.0
             55.0));
     TargetingConstants.hubShotMap.put(
         4.6,
         new ShotSettings(
             1.5,
-            Rotation2d.fromRotations(HoodConstants.minHoodAngle.getRotations() + .12),
+            Rotation2d.fromRotations(HoodConstants.minHoodAngle.getRotations() + .14),//+0.12
             42.0,
             55.0));
 
@@ -78,7 +78,7 @@ public class TargetingSubsystem extends SubsystemBase {
         5.6,
         new ShotSettings(
             1.7,
-            Rotation2d.fromRotations(HoodConstants.minHoodAngle.getRotations() + .12),
+            Rotation2d.fromRotations(HoodConstants.minHoodAngle.getRotations() + .14),//+0.12
             46.0,
             55.0));
 
@@ -86,7 +86,7 @@ public class TargetingSubsystem extends SubsystemBase {
         6.6,
         new ShotSettings(
             1.7,
-            Rotation2d.fromRotations(HoodConstants.minHoodAngle.getRotations() + .12),
+            Rotation2d.fromRotations(HoodConstants.minHoodAngle.getRotations() + .14),//+0.12
             50.0,
             55.0));
 
