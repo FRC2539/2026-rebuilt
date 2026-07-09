@@ -11,7 +11,7 @@ import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.MotorArrangementValue;
 import edu.wpi.first.math.geometry.Rotation2d;
 
-public final class HoodConstants {
+public final class HoodConstants { // .0654
 
   public static final int kMotorId = 10;
   public static final int hoodEncoderID = 41;

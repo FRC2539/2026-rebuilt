@@ -38,11 +38,7 @@ public class StaticShot extends Command {
       MagicFloorSubsystem magicFloorSubsystem,
       TransporterSubsystem transporterSubsystem,
       CommandSwerveDrivetrain drivetrainSubsystem,
-      NeckSubsystem neckSubsystem,
-      Rotation2d hoodAngle,
-      double rps,
-      double neckRPSOffset,
-      double transportVoltageOffset) {
+      NeckSubsystem neckSubsystem) {
     hood = hoodSubsystem;
     targeting = targetingSubsystem;
     shooter = shooterSubsystem;
@@ -50,11 +46,6 @@ public class StaticShot extends Command {
     transporter = transporterSubsystem;
     drivetrain = drivetrainSubsystem;
     neck = neckSubsystem;
-
-    tunableHoodAngle = hoodAngle;
-    tunableRPS = rps;
-    tunableNeckRPS = neckRPSOffset;
-    tunableTransport = transportVoltageOffset;
 
     addRequirements(hood, targeting, shooter, floor, transporter, drivetrain, neck);
   }
@@ -64,12 +55,12 @@ public class StaticShot extends Command {
 
   @Override
   public void execute() {
-    shooter.setTargetRPS(35 + tunableRPS);
-    neck.setTargetRPS(55 + tunableNeckRPS);
+    shooter.setTargetRPS(35.5);
+    neck.setTargetRPS(55.0);
 
     hood.setTargetAngle(
         () ->
-            Rotation2d.fromRotations(HoodConstants.minHoodAngle.getRotations() + .05));
+            Rotation2d.fromRotations(HoodConstants.minHoodAngle.getRotations() + .15));
 
     if ((shooter.isAtSetpoint() || hasSpunUp)
         && hood.isAtSetpoint()

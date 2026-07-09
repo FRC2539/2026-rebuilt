@@ -24,6 +24,7 @@ import frc.robot.lib.controller.ThrustmasterJoystick;
 import frc.robot.subsystems.drivetrain.CommandSwerveDrivetrain;
 import frc.robot.subsystems.drivetrain.DriveConstants;
 import frc.robot.subsystems.drivetrain.TunerConstants;
+import frc.robot.subsystems.hood.HoodConstants;
 import frc.robot.subsystems.hood.HoodIOTalonFXS;
 import frc.robot.subsystems.hood.HoodSubsystem;
 import frc.robot.subsystems.intake.pivot.PivotIOTalonFX;
@@ -166,7 +167,7 @@ public class RobotContainer {
                       transporter,
                       drivetrain,
                       neck,
-                      Rotation2d.fromRotations(hoodAngleOffset),
+                      Rotation2d.fromRotations(0),
                       shooterRPSOffset,
                       Rotation2d.fromDegrees(tunableHeadingOffsetDeg),
                       neckRPSOffset,
@@ -196,25 +197,25 @@ public class RobotContainer {
                 Set.of(hood, targeting, shooter, magicFloor, transporter, drivetrain, neck)));
 
 
-    rightDriveController
-        .getLeftThumb()
-        .whileTrue(
-            Commands.defer(
-                () -> {
-                  return new StaticShot(
-                      hood,
-                      targeting,
-                      shooter,
-                      magicFloor,
-                      transporter,
-                      drivetrain,
-                      neck,
-                      Rotation2d.fromRotations(hoodAngleOffset),
-                      shooterRPSOffset,
-                      neckRPSOffset,
-                      transporterOffset);
-                },
-                Set.of(hood, targeting, shooter, magicFloor, transporter, drivetrain, neck)));
+    // rightDriveController
+    //     .getLeftThumb()
+    //     .whileTrue(
+    //         Commands.defer(
+    //             () -> {
+    //               return new StaticShot(
+    //                   hood,
+    //                   targeting,
+    //                   shooter,
+    //                   magicFloor,
+    //                   transporter,
+    //                   drivetrain,
+    //                   neck,
+    //                   Rotation2d.fromRotations(hoodAngleOffset),
+    //                   shooterRPSOffset,
+    //                   neckRPSOffset,
+    //                   transporterOffset);
+    //             },
+               // Set.of(hood, targeting, shooter, magicFloor, transporter, drivetrain, neck)));
     rightDriveController.getBottomThumb().whileTrue(Commands.defer(
                 () -> {
                   return new DynamicShot(
@@ -231,25 +232,25 @@ public class RobotContainer {
                       transporterOffset);
                 },
                 Set.of(hood, targeting, shooter, magicFloor, transporter, drivetrain, neck)));
-    rightDriveController
-        .getRightThumb()
-        .whileTrue(
-            Commands.defer(
-                () -> {
-                  return new StaticShot(
-                      hood,
-                      targeting,
-                      shooter,
-                      magicFloor,
-                      transporter,
-                      drivetrain,
-                      neck,
-                      Rotation2d.fromRotations(hoodAngleOffset),
-                      shooterRPSOffset,
-                      neckRPSOffset,
-                      transporterOffset);
-                },
-                Set.of(hood, targeting, shooter, magicFloor, transporter, drivetrain, neck)));
+    // rightDriveController
+    //     .getRightThumb()
+    //     .whileTrue(
+    //         Commands.defer(
+    //             () -> {
+    //               return new StaticShot(
+    //                   hood,
+    //                   targeting,
+    //                   shooter,
+    //                   magicFloor,
+    //                   transporter,
+    //                   drivetrain,
+    //                   neck,
+    //                   Rotation2d.fromRotations(hoodAngleOffset),
+    //                   shooterRPSOffset,
+    //                   neckRPSOffset,
+    //                   transporterOffset);
+    //             },
+    //             Set.of(hood, targeting, shooter, magicFloor, transporter, drivetrain, neck)));
     // op binds
     operatorController.getX().whileTrue(roller.setVoltage(-12));
     operatorController.getB().whileTrue(transporter.setVoltage(3));
@@ -303,9 +304,12 @@ public class RobotContainer {
         .getLeftBottomRight()
         .onTrue(Commands.runOnce(() -> transporterOffset -= .5));
 
-    rightDriveController.getLeftBottomMiddle().onTrue(Commands.runOnce(() -> tunableHeadingOffsetDeg += 1)); //CCW +
-    rightDriveController.getLeftBottomRight().onTrue(Commands.runOnce(() -> tunableHeadingOffsetDeg -= 1));
+    // rightDriveController.getLeftBottomMiddle().onTrue(Commands.runOnce(() -> tunableHeadingOffsetDeg += 1)); //CCW +
+    // rightDriveController.getLeftBottomRight().onTrue(Commands.runOnce(() -> tunableHeadingOffsetDeg -= 1));
 
+    leftDriveController.getLeftThumb().whileTrue(new StaticShot(hood, targeting, shooter, magicFloor, transporter, drivetrain, neck));
+
+    rightDriveController.getLeftBottomRight().onTrue(hood.setHoodAngleForever(() -> Rotation2d.fromRotations(.101)));
     leftDriveController.getLeftTopMiddle().onTrue(Commands.defer(() -> pivot.toggleIntake(), Set.of(pivot)));
     // hood tuning
     operatorController.getDPadUp().onTrue(Commands.runOnce(() -> hoodAngleOffset += .02));

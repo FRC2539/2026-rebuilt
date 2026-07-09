@@ -23,7 +23,7 @@ public class TargetingSubsystem extends SubsystemBase {
   @AutoLogOutput public double realDistance = 0;
 
   @AutoLogOutput public Rotation2d targetRobotAngle;
-  @AutoLogOutput public Rotation2d targetHoodAngle;
+  @AutoLogOutput public double targetHoodAngle;
   @AutoLogOutput public double targetFlywheelRPS;
   @AutoLogOutput public double targetNeckRPS;
 
@@ -46,31 +46,31 @@ public class TargetingSubsystem extends SubsystemBase {
             55.0)); 
     TargetingConstants.hubShotMap.put(
         2.56,
-        new ShotSettings(
+        new ShotSettings( // -.0654
             1.2,
-            Rotation2d.fromRotations(HoodConstants.minHoodAngle.getRotations() + .05),//+0.05
+            Rotation2d.fromRotations(HoodConstants.minHoodAngle.getRotations() + .090508),// .068181
             34.0 + 1,
             55.0)); 
     TargetingConstants.hubShotMap.put(
         3.127,
         new ShotSettings(
             1.2,
-            Rotation2d.fromRotations(HoodConstants.minHoodAngle.getRotations() + .06),//+0.06
-            35.5 + 1,
-            45.0 + 5)); 
+            Rotation2d.fromRotations(HoodConstants.minHoodAngle.getRotations() + .15),//+0.06
+            36.0 - .5,
+            55.0)); 
     TargetingConstants.hubShotMap.put(
         3.568,
         new ShotSettings(
             1.4,
-            Rotation2d.fromRotations(HoodConstants.minHoodAngle.getRotations() + .06 + .05),//+0.05
-            40.0 - 5, // 36.0
+            Rotation2d.fromRotations(HoodConstants.minHoodAngle.getRotations() + .165),//+0.05
+            37.0, // 36.0
             55.0));
     TargetingConstants.hubShotMap.put(
         4.6,
         new ShotSettings(
             1.5,
-            Rotation2d.fromRotations(HoodConstants.minHoodAngle.getRotations() + .12),//+0.12
-            42.0,
+            Rotation2d.fromRotations(HoodConstants.minHoodAngle.getRotations() + .160),//+0.12
+            42.5,
             55.0));
 
 
@@ -128,7 +128,7 @@ public class TargetingSubsystem extends SubsystemBase {
       return calculatedParams; // Return last known good params
     }
 
-    targetHoodAngle = mapValues.hoodAngle();
+    targetHoodAngle = mapValues.hoodAngle().getRotations();
     targetFlywheelRPS = mapValues.wheelRPS();
     targetNeckRPS = mapValues.neckRPS();
     return new ShootingParameters(
@@ -180,7 +180,7 @@ public class TargetingSubsystem extends SubsystemBase {
 
     mapValues = TargetingConstants.hubShotMap.get(virtualDistance);
 
-    targetHoodAngle = mapValues.hoodAngle();
+    targetHoodAngle = mapValues.hoodAngle().getRotations();
     targetFlywheelRPS = mapValues.wheelRPS();
     targetNeckRPS = mapValues.neckRPS();
 
