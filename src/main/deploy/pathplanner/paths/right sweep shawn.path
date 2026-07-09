@@ -48,11 +48,11 @@
     },
     {
       "anchor": {
-        "x": 2.94,
+        "x": 2.54,
         "y": 2.542111801242236
       },
       "prevControl": {
-        "x": 4.034516415261757,
+        "x": 3.6345164152617575,
         "y": 2.493824312333628
       },
       "nextControl": null,
@@ -126,7 +126,7 @@
   },
   "goalEndState": {
     "velocity": 3.0,
-    "rotation": -137.7927023657132
+    "rotation": -142.95333952152046
   },
   "reversed": false,
   "folder": "right citrus",
