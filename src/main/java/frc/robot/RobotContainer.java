@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.commands.DynamicShot;
 import frc.robot.commands.FieldRelativeAngleSnap;
 import frc.robot.commands.HailMary;
+import frc.robot.commands.HoodReset;
 import frc.robot.commands.LongFerry;
 import frc.robot.commands.SimpleAlignAndShoot;
 import frc.robot.commands.SimpleFerry;
@@ -315,6 +316,8 @@ public class RobotContainer {
     operatorController.getDPadUp().onTrue(Commands.runOnce(() -> hoodAngleOffset += .02));
 
     operatorController.getDPadDown().onTrue(Commands.runOnce(() -> hoodAngleOffset -= .02));
+
+    leftDriveController.getLeftTopLeft().onTrue(Commands.defer(() -> new HoodReset(hood), Set.of(hood)));
   }
 
   private ChassisSpeeds getDriverChassisSpeeds() {

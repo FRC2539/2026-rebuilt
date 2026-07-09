@@ -4,8 +4,6 @@ import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 
 import java.util.function.DoubleSupplier;
 
-import org.ejml.data.IScalar;
-
 import com.ctre.phoenix6.swerve.SwerveRequest;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.filter.SlewRateLimiter;

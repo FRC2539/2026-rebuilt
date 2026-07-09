@@ -49,6 +49,9 @@ public class HoodSubsystem extends SubsystemBase {
     return Commands.run(() -> io.setHoodVoltage(volts), this);
   }
 
+  public Rotation2d getHoodPosition() {
+    return inputs.position;
+  }
   public boolean isEncoderConnected() {
     return inputs.throughboreConnected;
   }
