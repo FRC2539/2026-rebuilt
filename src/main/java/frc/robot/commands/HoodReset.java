@@ -25,12 +25,12 @@ public class HoodReset extends Command {
 
     @Override
     public void execute() {
-        hoodInstance.setVoltage(-.5);
+        hoodInstance.setVoltage(-.76);
     }
 
     @Override
     public boolean isFinished() {
-        return hoodTimer.hasElapsed(1.00);
+        return hoodTimer.hasElapsed(1.5);
     }
 
     @Override

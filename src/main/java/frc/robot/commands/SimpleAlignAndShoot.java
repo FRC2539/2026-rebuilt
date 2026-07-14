@@ -127,7 +127,7 @@ public class SimpleAlignAndShoot extends Command {
 
     shooter.setTargetRPS(targeting.getIdealFlywheelRPS().get() + tunableRPS);
     neck.setTargetRPS(targeting.getIdealNeckRPS().get() + tunableNeckRPS);
-    hood.setTargetAngle(() -> targeting.getIdealHoodAngle().get());
+    hood.setTargetAngle(() -> targeting.getIdealHoodAngle().get().plus(tunableHoodAngle));
 
     if (rotationController.atSetpoint()) {
 

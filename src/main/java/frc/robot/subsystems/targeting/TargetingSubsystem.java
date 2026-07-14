@@ -21,6 +21,7 @@ public class TargetingSubsystem extends SubsystemBase {
   @AutoLogOutput public Pose2d hubPosition;
   @AutoLogOutput public Pose2d desiredRobotPosition;
   @AutoLogOutput public double realDistance = 0;
+  @AutoLogOutput public double closestMapValue = 0;
 
   @AutoLogOutput public Rotation2d targetRobotAngle;
   @AutoLogOutput public double targetHoodAngle;
@@ -42,21 +43,21 @@ public class TargetingSubsystem extends SubsystemBase {
         new ShotSettings(
             1.2,
             Rotation2d.fromRotations(HoodConstants.minHoodAngle.getRotations()),
-            31.5, // 30.5
+            31.5 - 2.75, // 30.5
             55.0)); 
     TargetingConstants.hubShotMap.put(
         2.56,
         new ShotSettings( // -.0654
             1.2,
             Rotation2d.fromRotations(HoodConstants.minHoodAngle.getRotations() + .090508),// .068181
-            34.0 + 1,
+            35.0 - 2.75, // 35.0
             55.0)); 
     TargetingConstants.hubShotMap.put(
         3.127,
         new ShotSettings(
             1.2,
             Rotation2d.fromRotations(HoodConstants.minHoodAngle.getRotations() + .15),//+0.06
-            36.0 - .5,
+            36.0 - .5 - 1.25,
             55.0)); 
     TargetingConstants.hubShotMap.put(
         3.568,
@@ -106,7 +107,7 @@ public class TargetingSubsystem extends SubsystemBase {
 
     calculatedParams = calculateShotSOTM(robotPose, drivetrain.getFieldSpeeds(), hubPosition.getTranslation());
     
-    
+
   }
 
   public ShootingParameters calculateShot(
@@ -116,6 +117,7 @@ public class TargetingSubsystem extends SubsystemBase {
 
     realDistance = realDisplacementToHub.getNorm();
 
+    //closestMapValue = getClosestMapDistance(realDistance);
     Rotation2d neededHeading =
         realDisplacementToHub
             .getAngle()
@@ -204,5 +206,22 @@ public class TargetingSubsystem extends SubsystemBase {
 
   public Supplier<Double> getIdealNeckRPS() {
     return () -> calculatedParams.neckRPS();
+  }
+
+  public double getClosestMapDistance(double realDistance) {
+    if (realDistance >= 4.6) {
+      return 4.6;
+    }
+    if (realDistance >= 3.568) {
+      return 3.568;
+    }
+    if (realDistance >= 3.127) {
+      return 3.127;
+    }
+    if (realDistance >= 2.56) {
+      return 2.56;
+    }
+    return 1.776;
+
   }
 }

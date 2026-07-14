@@ -168,7 +168,7 @@ public class RobotContainer {
                       transporter,
                       drivetrain,
                       neck,
-                      Rotation2d.fromRotations(0),
+                      Rotation2d.fromRotations(hoodAngleOffset),
                       shooterRPSOffset,
                       Rotation2d.fromDegrees(tunableHeadingOffsetDeg),
                       neckRPSOffset,
@@ -305,8 +305,8 @@ public class RobotContainer {
         .getLeftBottomRight()
         .onTrue(Commands.runOnce(() -> transporterOffset -= .5));
 
-    // rightDriveController.getLeftBottomMiddle().onTrue(Commands.runOnce(() -> tunableHeadingOffsetDeg += 1)); //CCW +
-    // rightDriveController.getLeftBottomRight().onTrue(Commands.runOnce(() -> tunableHeadingOffsetDeg -= 1));
+    // rightDriveController.getLeftBottomMiddle().onTrue(Commands.runOnce(() -> tunableHeadingOffsetDeg += 7));// .02 rotations, 13ish steps //CCW +
+    // rightDriveController.getLeftBottomRight().onTrue(Commands.runOnce(() -> tunableHeadingOffsetDeg -= 7));
 
     leftDriveController.getLeftThumb().whileTrue(new StaticShot(hood, targeting, shooter, magicFloor, transporter, drivetrain, neck));
 
