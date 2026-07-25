@@ -5,7 +5,8 @@ import com.ctre.phoenix6.configs.TalonFXConfiguration;
 
 public class RollerConstants {
   public static final double intakeVoltage = 12;
-  public static final int rollerMotorID = 9;
+  public static final int leftRollerMotorID = 9;
+  public static final int rightRollerMotorID = 19;
 
   public static final String rollerMotorCanBus = "rio";
 

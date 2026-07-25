@@ -284,9 +284,9 @@ public class RobotContainer {
                 () -> getXVelocity(),
                 () -> getYVelocity()));
 
-    operatorController.getDPadLeft().onTrue(Commands.runOnce(() -> shooterRPSOffset += 1));
+    operatorController.getDPadRight().onTrue(Commands.runOnce(() -> shooterRPSOffset += 1));
 
-    operatorController.getDPadRight().onTrue(Commands.runOnce(() -> shooterRPSOffset -= 1));
+    operatorController.getDPadLeft().onTrue(Commands.runOnce(() -> shooterRPSOffset -= 1));
 
     operatorController
         .getRightTrigger()

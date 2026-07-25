@@ -4,7 +4,7 @@ import com.ctre.phoenix6.signals.RGBWColor;
 
 public class LightsConstants {
   // #region Constants
-  public static int CandleID = 19;
+  public static int CandleID = 23;
   public static int lastIndex = 8;
 
   // #region Segments
