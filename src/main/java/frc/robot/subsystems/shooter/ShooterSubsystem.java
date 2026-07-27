@@ -14,7 +14,8 @@ public class ShooterSubsystem extends SubsystemBase {
   public ShooterSubsystem(ShooterIO shooterIO) {
     this.shooterIO = shooterIO;
 
-    setDefaultCommand(setVoltage(0));
+    //setDefaultCommand(setVoltage(0));
+    setDefaultCommand(setShooterRPSForever(15));
   }
 
   @Override
