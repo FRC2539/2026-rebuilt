@@ -8,6 +8,8 @@ import java.util.function.Supplier;
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
 
+//adam is in the hood
+
 public class HoodSubsystem extends SubsystemBase {
 
   private final HoodIO io;
