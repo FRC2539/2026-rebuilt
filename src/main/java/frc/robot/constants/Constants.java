@@ -2,6 +2,8 @@ package frc.robot.constants;
 
 import edu.wpi.first.wpilibj.RobotBase;
 
+// Aaron Smith
+
 public final class Constants {
   public static final RobotType robot = RobotType.COMPBOT;
   public static final boolean tuningMode = true;
