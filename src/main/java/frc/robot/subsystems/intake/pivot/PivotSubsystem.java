@@ -42,7 +42,7 @@ public class PivotSubsystem extends SubsystemBase {
   }
 
   public boolean isDown() {
-    return inputs.pivotPosition > .48;// .35
+    return inputs.pivotPosition > .75;// .35
   }
 
   public Command toggleIntake() {
@@ -51,11 +51,11 @@ public class PivotSubsystem extends SubsystemBase {
 
   public Command feather() { 
     return Commands.either(
-        this.setPosition(Rotation2d.fromRotations(.3845)), // feather // .3989
+        this.setPosition(Rotation2d.fromRotations(.59)), // feather // .3989
         this.PutDown(),
         () -> { // is the intake down, a second random number, basically.
           return inputs.pivotPosition
-              > .50; // I really just need an arbitrary number here to serve as a "cutoff" between
+              > .77; // I really just need an arbitrary number here to serve as a "cutoff" between
           // up and down, .35 used above is too low.
         });
   }

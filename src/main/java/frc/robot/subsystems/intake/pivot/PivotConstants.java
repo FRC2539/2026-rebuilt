@@ -17,10 +17,10 @@ public class PivotConstants {
 
   public static final Rotation2d pivotDeadband = Rotation2d.fromRotations(.008);
 
-  public static final Rotation2d intakeUpPosition = Rotation2d.fromRotations(.2575);
-  public static final Rotation2d intakeDownPosition = Rotation2d.fromRotations(.5855);
+  public static final Rotation2d intakeUpPosition = Rotation2d.fromRotations(.447);
+  public static final Rotation2d intakeDownPosition = Rotation2d.fromRotations(.838);
 
-  // public static final Rotation2d intakeFeatherPosition = Rotation2d.fromRotations(0.4); // 0.95
+  public static final Rotation2d intakeFeatherPosition = Rotation2d.fromRotations(0.59); // 0.95
 
   public static final Slot0Configs slot0configs =
       new Slot0Configs().withKP(40).withKD(0.1).withKS(5); // 26, 5
