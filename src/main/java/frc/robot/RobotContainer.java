@@ -60,7 +60,7 @@ public class RobotContainer {
 
   private final LogitechController operatorController = new LogitechController(2);
 
-  @AutoLogOutput public double shooterRPSOffset = 0;
+  @AutoLogOutput public double shooterRPSOffset = -2.0;
 
   @AutoLogOutput public double hoodAngleOffset = 0;
 
